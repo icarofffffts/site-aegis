@@ -74,59 +74,64 @@ function PricingPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-6 lg:grid-cols-3">
-          {PLANS.map((plan) => {
-            const price = yearly ? plan.yearly : plan.monthly;
-            return (
-              <div
-                key={plan.name}
-                className={cn(
-                  "relative flex flex-col rounded-3xl border bg-card p-7 transition-all",
-                  plan.highlight
-                    ? "border-primary/60 shadow-glow"
-                    : "border-border hover:border-primary/30",
-                )}
-              >
-                {plan.highlight && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-primary to-primary-glow px-3 py-1 text-xs font-semibold text-primary-foreground shadow-glow">
-                    Mais popular
-                  </span>
-                )}
-                <h3 className="font-display text-xl font-bold">{plan.name}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
-
-                <div className="mt-6 flex items-baseline gap-1">
-                  <span className="font-display text-4xl font-bold">
-                    {price === 0 ? "Grátis" : `R$ ${price.toFixed(2).replace(".", ",")}`}
-                  </span>
-                  {price > 0 && (
-                    <span className="text-sm text-muted-foreground">/{yearly ? "ano" : "mês"}</span>
-                  )}
-                </div>
-
-                <Button
+        {loading ? (
+          <PricingSkeleton count={3} />
+        ) : (
+          <div className="grid gap-6 lg:grid-cols-3">
+            {PLANS.map((plan, i) => {
+              const price = yearly ? plan.yearly : plan.monthly;
+              return (
+                <div
+                  key={plan.name}
                   className={cn(
-                    "mt-6",
+                    "reveal lift relative flex flex-col rounded-3xl border bg-card p-7 transition-all",
                     plan.highlight
-                      ? "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-glow"
-                      : "bg-surface text-foreground hover:bg-surface-elevated",
+                      ? "border-primary/60 shadow-glow"
+                      : "border-border hover:border-primary/30",
                   )}
+                  style={{ animationDelay: `${i * 80}ms` }}
                 >
-                  {plan.cta}
-                </Button>
+                  {plan.highlight && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-primary to-primary-glow px-3 py-1 text-xs font-semibold text-primary-foreground shadow-glow">
+                      Mais popular
+                    </span>
+                  )}
+                  <h3 className="font-display text-xl font-bold">{plan.name}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
 
-                <ul className="mt-6 space-y-3 text-sm">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-success" />
-                      <span className="text-muted-foreground">{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
-        </div>
+                  <div className="mt-6 flex items-baseline gap-1">
+                    <span className="font-display text-4xl font-bold">
+                      {price === 0 ? "Grátis" : `R$ ${price.toFixed(2).replace(".", ",")}`}
+                    </span>
+                    {price > 0 && (
+                      <span className="text-sm text-muted-foreground">/{yearly ? "ano" : "mês"}</span>
+                    )}
+                  </div>
+
+                  <Button
+                    className={cn(
+                      "mt-6",
+                      plan.highlight
+                        ? "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-glow"
+                        : "bg-surface text-foreground hover:bg-surface-elevated",
+                    )}
+                  >
+                    {plan.cta}
+                  </Button>
+
+                  <ul className="mt-6 space-y-3 text-sm">
+                    {plan.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-success" />
+                        <span className="text-muted-foreground">{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       <section className="border-t border-border/60 bg-surface/30">
