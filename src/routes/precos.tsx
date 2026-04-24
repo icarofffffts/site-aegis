@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Sparkles } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
+import { PricingSkeleton } from "@/components/skeletons/PricingSkeleton";
 import { PLANS } from "@/data/pricing";
 import { cn } from "@/lib/utils";
 
