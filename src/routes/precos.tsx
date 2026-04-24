@@ -31,6 +31,12 @@ const FAQ = [
 
 function PricingPage() {
   const [yearly, setYearly] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setLoading(false), 450);
+    return () => window.clearTimeout(id);
+  }, []);
 
   return (
     <SiteLayout>
