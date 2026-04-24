@@ -1,31 +1,21 @@
 import { cn } from "@/lib/utils";
+import arxLogo from "@/assets/arx-logo.png";
 
 export function ShieldLogo({ className, withText = true }: { className?: string; withText?: boolean }) {
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <div className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary-glow shadow-glow">
-        <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 text-primary-foreground">
-          <path
-            d="M12 2L4 5v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V5l-8-3z"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinejoin="round"
-            fill="currentColor"
-            fillOpacity="0.2"
-          />
-          <path
-            d="M9 12l2 2 4-4"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+    <div className={cn("flex items-center gap-2.5", className)}>
+      <div className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary-glow/10 ring-1 ring-primary/30 shadow-glow">
+        <img src={arxLogo} alt="ARX DEVS" className="h-7 w-7 object-contain" />
       </div>
       {withText && (
-        <span className="font-display text-xl font-bold tracking-tight">
-          Aegis
-        </span>
+        <div className="flex flex-col leading-none">
+          <span className="font-display text-lg font-bold tracking-tight text-foreground">
+            Shield
+          </span>
+          <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+            by ARX DEVS
+          </span>
+        </div>
       )}
     </div>
   );
