@@ -63,11 +63,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ThemeProvider>
-          <RouteProgress />
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        {children}
         <Scripts />
       </body>
     </html>
@@ -75,5 +71,11 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <ThemeProvider>
+      <RouteProgress />
+      <Outlet />
+      <Toaster />
+    </ThemeProvider>
+  );
 }
