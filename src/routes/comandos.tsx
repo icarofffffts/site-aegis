@@ -88,38 +88,45 @@ function CommandsPage() {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((cmd) => (
-            <div
-              key={cmd.name}
-              className="rounded-2xl border border-border bg-surface/60 p-5 transition-colors hover:border-primary/40"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <code className="font-mono text-base font-semibold text-foreground">/{cmd.name}</code>
-                <span className="rounded-full border border-border bg-background/40 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  {cmd.category}
-                </span>
-              </div>
-              <p className="mt-2 text-sm text-muted-foreground">{cmd.description}</p>
-              <pre className="mt-3 overflow-x-auto rounded-md border border-border bg-background/60 p-2.5 font-mono text-xs text-foreground">
-                {cmd.syntax}
-              </pre>
-              <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px]">
-                <span className="rounded bg-muted px-2 py-0.5 text-muted-foreground">
-                  Permissão: <span className="text-foreground">{cmd.permission}</span>
-                </span>
-                {cmd.platforms.map((p) => (
-                  <span key={p} className="rounded bg-primary/15 px-2 py-0.5 text-primary">{p}</span>
-                ))}
-              </div>
+        {loading ? (
+          <CommandsSkeleton count={9} />
+        ) : (
+          <>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((cmd, i) => (
+                <div
+                  key={cmd.name}
+                  className="reveal lift rounded-2xl border border-border bg-surface/60 p-5 transition-colors hover:border-primary/40"
+                  style={{ animationDelay: `${Math.min(i * 40, 320)}ms` }}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <code className="font-mono text-base font-semibold text-foreground">/{cmd.name}</code>
+                    <span className="rounded-full border border-border bg-background/40 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      {cmd.category}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{cmd.description}</p>
+                  <pre className="mt-3 overflow-x-auto rounded-md border border-border bg-background/60 p-2.5 font-mono text-xs text-foreground">
+                    {cmd.syntax}
+                  </pre>
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px]">
+                    <span className="rounded bg-muted px-2 py-0.5 text-muted-foreground">
+                      Permissão: <span className="text-foreground">{cmd.permission}</span>
+                    </span>
+                    {cmd.platforms.map((p) => (
+                      <span key={p} className="rounded bg-primary/15 px-2 py-0.5 text-primary">{p}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {filtered.length === 0 && (
-          <div className="mt-12 rounded-xl border border-dashed border-border p-10 text-center text-muted-foreground">
-            Nenhum comando encontrado para "{query}".
-          </div>
+            {filtered.length === 0 && (
+              <div className="mt-12 rounded-xl border border-dashed border-border p-10 text-center text-muted-foreground">
+                Nenhum comando encontrado para "{query}".
+              </div>
+            )}
+          </>
         )}
       </section>
     </SiteLayout>
