@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 
 type Theme = "light" | "dark";
 
@@ -20,17 +20,24 @@ function getInitialTheme(): Theme {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("dark");
+  const [theme, setThemeState] = useState<Theme>(() => getInitialTheme());
+  const hydrated = useRef(false);
 
-  // Apply on mount (client-side, after hydration)
-  useEffect(() => {
-    const initial = getInitialTheme();
-    setThemeState(initial);
-  }, []);
-
+  // Sync with DOM after hydration; avoid writing on first render to prevent flicker
   useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
+    if (!hydrated.current) {
+      hydrated.current = true;
+      // Ensure stored value matches the resolved initial theme
+      try {
+        const saved = window.localStorage.getItem(STORAGE_KEY);
+        if (saved !== theme) window.localStorage.setItem(STORAGE_KEY, theme);
+      } catch {
+        // ignore
+      }
+      return;
+    }
     try {
       window.localStorage.setItem(STORAGE_KEY, theme);
     } catch {
