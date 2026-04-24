@@ -55,11 +55,71 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
 }
 
-/* Aegis — dark "shield premium" theme is the default */
+/* Shield — light "premium security" theme (default) */
 :root {
   --radius: 0.75rem;
 
-  /* Deep navy backgrounds */
+  --background: oklch(0.985 0.005 250);
+  --foreground: oklch(0.18 0.03 260);
+
+  --surface: oklch(0.97 0.008 250);
+  --surface-elevated: oklch(1 0 0);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.03 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.03 260);
+
+  --primary: oklch(0.55 0.18 250);
+  --primary-foreground: oklch(0.985 0.005 250);
+  --primary-glow: oklch(0.68 0.17 245);
+
+  --secondary: oklch(0.94 0.012 250);
+  --secondary-foreground: oklch(0.22 0.03 260);
+
+  --accent: oklch(0.93 0.02 250);
+  --accent-foreground: oklch(0.22 0.03 260);
+
+  --gold: oklch(0.72 0.14 80);
+  --gold-foreground: oklch(0.18 0.04 80);
+
+  --muted: oklch(0.94 0.01 250);
+  --muted-foreground: oklch(0.45 0.02 255);
+
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.98 0.01 250);
+
+  --success: oklch(0.62 0.16 155);
+  --success-foreground: oklch(0.98 0.01 250);
+
+  --border: oklch(0.18 0.03 260 / 10%);
+  --input: oklch(0.18 0.03 260 / 12%);
+  --ring: oklch(0.55 0.18 250);
+
+  --sidebar: oklch(0.97 0.008 250);
+  --sidebar-foreground: oklch(0.18 0.03 260);
+  --sidebar-primary: oklch(0.55 0.18 250);
+  --sidebar-primary-foreground: oklch(0.985 0.005 250);
+  --sidebar-accent: oklch(0.93 0.02 250);
+  --sidebar-accent-foreground: oklch(0.22 0.03 260);
+  --sidebar-border: oklch(0.18 0.03 260 / 10%);
+  --sidebar-ring: oklch(0.55 0.18 250);
+
+  --gradient-hero: radial-gradient(
+      ellipse at top,
+      oklch(0.7 0.15 245 / 0.18),
+      transparent 60%
+    ),
+    linear-gradient(180deg, oklch(0.985 0.005 250), oklch(0.96 0.01 250));
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
+  --gradient-gold: linear-gradient(135deg, var(--gold), oklch(0.82 0.12 75));
+  --shadow-glow: 0 0 40px -10px color-mix(in oklab, var(--primary) 45%, transparent);
+  --shadow-gold: 0 0 30px -10px color-mix(in oklab, var(--gold) 45%, transparent);
+  --shadow-elegant: 0 20px 50px -20px oklch(0.18 0.03 260 / 0.25);
+}
+
+/* Shield — dark "shield premium" theme */
+.dark {
   --background: oklch(0.16 0.03 260);
   --foreground: oklch(0.96 0.01 250);
 
@@ -71,7 +131,6 @@
   --popover: oklch(0.21 0.035 260);
   --popover-foreground: oklch(0.96 0.01 250);
 
-  /* Primary: electric blue */
   --primary: oklch(0.68 0.17 245);
   --primary-foreground: oklch(0.14 0.03 260);
   --primary-glow: oklch(0.78 0.16 235);
@@ -82,7 +141,6 @@
   --accent: oklch(0.30 0.06 250);
   --accent-foreground: oklch(0.96 0.01 250);
 
-  /* Gold accent */
   --gold: oklch(0.82 0.13 85);
   --gold-foreground: oklch(0.18 0.04 80);
 
@@ -108,15 +166,12 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.68 0.17 245);
 
-  /* Effects */
   --gradient-hero: radial-gradient(
       ellipse at top,
       oklch(0.30 0.10 250 / 0.55),
       transparent 60%
     ),
     linear-gradient(180deg, oklch(0.16 0.03 260), oklch(0.13 0.03 260));
-  --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
-  --gradient-gold: linear-gradient(135deg, var(--gold), oklch(0.88 0.10 75));
   --shadow-glow: 0 0 40px -10px color-mix(in oklab, var(--primary) 55%, transparent);
   --shadow-gold: 0 0 30px -10px color-mix(in oklab, var(--gold) 50%, transparent);
   --shadow-elegant: 0 20px 50px -20px oklch(0 0 0 / 0.6);
