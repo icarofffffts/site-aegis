@@ -365,12 +365,71 @@
   /* Animated grid for hero */
   .bg-grid-animated {
     background-image:
-      linear-gradient(to right, oklch(1 0 0 / 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(1 0 0 / 0.05) 1px, transparent 1px);
+      linear-gradient(to right, color-mix(in oklab, var(--foreground) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 7%, transparent) 1px, transparent 1px);
     background-size: 48px 48px;
     animation: grid-pan 30s linear infinite;
     mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
     -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
+  }
+
+  /* Animated underline for nav links */
+  .nav-link {
+    position: relative;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 6px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-glow));
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .nav-link:hover::after,
+  .nav-link[data-status="active"]::after {
+    transform: scaleX(1);
+  }
+
+  /* Top progress bar (route loading) */
+  .route-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 100;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--primary) 20%,
+      var(--primary-glow) 50%,
+      var(--gold) 80%,
+      transparent
+    );
+    background-size: 200% 100%;
+    transform-origin: left;
+    animation:
+      progress-grow 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards,
+      progress-shimmer 1.2s linear infinite;
+    box-shadow: 0 0 12px color-mix(in oklab, var(--primary) 60%, transparent);
+  }
+
+  /* Skeleton shimmer */
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--muted) 70%, transparent) 0%,
+      color-mix(in oklab, var(--muted-foreground) 15%, transparent) 50%,
+      color-mix(in oklab, var(--muted) 70%, transparent) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer-slide 1.6s linear infinite;
+    border-radius: var(--radius);
   }
 
   /* Border-gradient highlight on hover */
