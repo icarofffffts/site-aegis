@@ -9,8 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SuporteRouteImport } from './routes/suporte'
+import { Route as PrecosRouteImport } from './routes/precos'
+import { Route as ComandosRouteImport } from './routes/comandos'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SuporteRoute = SuporteRouteImport.update({
+  id: '/suporte',
+  path: '/suporte',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrecosRoute = PrecosRouteImport.update({
+  id: '/precos',
+  path: '/precos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComandosRoute = ComandosRouteImport.update({
+  id: '/comandos',
+  path: '/comandos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +37,61 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/comandos': typeof ComandosRoute
+  '/precos': typeof PrecosRoute
+  '/suporte': typeof SuporteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/comandos': typeof ComandosRoute
+  '/precos': typeof PrecosRoute
+  '/suporte': typeof SuporteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/comandos': typeof ComandosRoute
+  '/precos': typeof PrecosRoute
+  '/suporte': typeof SuporteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/comandos' | '/precos' | '/suporte'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/comandos' | '/precos' | '/suporte'
+  id: '__root__' | '/' | '/comandos' | '/precos' | '/suporte'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ComandosRoute: typeof ComandosRoute
+  PrecosRoute: typeof PrecosRoute
+  SuporteRoute: typeof SuporteRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/suporte': {
+      id: '/suporte'
+      path: '/suporte'
+      fullPath: '/suporte'
+      preLoaderRoute: typeof SuporteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/precos': {
+      id: '/precos'
+      path: '/precos'
+      fullPath: '/precos'
+      preLoaderRoute: typeof PrecosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comandos': {
+      id: '/comandos'
+      path: '/comandos'
+      fullPath: '/comandos'
+      preLoaderRoute: typeof ComandosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +104,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ComandosRoute: ComandosRoute,
+  PrecosRoute: PrecosRoute,
+  SuporteRoute: SuporteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
