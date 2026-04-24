@@ -50,38 +50,40 @@ function HomePage() {
     <SiteLayout>
       {/* Hero */}
       <section className="relative overflow-hidden bg-hero">
-        <div className="absolute inset-0 bg-grid opacity-40" />
-        <div className="absolute inset-x-0 -top-32 mx-auto h-64 w-[60%] rounded-full bg-primary/20 blur-3xl" />
+        <div className="absolute inset-0 bg-grid-animated opacity-60" />
+        <div className="orb orb-primary -top-24 left-1/4 h-72 w-72" />
+        <div className="orb orb-glow top-40 right-10 h-64 w-64" />
+        <div className="orb orb-gold bottom-0 left-10 h-56 w-56 opacity-30" />
 
         <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-20 sm:px-6 lg:px-8 lg:pt-28">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+            <span className="reveal pulse-ring inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               <Shield className="h-3.5 w-3.5" />
               Proteção de nível empresarial
             </span>
 
-            <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-6xl">
+            <h1 className="reveal reveal-delay-1 mt-6 text-4xl font-bold tracking-tight sm:text-6xl">
               Proteção avançada para a sua{" "}
-              <span className="text-gradient-primary">comunidade</span>
+              <span className="text-gradient-animated">comunidade</span>
             </h1>
 
-            <p className="mt-6 text-lg text-muted-foreground sm:text-xl">
+            <p className="reveal reveal-delay-2 mt-6 text-lg text-muted-foreground sm:text-xl">
               Aegis é o escudo definitivo contra raids, spam e ataques. Moderação automatizada, logs profundos e configuração simples — pronto para escalar entre múltiplas plataformas.
             </p>
 
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button asChild size="lg" className="bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-glow hover:opacity-90">
+            <div className="reveal reveal-delay-3 mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Button asChild size="lg" className="shine bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-glow transition-transform hover:scale-105 hover:opacity-95">
                 <a href="#" rel="noopener">
                   Adicionar ao Discord
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-border bg-surface/40 hover:bg-surface">
+              <Button asChild size="lg" variant="outline" className="border-border bg-surface/40 transition-all hover:border-primary/40 hover:bg-surface">
                 <Link to="/comandos">Ver comandos</Link>
               </Button>
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+            <div className="reveal reveal-delay-4 mt-10 flex flex-wrap items-center justify-center gap-2">
               {PLATFORMS.map((p) => (
                 <PlatformBadge key={p.name} platform={p} size="sm" />
               ))}
@@ -93,8 +95,12 @@ function HomePage() {
       {/* Stats */}
       <section className="border-y border-border/60 bg-surface/30">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-4 py-10 sm:px-6 md:grid-cols-4 lg:px-8">
-          {STATS.map((s) => (
-            <div key={s.label} className="text-center">
+          {STATS.map((s, i) => (
+            <div
+              key={s.label}
+              className="reveal text-center"
+              style={{ animationDelay: `${i * 0.08}s` }}
+            >
               <div className="font-display text-3xl font-bold text-gradient-gold sm:text-4xl">{s.value}</div>
               <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{s.label}</div>
             </div>
@@ -115,9 +121,9 @@ function HomePage() {
           {FEATURES.map((f) => (
             <div
               key={f.title}
-              className="group relative overflow-hidden rounded-2xl border border-border bg-surface/60 p-6 transition-all hover:border-primary/40 hover:bg-surface"
+              className="group lift border-gradient relative overflow-hidden rounded-2xl border border-border bg-surface/60 p-6 transition-colors hover:border-primary/40 hover:bg-surface"
             >
-              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary ring-1 ring-primary/30">
+              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary ring-1 ring-primary/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
                 <f.icon className="h-5 w-5" />
               </div>
               <h3 className="text-lg font-semibold">{f.title}</h3>
@@ -136,7 +142,7 @@ function HomePage() {
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {STEPS.map((s) => (
-              <div key={s.n} className="rounded-2xl border border-border bg-card p-6">
+              <div key={s.n} className="lift glow-on-hover rounded-2xl border border-border bg-card p-6">
                 <div className="font-display text-3xl font-bold text-gradient-primary">{s.n}</div>
                 <h3 className="mt-3 text-lg font-semibold">{s.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
