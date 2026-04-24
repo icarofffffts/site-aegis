@@ -504,6 +504,19 @@
   to { background-position: 48px 48px; }
 }
 
+@keyframes progress-grow {
+  0% { transform: scaleX(0); }
+  60% { transform: scaleX(0.7); }
+  100% { transform: scaleX(1); }
+}
+@keyframes progress-shimmer {
+  to { background-position: -200% 0; }
+}
+@keyframes shimmer-slide {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .orb-primary,
@@ -511,7 +524,9 @@
   .orb-glow,
   .text-gradient-animated,
   .bg-grid-animated,
-  .pulse-ring::before {
+  .pulse-ring::before,
+  .route-progress,
+  .skeleton-shimmer {
     animation: none !important;
   }
 }
