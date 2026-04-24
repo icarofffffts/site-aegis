@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Search, Shield } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Input } from "@/components/ui/input";
+import { CommandsSkeleton } from "@/components/skeletons/CommandsSkeleton";
 import { COMMAND_CATEGORIES, COMMANDS, type CommandCategory } from "@/data/commands";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +25,12 @@ export const Route = createFileRoute("/comandos")({
 function CommandsPage() {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState<CommandCategory | "Todos">("Todos");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setLoading(false), 450);
+    return () => window.clearTimeout(id);
+  }, []);
 
   const filtered = useMemo(() => {
     return COMMANDS.filter((c) => {
