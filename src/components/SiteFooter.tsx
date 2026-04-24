@@ -10,7 +10,7 @@ export function SiteFooter() {
           <div className="md:col-span-2">
             <ShieldLogo />
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
-              Proteção avançada e moderação inteligente para a sua comunidade — pensada para escalar entre múltiplas plataformas.
+              Plataforma de governança de segurança comunitária distribuída para o Discord. Um produto <span className="font-semibold text-foreground">ARX DEVS</span>.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               {PLATFORMS.map((p) => (
@@ -29,17 +29,17 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-foreground">Comunidade</h4>
+            <h4 className="text-sm font-semibold text-foreground">ARX DEVS</h4>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+              <li><a href="#" className="hover:text-foreground">Contexto</a></li>
               <li><a href="#" className="hover:text-foreground">Servidor de suporte</a></li>
               <li><a href="#" className="hover:text-foreground">Status</a></li>
-              <li><a href="#" className="hover:text-foreground">Documentação</a></li>
             </ul>
           </div>
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} Aegis. Todos os direitos reservados.</p>
+          <p>© {new Date().getFullYear()} ARX DEVS — Shield. Todos os direitos reservados.</p>
           <div className="flex gap-4">
             <a href="#" className="hover:text-foreground">Termos</a>
             <a href="#" className="hover:text-foreground">Privacidade</a>

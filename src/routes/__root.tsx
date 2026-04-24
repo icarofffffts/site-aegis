@@ -30,9 +30,9 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Aegis — Proteção avançada para sua comunidade" },
-      { name: "description", content: "Bot de moderação e segurança premium para Discord, com arquitetura multi-plataforma." },
-      { name: "author", content: "Aegis" },
+      { title: "Shield by ARX DEVS — Governança de segurança para Discord" },
+      { name: "description", content: "Plataforma colaborativa de blacklist e moderação para o ecossistema Discord. Um produto ARX DEVS." },
+      { name: "author", content: "ARX DEVS" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

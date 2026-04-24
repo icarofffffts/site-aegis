@@ -35,7 +35,10 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden md:flex">
+        <div className="hidden items-center gap-2 md:flex">
+          <Button asChild variant="ghost" size="sm">
+            <Link to="/login">Login</Link>
+          </Button>
           <Button asChild className="bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-glow hover:opacity-90">
             <a href="#" rel="noopener">Adicionar ao Discord</a>
           </Button>
@@ -69,6 +72,13 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          <Link
+            to="/login"
+            onClick={() => setOpen(false)}
+            className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-surface hover:text-foreground"
+          >
+            Login
+          </Link>
           <Button asChild className="mt-2 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground">
             <a href="#" rel="noopener">Adicionar ao Discord</a>
           </Button>

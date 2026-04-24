@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as PrecosRouteImport } from './routes/precos'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ComandosRouteImport } from './routes/comandos'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -22,6 +23,11 @@ const SuporteRoute = SuporteRouteImport.update({
 const PrecosRoute = PrecosRouteImport.update({
   id: '/precos',
   path: '/precos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComandosRoute = ComandosRouteImport.update({
@@ -38,12 +44,14 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/comandos': typeof ComandosRoute
+  '/login': typeof LoginRoute
   '/precos': typeof PrecosRoute
   '/suporte': typeof SuporteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/comandos': typeof ComandosRoute
+  '/login': typeof LoginRoute
   '/precos': typeof PrecosRoute
   '/suporte': typeof SuporteRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/comandos': typeof ComandosRoute
+  '/login': typeof LoginRoute
   '/precos': typeof PrecosRoute
   '/suporte': typeof SuporteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/comandos' | '/precos' | '/suporte'
+  fullPaths: '/' | '/comandos' | '/login' | '/precos' | '/suporte'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/comandos' | '/precos' | '/suporte'
-  id: '__root__' | '/' | '/comandos' | '/precos' | '/suporte'
+  to: '/' | '/comandos' | '/login' | '/precos' | '/suporte'
+  id: '__root__' | '/' | '/comandos' | '/login' | '/precos' | '/suporte'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ComandosRoute: typeof ComandosRoute
+  LoginRoute: typeof LoginRoute
   PrecosRoute: typeof PrecosRoute
   SuporteRoute: typeof SuporteRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/precos'
       fullPath: '/precos'
       preLoaderRoute: typeof PrecosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/comandos': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ComandosRoute: ComandosRoute,
+  LoginRoute: LoginRoute,
   PrecosRoute: PrecosRoute,
   SuporteRoute: SuporteRoute,
 }
