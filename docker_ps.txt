@@ -1,0 +1,10 @@
+CONTAINER ID   IMAGE                       COMMAND                  CREATED        STATUS                  PORTS                                                                                NAMES
+5ed1a6db619a   n8nio/n8n:latest            "tini -- /docker-ent…"   20 hours ago   Up 20 hours             0.0.0.0:5678->5678/tcp, [::]:5678->5678/tcp                                          n8n
+08362bc8173f   shield-radar-bot            "docker-entrypoint.s…"   37 hours ago   Up 37 hours                                                                                                  shield-radar-bot
+473b0e614e5f   shield-radar-app            "docker-entrypoint.s…"   37 hours ago   Up 37 hours (healthy)   0.0.0.0:3001->3000/tcp, [::]:3001->3000/tcp                                          shield-radar
+87b85989834a   lotters-radar-bot           "docker-entrypoint.s…"   44 hours ago   Up 35 hours                                                                                                  lotters-radar-bot
+70624e3d9959   arxdevs-site-arxdevs-site   "docker-entrypoint.s…"   10 days ago    Up 10 days              0.0.0.0:3002->3000/tcp, [::]:3002->3000/tcp                                          arxdevs-site
+0f693fb720ff   nginx:latest                "/docker-entrypoint.…"   10 days ago    Up 2 days               0.0.0.0:8880->80/tcp, [::]:8880->80/tcp, 0.0.0.0:8443->443/tcp, [::]:8443->443/tcp   nginx
+79bc9d2f9a0a   postgres:15                 "docker-entrypoint.s…"   10 days ago    Up 24 hours             5432/tcp                                                                             postgres
+3f20ec0ddfbf   postgres:15                 "docker-entrypoint.s…"   10 days ago    Up 10 days              0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp                                          postgres_geral
+007cf27dd43e   postgres:15                 "docker-entrypoint.s…"   2 weeks ago    Up 2 weeks              5432/tcp                                                                             postgres_evo

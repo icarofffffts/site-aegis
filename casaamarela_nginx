@@ -1,0 +1,27 @@
+server {
+    server_name casaamarela.arxdevs.xyz;
+    location / {
+        proxy_pass http://localhost:3011;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/casaamarela.arxdevs.xyz/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/casaamarela.arxdevs.xyz/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}server {
+    if ($host = casaamarela.arxdevs.xyz) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name casaamarela.arxdevs.xyz;
+    return 404; # managed by Certbot
+
+
+}

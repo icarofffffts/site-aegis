@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PricingSkeleton } from "@/components/skeletons/PricingSkeleton";
 import { PLANS } from "@/data/pricing";
 import { cn } from "@/lib/utils";
+import { SITE_URLS } from "@/lib/constants";
 
 export const Route = createFileRoute("/precos")({
   head: () => ({
@@ -40,22 +41,22 @@ function PricingPage() {
 
   return (
     <SiteLayout>
-      <section className="border-b border-border/60 bg-hero">
-        <div className="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 lg:px-8">
-          <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs font-medium text-gold">
+      <section className="bg-[#0d1117] border-b border-[#30363d]">
+        <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 lg:px-8">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#30363d] bg-[#161b22] px-3 py-1 text-xs font-semibold text-yellow-500">
             <Sparkles className="h-3.5 w-3.5" /> Comece grátis, escale quando precisar
           </span>
-          <h1 className="mt-5 text-4xl font-bold sm:text-5xl">Planos para qualquer <span className="text-gradient-gold">comunidade</span></h1>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Sem pegadinhas. Sem cobrança por servidor. Pague apenas pelos recursos avançados que sua comunidade realmente usa.
+          <h1 className="mt-6 text-4xl font-bold text-white sm:text-6xl">Planos para sua <span className="text-yellow-500">comunidade</span></h1>
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-[#7d8590]">
+            Proteção profissional para servidores de qualquer tamanho. Sem taxas ocultas.
           </p>
 
-          <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 p-1">
+          <div className="mt-10 inline-flex items-center gap-1 rounded-lg border border-[#30363d] bg-[#010409] p-1">
             <button
               onClick={() => setYearly(false)}
               className={cn(
-                "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-                !yearly ? "bg-primary text-primary-foreground" : "text-muted-foreground",
+                "rounded-md px-5 py-2 text-sm font-semibold transition-all",
+                !yearly ? "bg-[#30363d] text-white" : "text-[#7d8590] hover:text-white",
               )}
             >
               Mensal
@@ -63,11 +64,11 @@ function PricingPage() {
             <button
               onClick={() => setYearly(true)}
               className={cn(
-                "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-                yearly ? "bg-primary text-primary-foreground" : "text-muted-foreground",
+                "rounded-md px-5 py-2 text-sm font-semibold transition-all",
+                yearly ? "bg-[#30363d] text-white" : "text-[#7d8590] hover:text-white",
               )}
             >
-              Anual <span className="ml-1 text-xs text-gold">−17%</span>
+              Anual <span className="ml-1 text-xs text-yellow-500">−17%</span>
             </button>
           </div>
         </div>
@@ -77,53 +78,54 @@ function PricingPage() {
         {loading ? (
           <PricingSkeleton count={3} />
         ) : (
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-8 lg:grid-cols-3">
             {PLANS.map((plan, i) => {
               const price = yearly ? plan.yearly : plan.monthly;
+              const isHighlight = plan.highlight;
               return (
                 <div
                   key={plan.name}
                   className={cn(
-                    "reveal lift relative flex flex-col rounded-3xl border bg-card p-7 transition-all",
-                    plan.highlight
-                      ? "border-primary/60 shadow-glow"
-                      : "border-border hover:border-primary/30",
+                    "relative flex flex-col rounded-xl border p-8 transition-all",
+                    isHighlight
+                      ? "border-yellow-500/50 bg-[#161b22] ring-1 ring-yellow-500/20"
+                      : "border-[#30363d] bg-[#0d1117] hover:border-[#8b949e]",
                   )}
-                  style={{ animationDelay: `${i * 80}ms` }}
                 >
-                  {plan.highlight && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-primary to-primary-glow px-3 py-1 text-xs font-semibold text-primary-foreground shadow-glow">
+                  {isHighlight && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-yellow-500 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black">
                       Mais popular
                     </span>
                   )}
-                  <h3 className="font-display text-xl font-bold">{plan.name}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
+                  <h3 className="text-xl font-bold text-white">{plan.name}</h3>
+                  <p className="mt-2 text-sm text-[#7d8590]">{plan.tagline}</p>
 
-                  <div className="mt-6 flex items-baseline gap-1">
-                    <span className="font-display text-4xl font-bold">
+                  <div className="mt-8 flex items-baseline gap-1">
+                    <span className="text-4xl font-bold text-white">
                       {price === 0 ? "Grátis" : `R$ ${price.toFixed(2).replace(".", ",")}`}
                     </span>
                     {price > 0 && (
-                      <span className="text-sm text-muted-foreground">/{yearly ? "ano" : "mês"}</span>
+                      <span className="text-sm text-[#7d8590]">/{yearly ? "ano" : "mês"}</span>
                     )}
                   </div>
 
                   <Button
+                    asChild
                     className={cn(
-                      "mt-6",
-                      plan.highlight
-                        ? "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-glow"
-                        : "bg-surface text-foreground hover:bg-surface-elevated",
+                      "mt-8 h-12 text-sm font-bold shadow-none",
+                      isHighlight
+                        ? "bg-yellow-500 text-black hover:bg-yellow-400"
+                        : "border-[#30363d] bg-[#21262d] text-[#c9d1d9] hover:bg-[#30363d] hover:border-[#8b949e]",
                     )}
                   >
-                    {plan.cta}
+                    <a href={SITE_URLS.botInvite}>{plan.cta}</a>
                   </Button>
 
-                  <ul className="mt-6 space-y-3 text-sm">
+                  <ul className="mt-10 space-y-4 text-sm">
                     {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-success" />
-                        <span className="text-muted-foreground">{f}</span>
+                      <li key={f} className="flex items-start gap-3">
+                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#3fb950]" />
+                        <span className="text-[#7d8590]">{f}</span>
                       </li>
                     ))}
                   </ul>
@@ -134,19 +136,19 @@ function PricingPage() {
         )}
       </section>
 
-      <section className="border-t border-border/60 bg-surface/30">
-        <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
-          <h2 className="text-center text-3xl font-bold">Perguntas frequentes</h2>
-          <div className="mt-8 divide-y divide-border rounded-2xl border border-border bg-card">
+      <section className="bg-[#0d1117] border-t border-[#30363d]">
+        <div className="mx-auto max-w-3xl px-4 py-24 sm:px-6 lg:px-8">
+          <h2 className="text-center text-3xl font-bold text-white">Perguntas frequentes</h2>
+          <div className="mt-12 divide-y divide-[#30363d] overflow-hidden rounded-xl border border-[#30363d] bg-[#161b22]">
             {FAQ.map((item) => (
-              <details key={item.q} className="group p-5">
-                <summary className="cursor-pointer list-none text-base font-medium text-foreground">
-                  <div className="flex items-center justify-between gap-2">
+              <details key={item.q} className="group p-6 transition-colors hover:bg-[#1c2128]">
+                <summary className="cursor-pointer list-none text-base font-semibold text-white">
+                  <div className="flex items-center justify-between gap-4">
                     <span>{item.q}</span>
-                    <span className="text-muted-foreground transition-transform group-open:rotate-45">+</span>
+                    <span className="text-[#8b949e] transition-transform group-open:rotate-45">+</span>
                   </div>
                 </summary>
-                <p className="mt-3 text-sm text-muted-foreground">{item.a}</p>
+                <p className="mt-4 text-sm leading-relaxed text-[#7d8590]">{item.a}</p>
               </details>
             ))}
           </div>

@@ -11,9 +11,21 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as PrecosRouteImport } from './routes/precos'
+import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ComandosRouteImport } from './routes/comandos'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthLogoutRouteImport } from './routes/auth.logout'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as ApiStatsRouteImport } from './routes/api.stats'
+import { Route as ApiReportsRouteImport } from './routes/api.reports'
+import { Route as ApiProtectionRouteImport } from './routes/api.protection'
+import { Route as ApiMeRouteImport } from './routes/api.me'
+import { Route as ApiHealthCheckRouteImport } from './routes/api.health-check'
+import { Route as ApiDashboardRouteImport } from './routes/api.dashboard'
+import { Route as ApiBotconfigRouteImport } from './routes/api.botconfig'
+import { Route as ApiBotStatusRouteImport } from './routes/api.bot-status'
 
 const SuporteRoute = SuporteRouteImport.update({
   id: '/suporte',
@@ -25,9 +37,19 @@ const PrecosRoute = PrecosRouteImport.update({
   path: '/precos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LogoutRoute = LogoutRouteImport.update({
+  id: '/logout',
+  path: '/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComandosRoute = ComandosRouteImport.update({
@@ -40,43 +62,193 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthLogoutRoute = AuthLogoutRouteImport.update({
+  id: '/auth/logout',
+  path: '/auth/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStatsRoute = ApiStatsRouteImport.update({
+  id: '/api/stats',
+  path: '/api/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportsRoute = ApiReportsRouteImport.update({
+  id: '/api/reports',
+  path: '/api/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiProtectionRoute = ApiProtectionRouteImport.update({
+  id: '/api/protection',
+  path: '/api/protection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMeRoute = ApiMeRouteImport.update({
+  id: '/api/me',
+  path: '/api/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHealthCheckRoute = ApiHealthCheckRouteImport.update({
+  id: '/api/health-check',
+  path: '/api/health-check',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDashboardRoute = ApiDashboardRouteImport.update({
+  id: '/api/dashboard',
+  path: '/api/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBotconfigRoute = ApiBotconfigRouteImport.update({
+  id: '/api/botconfig',
+  path: '/api/botconfig',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBotStatusRoute = ApiBotStatusRouteImport.update({
+  id: '/api/bot-status',
+  path: '/api/bot-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/comandos': typeof ComandosRoute
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/precos': typeof PrecosRoute
   '/suporte': typeof SuporteRoute
+  '/api/bot-status': typeof ApiBotStatusRoute
+  '/api/botconfig': typeof ApiBotconfigRoute
+  '/api/dashboard': typeof ApiDashboardRoute
+  '/api/health-check': typeof ApiHealthCheckRoute
+  '/api/me': typeof ApiMeRoute
+  '/api/protection': typeof ApiProtectionRoute
+  '/api/reports': typeof ApiReportsRoute
+  '/api/stats': typeof ApiStatsRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/logout': typeof AuthLogoutRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/comandos': typeof ComandosRoute
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/precos': typeof PrecosRoute
   '/suporte': typeof SuporteRoute
+  '/api/bot-status': typeof ApiBotStatusRoute
+  '/api/botconfig': typeof ApiBotconfigRoute
+  '/api/dashboard': typeof ApiDashboardRoute
+  '/api/health-check': typeof ApiHealthCheckRoute
+  '/api/me': typeof ApiMeRoute
+  '/api/protection': typeof ApiProtectionRoute
+  '/api/reports': typeof ApiReportsRoute
+  '/api/stats': typeof ApiStatsRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/logout': typeof AuthLogoutRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/comandos': typeof ComandosRoute
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/precos': typeof PrecosRoute
   '/suporte': typeof SuporteRoute
+  '/api/bot-status': typeof ApiBotStatusRoute
+  '/api/botconfig': typeof ApiBotconfigRoute
+  '/api/dashboard': typeof ApiDashboardRoute
+  '/api/health-check': typeof ApiHealthCheckRoute
+  '/api/me': typeof ApiMeRoute
+  '/api/protection': typeof ApiProtectionRoute
+  '/api/reports': typeof ApiReportsRoute
+  '/api/stats': typeof ApiStatsRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/logout': typeof AuthLogoutRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/comandos' | '/login' | '/precos' | '/suporte'
+  fullPaths:
+    | '/'
+    | '/comandos'
+    | '/dashboard'
+    | '/login'
+    | '/logout'
+    | '/precos'
+    | '/suporte'
+    | '/api/bot-status'
+    | '/api/botconfig'
+    | '/api/dashboard'
+    | '/api/health-check'
+    | '/api/me'
+    | '/api/protection'
+    | '/api/reports'
+    | '/api/stats'
+    | '/auth/callback'
+    | '/auth/logout'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/comandos' | '/login' | '/precos' | '/suporte'
-  id: '__root__' | '/' | '/comandos' | '/login' | '/precos' | '/suporte'
+  to:
+    | '/'
+    | '/comandos'
+    | '/dashboard'
+    | '/login'
+    | '/logout'
+    | '/precos'
+    | '/suporte'
+    | '/api/bot-status'
+    | '/api/botconfig'
+    | '/api/dashboard'
+    | '/api/health-check'
+    | '/api/me'
+    | '/api/protection'
+    | '/api/reports'
+    | '/api/stats'
+    | '/auth/callback'
+    | '/auth/logout'
+  id:
+    | '__root__'
+    | '/'
+    | '/comandos'
+    | '/dashboard'
+    | '/login'
+    | '/logout'
+    | '/precos'
+    | '/suporte'
+    | '/api/bot-status'
+    | '/api/botconfig'
+    | '/api/dashboard'
+    | '/api/health-check'
+    | '/api/me'
+    | '/api/protection'
+    | '/api/reports'
+    | '/api/stats'
+    | '/auth/callback'
+    | '/auth/logout'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ComandosRoute: typeof ComandosRoute
+  DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
+  LogoutRoute: typeof LogoutRoute
   PrecosRoute: typeof PrecosRoute
   SuporteRoute: typeof SuporteRoute
+  ApiBotStatusRoute: typeof ApiBotStatusRoute
+  ApiBotconfigRoute: typeof ApiBotconfigRoute
+  ApiDashboardRoute: typeof ApiDashboardRoute
+  ApiHealthCheckRoute: typeof ApiHealthCheckRoute
+  ApiMeRoute: typeof ApiMeRoute
+  ApiProtectionRoute: typeof ApiProtectionRoute
+  ApiReportsRoute: typeof ApiReportsRoute
+  ApiStatsRoute: typeof ApiStatsRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
+  AuthLogoutRoute: typeof AuthLogoutRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -95,11 +267,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrecosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/comandos': {
@@ -116,15 +302,97 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/logout': {
+      id: '/auth/logout'
+      path: '/auth/logout'
+      fullPath: '/auth/logout'
+      preLoaderRoute: typeof AuthLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stats': {
+      id: '/api/stats'
+      path: '/api/stats'
+      fullPath: '/api/stats'
+      preLoaderRoute: typeof ApiStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reports': {
+      id: '/api/reports'
+      path: '/api/reports'
+      fullPath: '/api/reports'
+      preLoaderRoute: typeof ApiReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/protection': {
+      id: '/api/protection'
+      path: '/api/protection'
+      fullPath: '/api/protection'
+      preLoaderRoute: typeof ApiProtectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/me': {
+      id: '/api/me'
+      path: '/api/me'
+      fullPath: '/api/me'
+      preLoaderRoute: typeof ApiMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/health-check': {
+      id: '/api/health-check'
+      path: '/api/health-check'
+      fullPath: '/api/health-check'
+      preLoaderRoute: typeof ApiHealthCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/dashboard': {
+      id: '/api/dashboard'
+      path: '/api/dashboard'
+      fullPath: '/api/dashboard'
+      preLoaderRoute: typeof ApiDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/botconfig': {
+      id: '/api/botconfig'
+      path: '/api/botconfig'
+      fullPath: '/api/botconfig'
+      preLoaderRoute: typeof ApiBotconfigRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/bot-status': {
+      id: '/api/bot-status'
+      path: '/api/bot-status'
+      fullPath: '/api/bot-status'
+      preLoaderRoute: typeof ApiBotStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ComandosRoute: ComandosRoute,
+  DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
+  LogoutRoute: LogoutRoute,
   PrecosRoute: PrecosRoute,
   SuporteRoute: SuporteRoute,
+  ApiBotStatusRoute: ApiBotStatusRoute,
+  ApiBotconfigRoute: ApiBotconfigRoute,
+  ApiDashboardRoute: ApiDashboardRoute,
+  ApiHealthCheckRoute: ApiHealthCheckRoute,
+  ApiMeRoute: ApiMeRoute,
+  ApiProtectionRoute: ApiProtectionRoute,
+  ApiReportsRoute: ApiReportsRoute,
+  ApiStatsRoute: ApiStatsRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
+  AuthLogoutRoute: AuthLogoutRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

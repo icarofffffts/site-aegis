@@ -1,0 +1,9 @@
+services:
+  aegis-site:
+    build: .
+    container_name: aegis-site
+    ports:
+      - "3002:3002"
+    restart: always
+    env_file:
+      - .env.production.local

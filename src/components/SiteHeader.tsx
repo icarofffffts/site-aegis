@@ -1,21 +1,29 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
-import { ShieldLogo } from "./ShieldLogo";
-import { ThemeToggle } from "./ThemeToggle";
+import { Menu, X, LogOut, ChevronDown } from "lucide-react";
+import { AegisLogo } from "./AegisLogo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { SITE_URLS } from "@/lib/constants";
 
 const NAV = [
   { to: "/", label: "Início" },
   { to: "/comandos", label: "Comandos" },
+  { to: "/dashboard", label: "Dashboard" },
   { to: "/precos", label: "Preços" },
   { to: "/suporte", label: "Suporte" },
 ] as const;
 
+interface SessionUser {
+  id: string;
+  username: string;
+  avatar: string;
+}
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<SessionUser | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -24,13 +32,26 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("aegis_session") : null;
+    fetch("/api/me", {
+      credentials: "include",
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data?.authenticated) setUser(data.user);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 border-b transition-all duration-300",
+        "sticky top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-border/70 bg-background/75 shadow-elegant backdrop-blur-2xl supports-[backdrop-filter]:bg-background/60"
-          : "border-transparent bg-background/40 backdrop-blur-md",
+          ? "border-b border-border bg-[#010409]/80 backdrop-blur-md"
+          : "bg-[#010409]/40 backdrop-blur-sm",
       )}
     >
       <div
@@ -44,7 +65,7 @@ export function SiteHeader() {
           className="flex items-center transition-transform duration-300 hover:scale-[1.02]"
           onClick={() => setOpen(false)}
         >
-          <ShieldLogo />
+          <AegisLogo />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -61,20 +82,42 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
-          <ThemeToggle />
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/login">Login</Link>
-          </Button>
+          {user ? (
+            <div className="flex items-center gap-2">
+              <Link
+                to="/dashboard"
+                className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground hover:bg-surface hover:text-foreground transition-colors"
+              >
+                <img src={user.avatar} alt={user.username} className="h-6 w-6 rounded-full" />
+                <span>{user.username}</span>
+                <ChevronDown className="h-3 w-3" />
+              </Link>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground"
+                onClick={() => {
+                  try { localStorage.removeItem("aegis_session"); } catch {}
+                  window.location.replace("/");
+                }}
+              >
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            <Button asChild variant="ghost" size="sm" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+              <Link to="/login">Login</Link>
+            </Button>
+          )}
           <Button
             asChild
-            className="shine bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-glow transition-transform hover:scale-105 hover:opacity-95"
+            className="bg-[#1f883d] text-white hover:bg-[#1a7a35] shadow-none border border-[#1f883d]"
           >
-            <a href="#" rel="noopener">Adicionar ao Discord</a>
+            <a href={SITE_URLS.botInvite} rel="noopener">Adicionar ao Discord</a>
           </Button>
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
-          <ThemeToggle />
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground transition-colors hover:bg-surface"
@@ -104,15 +147,38 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <Link
-            to="/login"
-            onClick={() => setOpen(false)}
-            className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-surface hover:text-foreground"
-          >
-            Login
-          </Link>
-          <Button asChild className="mt-2 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground">
-            <a href="#" rel="noopener">Adicionar ao Discord</a>
+          {user ? (
+            <>
+              <Link
+                to="/dashboard"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-surface hover:text-foreground"
+              >
+                <img src={user.avatar} alt={user.username} className="h-5 w-5 rounded-full" />
+                {user.username}
+              </Link>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  try { localStorage.removeItem("aegis_session"); } catch {}
+                  window.location.replace("/");
+                }}
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-red-400 hover:bg-surface w-full text-left"
+              >
+                <LogOut className="h-4 w-4" /> Sair
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              onClick={() => setOpen(false)}
+              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-surface hover:text-foreground"
+            >
+              Login
+            </Link>
+          )}
+          <Button asChild className="mt-2 bg-[#1f883d] text-white hover:bg-[#1a7a35] shadow-none border border-[#1f883d]">
+            <a href={SITE_URLS.botInvite} rel="noopener">Adicionar ao Discord</a>
           </Button>
         </nav>
       </div>

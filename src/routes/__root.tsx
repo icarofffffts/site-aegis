@@ -32,7 +32,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Shield by ARX DEVS — Governança de segurança para Discord" },
+      { title: "Aegis — Proteção Avançada para sua comunidade" },
       { name: "description", content: "Plataforma colaborativa de blacklist e moderação para o ecossistema Discord. Um produto ARX DEVS." },
       { name: "author", content: "ARX DEVS" },
       { property: "og:type", content: "website" },
@@ -58,7 +58,7 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR" className="dark">
       <head>
         <HeadContent />
       </head>

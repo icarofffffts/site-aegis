@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      - clinicas-network
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: ${POSTGRES_DB}
+      DB_POSTGRESDB_USER: ${POSTGRES_USER}
+      DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD}
+      WEBHOOK_URL: "https://n8n.arxsolutions.cloud"
+      N8N_HOST: "n8n.arxsolutions.cloud"
+      N8N_PROTOCOL: "https"
+    depends_on:
+      - postgres
+    networks:
+      - clinicas-network
+
+  postgres_geral:
+    image: postgres:15
+    container_name: postgres_geral
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: clinicas_geral
+    volumes:
+      - ./data/postgres_geral:/var/lib/postgresql/data
+    networks:
+      - clinicas-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "8880:80"
+      - "8443:443"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - n8n
+    networks:
+      - clinicas-network
+
+networks:
+  clinicas-network:
+    driver: bridge
