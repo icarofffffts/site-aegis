@@ -46,7 +46,7 @@ export const Route = createFileRoute("/api/reports")({
         const newStatus = action === "approve" ? "approved" : "rejected";
 
         const { data, error } = await supabase
-          .from("reports")
+          .schema("shield").from("reports")
           .update({
             status: newStatus,
             reviewed_by: session.id,

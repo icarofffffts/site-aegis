@@ -29,7 +29,7 @@ export const Route = createFileRoute("/api/botconfig")({
         if (userId) {
           // Busca alertas de um usuário específico
           const { data: alerts } = await supabase
-            .from("arx_alerts")
+            .schema("aegis").from("arx_alerts")
             .select("*")
             .eq("discord_user_id", userId)
             .order("created_at", { ascending: false })
@@ -40,7 +40,7 @@ export const Route = createFileRoute("/api/botconfig")({
 
         // Lista todos os usuários com alertas ativos (top 50)
         const { data: flagged } = await supabase
-          .from("arx_alerts")
+          .schema("aegis").from("arx_alerts")
           .select("discord_user_id, severity, alert_type, created_at, message")
           .eq("is_active", true)
           .order("created_at", { ascending: false })
@@ -75,7 +75,7 @@ export const Route = createFileRoute("/api/botconfig")({
         if (!userId) return new Response(JSON.stringify({ error: "userId required" }), { status: 400, headers: { "Content-Type": "application/json" } });
 
         const { error } = await supabase
-          .from("arx_alerts")
+          .schema("aegis").from("arx_alerts")
           .update({ is_active: false, updated_at: new Date().toISOString() })
           .eq("discord_user_id", userId)
           .eq("is_active", true);

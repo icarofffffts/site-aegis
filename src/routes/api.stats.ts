@@ -25,7 +25,7 @@ export const Route = createFileRoute("/api/stats")({
         // Alertas por dia nos últimos 14 dias
         const since14d = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
         const { data: alertsByDay } = await supabase
-          .from("arx_alerts")
+          .schema("aegis").from("arx_alerts")
           .select("created_at, severity")
           .gte("created_at", since14d)
           .order("created_at", { ascending: true });
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/api/stats")({
 
         // Distribuição por tipo de alerta
         const { data: byType } = await supabase
-          .from("arx_alerts")
+          .schema("aegis").from("arx_alerts")
           .select("alert_type")
           .eq("is_active", true);
 
@@ -52,7 +52,7 @@ export const Route = createFileRoute("/api/stats")({
 
         // Distribuição por severidade
         const { data: bySeverity } = await supabase
-          .from("arx_alerts")
+          .schema("aegis").from("arx_alerts")
           .select("severity")
           .eq("is_active", true);
 
@@ -63,7 +63,7 @@ export const Route = createFileRoute("/api/stats")({
 
         // Ações dos últimos 14 dias
         const { data: actionsByDay } = await supabase
-          .from("arx_action_log")
+          .schema("aegis").from("arx_action_log")
           .select("created_at, action_type")
           .gte("created_at", since14d)
           .order("created_at", { ascending: true });

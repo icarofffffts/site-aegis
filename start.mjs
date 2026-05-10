@@ -362,12 +362,12 @@ fetch('/api/auth/process', {
         { data: recentActions },
         { data: pendingReports },
       ] = await Promise.all([
-        supabase.from("arx_alerts").select("*", { count: "exact", head: true }).eq("is_active", true),
-        supabase.from("arx_alerts").select("*", { count: "exact", head: true }).eq("is_active", true).eq("severity", "critical"),
-        supabase.from("arx_alerts").select("discord_user_id").eq("is_active", true),
-        supabase.from("arx_alerts").select("*", { count: "exact", head: true }).gte("created_at", since24h),
-        supabase.from("arx_action_log").select("*").order("created_at", { ascending: false }).limit(10),
-        supabase.from("reports").select("id,target_discord_id,reason,severity,created_at").eq("status", "pending").order("created_at", { ascending: true }).limit(20),
+        supabase.schema("aegis").from("arx_alerts").select("*", { count: "exact", head: true }).eq("is_active", true),
+        supabase.schema("aegis").from("arx_alerts").select("*", { count: "exact", head: true }).eq("is_active", true).eq("severity", "critical"),
+        supabase.schema("aegis").from("arx_alerts").select("discord_user_id").eq("is_active", true),
+        supabase.schema("aegis").from("arx_alerts").select("*", { count: "exact", head: true }).gte("created_at", since24h),
+        supabase.schema("aegis").from("arx_action_log").select("*").order("created_at", { ascending: false }).limit(10),
+        supabase.schema("shield").from("reports").select("id,target_discord_id,reason,severity,created_at").eq("status", "pending").order("created_at", { ascending: true }).limit(20),
       ]);
 
       const flaggedUsers = new Set((flaggedData ?? []).map(r => r.discord_user_id)).size;
@@ -389,7 +389,7 @@ fetch('/api/auth/process', {
       const id     = url.searchParams.get("id");
       const action = url.searchParams.get("action");
       if (!id || !["approve","reject"].includes(action)) return json(res, 400, { error: "invalid_params" });
-      const { error } = await supabase.from("reports").update({ status: action === "approve" ? "approved" : "rejected", reviewed_by: sess.id, updated_at: new Date().toISOString() }).eq("id", id);
+      const { error } = await supabase.schema("shield").from("reports").update({ status: action === "approve" ? "approved" : "rejected", reviewed_by: sess.id, updated_at: new Date().toISOString() }).eq("id", id);
       if (error) return json(res, 500, { error: error.message });
       return json(res, 200, { ok: true });
     }
@@ -437,8 +437,8 @@ fetch('/api/auth/process', {
       const guildId = url.searchParams.get("guildId");
       if (!guildId) return json(res, 400, { error: "guildId required" });
 
-      const { data: config } = await supabase.from("arx_server_config").select("*").eq("discord_guild_id", guildId).single();
-      const { data: patterns } = await supabase.from("arx_detection_patterns").select("*").eq("discord_guild_id", guildId).eq("is_active", true);
+      const { data: config } = await supabase.schema("aegis").from("arx_server_config").select("*").eq("discord_guild_id", guildId).single();
+      const { data: patterns } = await supabase.schema("aegis").from("arx_detection_patterns").select("*").eq("discord_guild_id", guildId).eq("is_active", true);
 
       return json(res, 200, { config: config ?? null, patterns: patterns ?? [] });
     }
@@ -457,12 +457,12 @@ fetch('/api/auth/process', {
       const { guildId, config } = body;
       if (!guildId) return json(res, 400, { error: "guildId required" });
 
-      const { data: existing } = await supabase.from("arx_server_config").select("id").eq("discord_guild_id", guildId).single();
+      const { data: existing } = await supabase.schema("aegis").from("arx_server_config").select("id").eq("discord_guild_id", guildId).single();
       let result;
       if (existing) {
-        result = await supabase.from("arx_server_config").update({ ...config, updated_at: new Date().toISOString() }).eq("discord_guild_id", guildId).select().single();
+        result = await supabase.schema("aegis").from("arx_server_config").update({ ...config, updated_at: new Date().toISOString() }).eq("discord_guild_id", guildId).select().single();
       } else {
-        result = await supabase.from("arx_server_config").insert({ discord_guild_id: guildId, ...config }).select().single();
+        result = await supabase.schema("aegis").from("arx_server_config").insert({ discord_guild_id: guildId, ...config }).select().single();
       }
       if (result.error) return json(res, 500, { error: result.error.message });
       return json(res, 200, { ok: true, config: result.data });
