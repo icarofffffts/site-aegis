@@ -83,20 +83,28 @@ function LoginPage() {
               )}
 
               <a
+                href={SITE_URLS.arxLogin}
+                className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-indigo-600 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
+              >
+                <span className="font-bold text-base">AX</span>
+                Entrar com ARX
+              </a>
+
+              <div className="my-6 flex items-center gap-3 text-xs text-[#7d8590]">
+                <div className="h-px flex-1 bg-[#30363d]" />
+                <span>ou continue com</span>
+                <div className="h-px flex-1 bg-[#30363d]" />
+              </div>
+
+              <a
                 href={SITE_URLS.discordLogin}
-                className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#5865F2] text-sm font-semibold text-white transition-colors hover:bg-[#4752C4]"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#5865F2] text-sm font-semibold text-white transition-colors hover:bg-[#4752C4]"
               >
                 <DiscordIcon className="h-5 w-5" />
                 Continuar com Discord
               </a>
 
-              <div className="my-6 flex items-center gap-3 text-xs text-[#7d8590]">
-                <div className="h-px flex-1 bg-[#30363d]" />
-                <span>acesso restrito</span>
-                <div className="h-px flex-1 bg-[#30363d]" />
-              </div>
-
-              <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4 text-xs text-[#7d8590]">
+              <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4 mt-6 text-xs text-[#7d8590]">
                 <p className="font-medium text-white">Apenas moderadores autorizados</p>
                 <p className="mt-1">
                   O acesso ao painel é restrito a IDs Discord pré-aprovados pela equipe ARX DEVS. Solicite acesso no servidor de suporte.

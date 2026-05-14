@@ -18,6 +18,8 @@ import { Route as ComandosRouteImport } from './routes/comandos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthLogoutRouteImport } from './routes/auth.logout'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as AuthArxLogoutServerRouteImport } from './routes/auth.arx-logout-server'
+import { Route as AuthArxCallbackRouteImport } from './routes/auth.arx-callback'
 import { Route as ApiStatsRouteImport } from './routes/api.stats'
 import { Route as ApiReportsRouteImport } from './routes/api.reports'
 import { Route as ApiProtectionRouteImport } from './routes/api.protection'
@@ -70,6 +72,16 @@ const AuthLogoutRoute = AuthLogoutRouteImport.update({
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
   id: '/auth/callback',
   path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthArxLogoutServerRoute = AuthArxLogoutServerRouteImport.update({
+  id: '/auth/arx-logout-server',
+  path: '/auth/arx-logout-server',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthArxCallbackRoute = AuthArxCallbackRouteImport.update({
+  id: '/auth/arx-callback',
+  path: '/auth/arx-callback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiStatsRoute = ApiStatsRouteImport.update({
@@ -129,6 +141,8 @@ export interface FileRoutesByFullPath {
   '/api/protection': typeof ApiProtectionRoute
   '/api/reports': typeof ApiReportsRoute
   '/api/stats': typeof ApiStatsRoute
+  '/auth/arx-callback': typeof AuthArxCallbackRoute
+  '/auth/arx-logout-server': typeof AuthArxLogoutServerRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/logout': typeof AuthLogoutRoute
 }
@@ -148,6 +162,8 @@ export interface FileRoutesByTo {
   '/api/protection': typeof ApiProtectionRoute
   '/api/reports': typeof ApiReportsRoute
   '/api/stats': typeof ApiStatsRoute
+  '/auth/arx-callback': typeof AuthArxCallbackRoute
+  '/auth/arx-logout-server': typeof AuthArxLogoutServerRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/logout': typeof AuthLogoutRoute
 }
@@ -168,6 +184,8 @@ export interface FileRoutesById {
   '/api/protection': typeof ApiProtectionRoute
   '/api/reports': typeof ApiReportsRoute
   '/api/stats': typeof ApiStatsRoute
+  '/auth/arx-callback': typeof AuthArxCallbackRoute
+  '/auth/arx-logout-server': typeof AuthArxLogoutServerRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/logout': typeof AuthLogoutRoute
 }
@@ -189,6 +207,8 @@ export interface FileRouteTypes {
     | '/api/protection'
     | '/api/reports'
     | '/api/stats'
+    | '/auth/arx-callback'
+    | '/auth/arx-logout-server'
     | '/auth/callback'
     | '/auth/logout'
   fileRoutesByTo: FileRoutesByTo
@@ -208,6 +228,8 @@ export interface FileRouteTypes {
     | '/api/protection'
     | '/api/reports'
     | '/api/stats'
+    | '/auth/arx-callback'
+    | '/auth/arx-logout-server'
     | '/auth/callback'
     | '/auth/logout'
   id:
@@ -227,6 +249,8 @@ export interface FileRouteTypes {
     | '/api/protection'
     | '/api/reports'
     | '/api/stats'
+    | '/auth/arx-callback'
+    | '/auth/arx-logout-server'
     | '/auth/callback'
     | '/auth/logout'
   fileRoutesById: FileRoutesById
@@ -247,6 +271,8 @@ export interface RootRouteChildren {
   ApiProtectionRoute: typeof ApiProtectionRoute
   ApiReportsRoute: typeof ApiReportsRoute
   ApiStatsRoute: typeof ApiStatsRoute
+  AuthArxCallbackRoute: typeof AuthArxCallbackRoute
+  AuthArxLogoutServerRoute: typeof AuthArxLogoutServerRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthLogoutRoute: typeof AuthLogoutRoute
 }
@@ -314,6 +340,20 @@ declare module '@tanstack/react-router' {
       path: '/auth/callback'
       fullPath: '/auth/callback'
       preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/arx-logout-server': {
+      id: '/auth/arx-logout-server'
+      path: '/auth/arx-logout-server'
+      fullPath: '/auth/arx-logout-server'
+      preLoaderRoute: typeof AuthArxLogoutServerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/arx-callback': {
+      id: '/auth/arx-callback'
+      path: '/auth/arx-callback'
+      fullPath: '/auth/arx-callback'
+      preLoaderRoute: typeof AuthArxCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/stats': {
@@ -391,6 +431,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiProtectionRoute: ApiProtectionRoute,
   ApiReportsRoute: ApiReportsRoute,
   ApiStatsRoute: ApiStatsRoute,
+  AuthArxCallbackRoute: AuthArxCallbackRoute,
+  AuthArxLogoutServerRoute: AuthArxLogoutServerRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   AuthLogoutRoute: AuthLogoutRoute,
 }

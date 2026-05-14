@@ -7,12 +7,11 @@ export const Route = createFileRoute("/logout")({
 
 function LogoutPage() {
   useEffect(() => {
-    // Limpa a sessão do localStorage
     try { localStorage.removeItem("aegis_session"); } catch {}
     try { sessionStorage.clear(); } catch {}
 
-    // Notifica o servidor para expirar o cookie também
-    fetch("/auth/logout-server", { method: "POST", credentials: "include" })
+    // Clear ARX auth cookie via server request
+    fetch("/auth/arx-logout-server", { method: "POST", credentials: "include" })
       .catch(() => {})
       .finally(() => {
         window.location.replace("/");

@@ -1,34 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
+import { checkAuth } from "@/lib/auth-check";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
-function getSession(request: Request) {
-  const cookieHeader = request.headers.get("cookie") ?? "";
-  const match = cookieHeader.match(/aegis_session=([^;]+)/);
-  if (!match) return null;
-  try {
-    const session = JSON.parse(Buffer.from(match[1], "base64").toString("utf-8"));
-    if (Date.now() > session.expiresAt) return null;
-    return session;
-  } catch {
-    return null;
-  }
-}
-
 export const Route = createFileRoute("/api/reports")({
   server: {
     handlers: {
       // PATCH /api/reports?id=xxx&action=approve|reject
       PATCH: async ({ request }) => {
-        const session = getSession(request);
-        if (!session) {
+        const { result, clearHeaders } = await checkAuth(request);
+        if (!result.authenticated) {
           return new Response(JSON.stringify({ error: "unauthorized" }), {
             status: 401,
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              ...(clearHeaders || {}),
+            },
           });
         }
 
@@ -49,7 +40,7 @@ export const Route = createFileRoute("/api/reports")({
           .schema("shield").from("reports")
           .update({
             status: newStatus,
-            reviewed_by: session.id,
+            reviewed_by: result.userId,
             updated_at: new Date().toISOString(),
           })
           .eq("id", id)

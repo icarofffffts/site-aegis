@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
+import { checkAuth } from "@/lib/auth-check";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -33,28 +34,14 @@ export const Route = createFileRoute("/api/dashboard")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        // Verificar sessão
-        const cookieHeader = request.headers.get("cookie") ?? "";
-        const match = cookieHeader.match(/aegis_session=([^;]+)/);
-        if (!match) {
+        const { result, clearHeaders } = await checkAuth(request);
+        if (!result.authenticated) {
           return new Response(JSON.stringify({ error: "unauthorized" }), {
             status: 401,
-            headers: { "Content-Type": "application/json" },
-          });
-        }
-
-        try {
-          const session = JSON.parse(Buffer.from(match[1], "base64").toString("utf-8"));
-          if (Date.now() > session.expiresAt) {
-            return new Response(JSON.stringify({ error: "session_expired" }), {
-              status: 401,
-              headers: { "Content-Type": "application/json" },
-            });
-          }
-        } catch {
-          return new Response(JSON.stringify({ error: "invalid_session" }), {
-            status: 401,
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              ...(clearHeaders || {}),
+            },
           });
         }
 

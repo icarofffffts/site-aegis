@@ -1,33 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
+import { checkAuth } from "@/lib/auth-check";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
-function getSession(request: Request) {
-  const cookie = request.headers.get("cookie") ?? "";
-  const match = cookie.match(/aegis_session=([^;]+)/);
-  if (!match) return null;
-  try {
-    const s = JSON.parse(Buffer.from(match[1], "base64").toString("utf-8"));
-    return Date.now() > s.expiresAt ? null : s;
-  } catch { return null; }
-}
-
 export const Route = createFileRoute("/api/botconfig")({
   server: {
     handlers: {
       // GET — busca alertas de um usuário específico
       GET: async ({ request }) => {
-        if (!getSession(request)) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
+        const { result } = await checkAuth(request);
+        if (!result.authenticated) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
 
         const url = new URL(request.url);
         const userId = url.searchParams.get("userId");
 
         if (userId) {
-          // Busca alertas de um usuário específico
           const { data: alerts } = await supabase
             .schema("aegis").from("arx_alerts")
             .select("*")
@@ -38,7 +29,6 @@ export const Route = createFileRoute("/api/botconfig")({
           return new Response(JSON.stringify({ alerts: alerts ?? [] }), { headers: { "Content-Type": "application/json" } });
         }
 
-        // Lista todos os usuários com alertas ativos (top 50)
         const { data: flagged } = await supabase
           .schema("aegis").from("arx_alerts")
           .select("discord_user_id, severity, alert_type, created_at, message")
@@ -46,7 +36,6 @@ export const Route = createFileRoute("/api/botconfig")({
           .order("created_at", { ascending: false })
           .limit(50);
 
-        // Agrupar por usuário
         const users: Record<string, { count: number; maxSeverity: string; types: string[]; lastSeen: string }> = {};
         const severityOrder = ["critical", "high", "medium", "low"];
         for (const a of flagged ?? []) {
@@ -67,8 +56,8 @@ export const Route = createFileRoute("/api/botconfig")({
 
       // DELETE — desativa todos os alertas de um usuário
       DELETE: async ({ request }) => {
-        const session = getSession(request);
-        if (!session) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
+        const { result } = await checkAuth(request);
+        if (!result.authenticated) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
 
         const url = new URL(request.url);
         const userId = url.searchParams.get("userId");

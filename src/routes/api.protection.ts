@@ -1,27 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
+import { checkAuth } from "@/lib/auth-check";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
-function getSession(request: Request) {
-  const cookie = request.headers.get("cookie") ?? "";
-  const match = cookie.match(/aegis_session=([^;]+)/);
-  if (!match) return null;
-  try {
-    const s = JSON.parse(Buffer.from(match[1], "base64").toString("utf-8"));
-    return Date.now() > s.expiresAt ? null : s;
-  } catch { return null; }
-}
-
 export const Route = createFileRoute("/api/protection")({
   server: {
     handlers: {
       // GET — busca config + padrões de um servidor
       GET: async ({ request }) => {
-        if (!getSession(request)) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
+        const { result } = await checkAuth(request);
+        if (!result.authenticated) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
 
         const url = new URL(request.url);
         const guildId = url.searchParams.get("guildId");
@@ -37,8 +29,8 @@ export const Route = createFileRoute("/api/protection")({
 
       // PATCH — atualiza config do servidor
       PATCH: async ({ request }) => {
-        const session = getSession(request);
-        if (!session) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
+        const { result } = await checkAuth(request);
+        if (!result.authenticated) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
 
         const body = await request.json() as { guildId: string; config: Record<string, unknown> };
         const { guildId, config } = body;
@@ -46,21 +38,21 @@ export const Route = createFileRoute("/api/protection")({
 
         const { data: existing } = await supabase.schema("aegis").from("arx_server_config").select("id").eq("discord_guild_id", guildId).single();
 
-        let result;
+        let res;
         if (existing) {
-          result = await supabase.schema("aegis").from("arx_server_config").update({ ...config, updated_at: new Date().toISOString() }).eq("discord_guild_id", guildId).select().single();
+          res = await supabase.schema("aegis").from("arx_server_config").update({ ...config, updated_at: new Date().toISOString() }).eq("discord_guild_id", guildId).select().single();
         } else {
-          result = await supabase.schema("aegis").from("arx_server_config").insert({ discord_guild_id: guildId, ...config }).select().single();
+          res = await supabase.schema("aegis").from("arx_server_config").insert({ discord_guild_id: guildId, ...config }).select().single();
         }
 
-        if (result.error) return new Response(JSON.stringify({ error: result.error.message }), { status: 500, headers: { "Content-Type": "application/json" } });
-        return new Response(JSON.stringify({ ok: true, config: result.data }), { headers: { "Content-Type": "application/json" } });
+        if (res.error) return new Response(JSON.stringify({ error: res.error.message }), { status: 500, headers: { "Content-Type": "application/json" } });
+        return new Response(JSON.stringify({ ok: true, config: res.data }), { headers: { "Content-Type": "application/json" } });
       },
 
       // POST — adiciona padrão de detecção
       POST: async ({ request }) => {
-        const session = getSession(request);
-        if (!session) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
+        const { result } = await checkAuth(request);
+        if (!result.authenticated) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
 
         const body = await request.json() as { guildId: string; patternType: string; patternValue: string; severity: string; description: string };
         const { guildId, patternType, patternValue, severity, description } = body;
@@ -71,7 +63,7 @@ export const Route = createFileRoute("/api/protection")({
           pattern_value: patternValue,
           severity,
           description,
-          created_by: session.id,
+          created_by: result.userId,
         }).select().single();
 
         if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { "Content-Type": "application/json" } });
@@ -80,8 +72,8 @@ export const Route = createFileRoute("/api/protection")({
 
       // DELETE — desativa padrão
       DELETE: async ({ request }) => {
-        const session = getSession(request);
-        if (!session) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
+        const { result } = await checkAuth(request);
+        if (!result.authenticated) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
 
         const url = new URL(request.url);
         const id = url.searchParams.get("id");
