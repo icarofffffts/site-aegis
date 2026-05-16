@@ -83,11 +83,11 @@ function LoginPage() {
               )}
 
               <a
-                href={SITE_URLS.arxLogin}
-                className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-indigo-600 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
+                href={SITE_URLS.discordLogin}
+                className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#5865F2] text-sm font-semibold text-white transition-colors hover:bg-[#4752C4]"
               >
-                <span className="font-bold text-base">AX</span>
-                Entrar com ARX
+                <DiscordIcon className="h-5 w-5" />
+                Continuar com Discord
               </a>
 
               <div className="my-6 flex items-center gap-3 text-xs text-[#7d8590]">
@@ -97,11 +97,11 @@ function LoginPage() {
               </div>
 
               <a
-                href={SITE_URLS.discordLogin}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#5865F2] text-sm font-semibold text-white transition-colors hover:bg-[#4752C4]"
+                href={SITE_URLS.arxLogin}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-indigo-600 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
               >
-                <DiscordIcon className="h-5 w-5" />
-                Continuar com Discord
+                <span className="font-bold text-base">AX</span>
+                Entrar com ARX
               </a>
 
               <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4 mt-6 text-xs text-[#7d8590]">
