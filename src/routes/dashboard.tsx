@@ -32,8 +32,6 @@ import { useEffect, useState, useCallback } from "react";
 import { SITE_URLS } from "@/lib/constants";
 import { BrandingSection } from "@/components/BrandingSection";
 
-const ADMIN_DISCORD_IDS = ["858698544822353951"];
-
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
 });
@@ -106,13 +104,13 @@ function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [serverSelected, setServerSelected] = useState(false);
   const [user, setUser] = useState<SessionUser | null>(null);
+  const [isPremium, setIsPremium] = useState(false);
   const [loadingUser, setLoadingUser] = useState(true);
   const [data, setData] = useState<DashboardData | null>(null);
   const [loadingData, setLoadingData] = useState(true);
   const [guilds, setGuilds] = useState<{ mutual: Guild[]; notAdded: Guild[] } | null>(null);
   const [selectedGuild, setSelectedGuild] = useState<Guild | null>(null);
   const [showGuildPicker, setShowGuildPicker] = useState(false);
-  const isPremium = !!(user && ADMIN_DISCORD_IDS.includes(user.id));
   const PREMIUM_TABS = ["alerts", "protection", "stats", "settings", "whitelabel"];
   const isTabLocked = (tab: string) => !isPremium && PREMIUM_TABS.includes(tab);
 
@@ -124,8 +122,12 @@ function DashboardPage() {
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         clearTimeout(timeout);
-        if (d?.authenticated) setUser(d.user);
-        else window.location.href = "/login";
+        if (d?.authenticated) {
+          setUser(d.user);
+          setIsPremium(!!d.isPremium);
+        } else {
+          window.location.href = "/login";
+        }
       })
       .catch((err) => {
         clearTimeout(timeout);

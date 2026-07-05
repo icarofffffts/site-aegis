@@ -332,8 +332,11 @@ fetch('/api/auth/process', {
       if (!session) session = getSession(cookies);
 
       if (!session) return json(res, 401, { authenticated: false });
+
+      const isPremium = ADMIN_IDS.includes(session.id);
       return json(res, 200, {
         authenticated: true,
+        isPremium,
         user: {
           id: session.id, username: session.username,
           discriminator: session.discriminator,

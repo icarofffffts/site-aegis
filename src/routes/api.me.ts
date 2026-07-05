@@ -1,6 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { verifyArxJwt } from "@/lib/arx-auth";
 
+const ADMIN_IDS = (process.env.ADMIN_DISCORD_IDS ?? "")
+  .split(",")
+  .map((id) => id.trim());
+
+function getDiscordIdFromSessionCookie(cookieHeader: string): string | null {
+  const legacyMatch = cookieHeader.match(/aegis_session=([^;]+)/);
+  if (!legacyMatch) return null;
+  try {
+    const session = JSON.parse(
+      Buffer.from(legacyMatch[1], "base64").toString("utf-8")
+    );
+    if (Date.now() < session.expiresAt) {
+      return session.id;
+    }
+  } catch {}
+  return null;
+}
+
+function checkIsPremium(id: string): boolean {
+  return ADMIN_IDS.includes(id);
+}
+
 export const Route = createFileRoute("/api/me")({
   server: {
     handlers: {
@@ -12,11 +34,17 @@ export const Route = createFileRoute("/api/me")({
         if (arxMatch) {
           const user = await verifyArxJwt(arxMatch[1]);
           if (user) {
+            // Also check for Discord session cookie to determine premium
+            const discordId = getDiscordIdFromSessionCookie(cookieHeader);
+            const isPremium = discordId ? checkIsPremium(discordId) : false;
+
             return new Response(
               JSON.stringify({
                 authenticated: true,
+                isPremium,
                 user: {
                   id: user.openId,
+                  discordId,
                   username: user.name || user.email,
                   email: user.email,
                   avatar: null,
@@ -71,6 +99,7 @@ export const Route = createFileRoute("/api/me")({
           return new Response(
             JSON.stringify({
               authenticated: true,
+              isPremium: checkIsPremium(session.id),
               user: {
                 id: session.id,
                 username: session.username,
