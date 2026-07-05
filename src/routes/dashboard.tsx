@@ -1085,13 +1085,37 @@ function ServerConfigSection({ authFetch, guild }: { authFetch: typeof window.fe
             </Field>
           </div>
 
-          <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-5 flex gap-4">
-            <Settings className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
+          <div className="rounded-xl border border-purple-500/20 bg-purple-500/5 p-5 flex gap-4">
+            <span className="text-2xl shrink-0 mt-0.5">💡</span>
             <div>
-              <p className="text-sm font-medium text-white">Configurações avançadas via comandos</p>
-              <p className="text-xs text-[#7d8590] mt-1">
-                Padrões de detecção, blacklist e whitelist são gerenciados no Discord via{" "}
-                <code className="text-blue-400">/admin</code>, <code className="text-blue-400">/blacklist</code> e <code className="text-blue-400">/whitelist</code>.
+              <p className="text-sm font-medium text-white">Benefícios Premium</p>
+              <p className="text-xs text-[#8b949e] mt-1 leading-relaxed">
+                Desbloqueie funcionalidades inteligentes exclusivas para seu servidor:
+              </p>
+              <ul className="mt-2 space-y-1 text-xs text-[#8b949e]">
+                <li className="flex items-center gap-2">
+                  <span className="text-purple-400">✨</span>
+                  <span><strong className="text-[#e6edf3]">Anti-raid inteligente</strong> com machine learning — detecta padrões de ataque em tempo real</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-purple-400">✨</span>
+                  <span><strong className="text-[#e6edf3]">Relatórios semanais</strong> automáticos com análises de segurança</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-purple-400">✨</span>
+                  <span><strong className="text-[#e6edf3]">Whitelist avançada</strong> com domínios regex e multi-nível</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-purple-400">✨</span>
+                  <span><strong className="text-[#e6edf3]">Comandos customizados</strong> com ações automatizadas (AutoMod AI)</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-purple-400">✨</span>
+                  <span><strong className="text-[#e6edf3]">Suporte prioritário</strong> — configure regras exclusivas com nossa equipe</span>
+                </li>
+              </ul>
+              <p className="text-xs text-[#e6edf3] mt-3 font-medium">
+                Em breve: sistema de assinatura para desbloquear todos os recursos premium.
               </p>
             </div>
           </div>
