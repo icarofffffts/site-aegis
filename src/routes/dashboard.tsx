@@ -259,11 +259,30 @@ function DashboardPage() {
         {/* Content Area */}
         <main className="flex-1 overflow-y-auto p-8">
           <div className="max-w-6xl mx-auto">
-            {activeTab === "overview"   && <OverviewSection data={data} loading={loadingData} />}
-            {activeTab === "alerts"     && <AlertsSection authFetch={authFetch} />}
-            {activeTab === "protection" && <ProtectionSection authFetch={authFetch} guildId={selectedGuild?.id} />}
-            {activeTab === "stats"      && <StatsSection authFetch={authFetch} />}
-            {activeTab === "settings"   && <ServerConfigSection authFetch={authFetch} guild={selectedGuild} />}
+            {!selectedGuild ? (
+              <div className="flex flex-col items-center justify-center py-24 text-center">
+                <div className="text-4xl mb-4 opacity-30">📋</div>
+                <h2 className="text-xl font-bold text-white mb-2">Nenhum servidor selecionado</h2>
+                <p className="text-[#8b949e] mb-6 max-w-md">
+                  Clique no seletor no canto superior esquerdo para escolher um servidor
+                  e gerenciar as configuracoes de protecao do AegisBot.
+                </p>
+                <button
+                  onClick={() => setShowGuildPicker(true)}
+                  className="px-4 py-2 bg-[#238636] text-white text-sm rounded-md hover:bg-[#2ea043] transition-colors"
+                >
+                  Selecionar servidor
+                </button>
+              </div>
+            ) : (
+              <>
+                {activeTab === "overview"   && <OverviewSection data={data} loading={loadingData} />}
+                {activeTab === "alerts"     && <AlertsSection authFetch={authFetch} />}
+                {activeTab === "protection" && <ProtectionSection authFetch={authFetch} guildId={selectedGuild?.id} />}
+                {activeTab === "stats"      && <StatsSection authFetch={authFetch} />}
+                {activeTab === "settings"   && <ServerConfigSection authFetch={authFetch} guild={selectedGuild} />}
+              </>
+            )}
           </div>
         </main>
       </div>
@@ -583,15 +602,15 @@ function ProtectionSection({ authFetch, guildId }: { authFetch: typeof window.fe
   const loadBlacklist = useCallback(async () => {
     try {
       const [bl, wl] = await Promise.all([
-        authFetch("/api/blacklist?guildId=" + (guild?.id ?? "")),
-        authFetch("/api/whitelist?guildId=" + (guild?.id ?? "")),
+        authFetch("/api/blacklist?guildId=" + (guildId ?? "")),
+        authFetch("/api/whitelist?guildId=" + (guildId ?? "")),
       ]);
       const blData = await bl.json();
       const wlData = await wl.json();
       setBlacklistData(blData.data ?? []);
       setWhitelistData(wlData.data ?? []);
     } catch { setBlacklistData([]); setWhitelistData([]); }
-  }, [guild?.id]);
+  }, [guildId]);
 
   useEffect(() => { loadBlacklist(); }, [loadBlacklist]);
 
@@ -922,7 +941,7 @@ function StatsSection({ authFetch }: { authFetch: typeof window.fetch }) {
 
 // ── Meu Servidor ─────────────────────────────────────────────────
 function ServerConfigSection({ authFetch, guild }: { authFetch: typeof window.fetch; guild: Guild | null }) {
-  const guildId = guild?.id ?? null;
+  const guildId = guildId ?? null;
   const [config, setConfig] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
