@@ -563,8 +563,8 @@ function AlertsSection({ authFetch }: { authFetch: typeof window.fetch }) {
 }
 
 // ── Proteção ─────────────────────────────────────────────────────
-function ProtectionSection({ authFetch }: { authFetch: typeof window.fetch }) {
-  const GUILD_ID = "placeholder"; // sem guild selecionada ainda
+function ProtectionSection({ authFetch, guildId }: { authFetch: typeof window.fetch; guildId?: string }) {
+  const GUILD_ID = guildId ?? "placeholder"; // sem guild selecionada ainda
   const [patterns, setPatterns] = useState<any[]>([]);
   const [config, setConfig] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -577,7 +577,7 @@ function ProtectionSection({ authFetch }: { authFetch: typeof window.fetch }) {
       .then(d => { if (d) { setPatterns(d.patterns ?? []); setConfig(d.config); } })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  }, [guildId]);
 
   const addPattern = async () => {
     if (!newPattern.value.trim()) return;
