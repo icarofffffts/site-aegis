@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-async function tryFetch(host, port, path) {
+async function tryFetch(host: string, port: string, path: string) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 3000);
   try {
@@ -49,10 +49,11 @@ export const Route = createFileRoute('/api/bot-status')({
             status: 503,
             headers: { 'Content-Type': 'application/json' }
           });
-        } catch (err) {
+        } catch (err: unknown) {
+          const reason = err instanceof Error ? err.message : 'Erro desconhecido';
           return new Response(JSON.stringify({
             status: 'offline',
-            reason: 'Erro interno: ' + err.message,
+            reason: 'Erro interno: ' + reason,
             service: 'AegisBot'
           }), {
             status: 503,

@@ -8,13 +8,7 @@ import path from "node:path";
 export default defineConfig({
   plugins: [
     tsconfigPaths(),
-    tanstackStart({
-      app: {
-        server: {
-          preset: "node-server",
-        },
-      },
-    }),
+    tanstackStart(),
     react(),
     tailwindcss(),
   ],

@@ -84,9 +84,9 @@ function getToken(): string | null {
   return localStorage.getItem("aegis_session");
 }
 
-function authFetch(url: string, options: RequestInit = {}) {
+function authFetch(input: RequestInfo | URL, options: RequestInit = {}) {
   const token = getToken();
-  return fetch(url, {
+  return fetch(input, {
     ...options,
     credentials: "include",
     headers: {
@@ -106,7 +106,7 @@ function DashboardPage() {
   const [guilds, setGuilds] = useState<{ mutual: Guild[]; notAdded: Guild[] } | null>(null);
   const [selectedGuild, setSelectedGuild] = useState<Guild | null>(null);
   const [showGuildPicker, setShowGuildPicker] = useState(false);
-  const isPremium = user && ADMIN_DISCORD_IDS.includes(user.id);
+  const isPremium = !!(user && ADMIN_DISCORD_IDS.includes(user.id));
   const PREMIUM_TABS = ["alerts", "protection", "stats", "settings", "whitelabel"];
   const isTabLocked = (tab: string) => !isPremium && PREMIUM_TABS.includes(tab);
 
