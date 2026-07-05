@@ -5,8 +5,8 @@ export const Route = createFileRoute('/api/bot-status')({
     handlers: {
       GET: async () => {
         try {
-          const botHost = process.env.BOT_CONTAINER_HOST || 'l8cb0bnoj32n6d7sz9ap2g6u-152308153787';
-          const botPort = process.env.BOT_CONTAINER_PORT || '3001';
+          const botHost = process.env.BOT_CONTAINER_HOST || 'aegis-bot';
+          const botPort = process.env.BOT_CONTAINER_PORT || '3000';
           
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 5000);

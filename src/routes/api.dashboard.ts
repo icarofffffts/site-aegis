@@ -8,7 +8,7 @@ const supabase = createClient(
 );
 
 // Lê o heartbeat do bot (arquivo gerado pelo AegisBot a cada 30s)
-const BOT_STATUS_URL = process.env.BOT_STATUS_URL || "http://l8cb0bnoj32n6d7sz9ap2g6u-152308153787:3001/status";
+const BOT_STATUS_URL = process.env.BOT_STATUS_URL || "http://aegis-bot:3000/status";
 
 async function getBotStatus() {
   try {
