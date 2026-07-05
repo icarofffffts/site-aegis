@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { checkAuth } from "@/lib/auth-check";
-import fs from "node:fs";
-import path from "node:path";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -10,21 +8,17 @@ const supabase = createClient(
 );
 
 // Lê o heartbeat do bot (arquivo gerado pelo AegisBot a cada 30s)
-function getBotStatus() {
+const BOT_STATUS_URL = process.env.BOT_STATUS_URL || "http://l8cb0bnoj32n6d7sz9ap2g6u-152308153787:3001/status";
+
+async function getBotStatus() {
   try {
-    const heartbeatPath = path.join(
-      process.cwd(),
-      "..",
-      "AegisBot",
-      "src",
-      "database",
-      "data",
-      "heartbeat.json",
-    );
-    if (!fs.existsSync(heartbeatPath)) return { online: false, uptime: null };
-    const data = JSON.parse(fs.readFileSync(heartbeatPath, "utf-8"));
-    const age = Date.now() - new Date(data.timestamp).getTime();
-    return { online: age < 90000, lastSeen: data.timestamp, pid: data.pid };
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(BOT_STATUS_URL, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    if (!res.ok) return { online: false, uptime: null };
+    const data = await res.json();
+    return { online: data.online, uptime: data.uptime, lastSeen: new Date().toISOString() };
   } catch {
     return { online: false, uptime: null };
   }
@@ -106,7 +100,7 @@ export const Route = createFileRoute("/api/dashboard")({
             .limit(20);
 
           // 7. Status do bot via heartbeat
-          const botStatus = getBotStatus();
+          const botStatus = await getBotStatus();
 
           return new Response(
             JSON.stringify({
