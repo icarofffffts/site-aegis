@@ -411,7 +411,7 @@ function PremiumPage({ isPremium, onUpgrade }: { isPremium: boolean; onUpgrade: 
             ))}
           </div>
           <button
-            onClick={onUpgrade}
+            onClick={() => alert("Em breve: sistema de assinatura via Mercado Pago.")}
             className="px-6 py-2.5 bg-gradient-to-r from-[#238636] to-[#2ea043] text-white font-semibold rounded-lg hover:from-[#2ea043] hover:to-[#3fb950] transition-all"
           >
             Assinar Premium
