@@ -40,10 +40,10 @@ function CheckoutPage() {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        toast.error("Erro ao iniciar pagamento. Tente novamente.");
+        toast.error("Pagamentos ainda em implementacao. Em breve!");
       }
     } catch {
-      toast.error("Erro de conexão. Tente novamente.");
+      toast.error("Serviço temporariamente indisponível.");
     } finally {
       setLoading(false);
     }

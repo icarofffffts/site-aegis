@@ -1,54 +1,59 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+async function tryFetch(host, port, path) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 3000);
+  try {
+    const res = await fetch(`http://${host}:${port}${path}`, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    if (res.ok) return { ok: true, data: await res.json() };
+    return { ok: false };
+  } catch {
+    clearTimeout(timeoutId);
+    return { ok: false };
+  }
+}
+
 export const Route = createFileRoute('/api/bot-status')({
   server: {
     handlers: {
       GET: async () => {
         try {
-          const botHost = process.env.BOT_CONTAINER_HOST || 'aegis-bot';
-          const botPort = process.env.BOT_CONTAINER_PORT || '3000';
-          
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 5000);
-          
-          const response = await fetch('http://' + botHost + ':' + botPort + '/status', {
-            signal: controller.signal
+          const port = process.env.BOT_CONTAINER_PORT || '3000';
+
+          // Try multiple hosts in order
+          const hosts = process.env.BOT_CONTAINER_HOST
+            ? [process.env.BOT_CONTAINER_HOST, 'aegis-bot']
+            : ['aegis-bot'];
+
+          for (const host of hosts) {
+            const result = await tryFetch(host, port, '/status');
+            if (result.ok && result.data.online) {
+              return new Response(JSON.stringify({
+                status: 'operational',
+                uptime: result.data.uptime,
+                service: 'AegisBot',
+                checkTime: new Date().toISOString(),
+                host
+              }), {
+                headers: { 'Content-Type': 'application/json' }
+              });
+            }
+          }
+
+          return new Response(JSON.stringify({
+            status: 'offline',
+            reason: 'Nenhum host do bot respondeu.',
+            service: 'AegisBot'
+          }), {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' }
           });
-          
-          clearTimeout(timeoutId);
-
-          if (!response.ok) {
-            throw new Error('HTTP error! status: ' + response.status);
-          }
-
-          const data = await response.json();
-
-          if (data.online) {
-            return new Response(JSON.stringify({
-              status: 'operational',
-              uptime: data.uptime,
-              service: 'AegisBot',
-              checkTime: new Date().toISOString()
-            }), {
-              headers: { 'Content-Type': 'application/json' }
-            });
-          } else {
-             return new Response(JSON.stringify({ 
-              status: 'offline', 
-              reason: 'Bot reportou offline.',
-              service: 'AegisBot'
-            }), { 
-              status: 503,
-              headers: { 'Content-Type': 'application/json' } 
-            });
-          }
-          
-        } catch (err: any) {
-          console.error('[HealthCheck] Error checking bot status:', err.message);
-          return new Response(JSON.stringify({ 
-            status: 'offline', 
-            reason: 'Falha ao conectar no micro-servidor do bot: ' + err.message,
-            service: 'AegisBot' 
+        } catch (err) {
+          return new Response(JSON.stringify({
+            status: 'offline',
+            reason: 'Erro interno: ' + err.message,
+            service: 'AegisBot'
           }), {
             status: 503,
             headers: { 'Content-Type': 'application/json' }
