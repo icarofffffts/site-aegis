@@ -15,19 +15,27 @@ import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ComandosRouteImport } from './routes/comandos'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthLogoutRouteImport } from './routes/auth.logout'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthArxLogoutServerRouteImport } from './routes/auth.arx-logout-server'
 import { Route as AuthArxCallbackRouteImport } from './routes/auth.arx-callback'
+import { Route as ApiWhitelistRouteImport } from './routes/api.whitelist'
 import { Route as ApiStatsRouteImport } from './routes/api.stats'
 import { Route as ApiReportsRouteImport } from './routes/api.reports'
 import { Route as ApiProtectionRouteImport } from './routes/api.protection'
 import { Route as ApiMeRouteImport } from './routes/api.me'
 import { Route as ApiHealthCheckRouteImport } from './routes/api.health-check'
+import { Route as ApiGuildsRouteImport } from './routes/api.guilds'
+import { Route as ApiGuildConfigRouteImport } from './routes/api.guild-config'
+import { Route as ApiGuildBrandingRouteImport } from './routes/api.guild-branding'
 import { Route as ApiDashboardRouteImport } from './routes/api.dashboard'
+import { Route as ApiContactRouteImport } from './routes/api.contact'
+import { Route as ApiCheckoutRouteImport } from './routes/api.checkout'
 import { Route as ApiBotconfigRouteImport } from './routes/api.botconfig'
 import { Route as ApiBotStatusRouteImport } from './routes/api.bot-status'
+import { Route as ApiBlacklistRouteImport } from './routes/api.blacklist'
 
 const SuporteRoute = SuporteRouteImport.update({
   id: '/suporte',
@@ -59,6 +67,11 @@ const ComandosRoute = ComandosRouteImport.update({
   path: '/comandos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -82,6 +95,11 @@ const AuthArxLogoutServerRoute = AuthArxLogoutServerRouteImport.update({
 const AuthArxCallbackRoute = AuthArxCallbackRouteImport.update({
   id: '/auth/arx-callback',
   path: '/auth/arx-callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWhitelistRoute = ApiWhitelistRouteImport.update({
+  id: '/api/whitelist',
+  path: '/api/whitelist',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiStatsRoute = ApiStatsRouteImport.update({
@@ -109,9 +127,34 @@ const ApiHealthCheckRoute = ApiHealthCheckRouteImport.update({
   path: '/api/health-check',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiGuildsRoute = ApiGuildsRouteImport.update({
+  id: '/api/guilds',
+  path: '/api/guilds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiGuildConfigRoute = ApiGuildConfigRouteImport.update({
+  id: '/api/guild-config',
+  path: '/api/guild-config',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiGuildBrandingRoute = ApiGuildBrandingRouteImport.update({
+  id: '/api/guild-branding',
+  path: '/api/guild-branding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiDashboardRoute = ApiDashboardRouteImport.update({
   id: '/api/dashboard',
   path: '/api/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiContactRoute = ApiContactRouteImport.update({
+  id: '/api/contact',
+  path: '/api/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
+  id: '/api/checkout',
+  path: '/api/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiBotconfigRoute = ApiBotconfigRouteImport.update({
@@ -124,23 +167,36 @@ const ApiBotStatusRoute = ApiBotStatusRouteImport.update({
   path: '/api/bot-status',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiBlacklistRoute = ApiBlacklistRouteImport.update({
+  id: '/api/blacklist',
+  path: '/api/blacklist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/comandos': typeof ComandosRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/precos': typeof PrecosRoute
   '/suporte': typeof SuporteRoute
+  '/api/blacklist': typeof ApiBlacklistRoute
   '/api/bot-status': typeof ApiBotStatusRoute
   '/api/botconfig': typeof ApiBotconfigRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/contact': typeof ApiContactRoute
   '/api/dashboard': typeof ApiDashboardRoute
+  '/api/guild-branding': typeof ApiGuildBrandingRoute
+  '/api/guild-config': typeof ApiGuildConfigRoute
+  '/api/guilds': typeof ApiGuildsRoute
   '/api/health-check': typeof ApiHealthCheckRoute
   '/api/me': typeof ApiMeRoute
   '/api/protection': typeof ApiProtectionRoute
   '/api/reports': typeof ApiReportsRoute
   '/api/stats': typeof ApiStatsRoute
+  '/api/whitelist': typeof ApiWhitelistRoute
   '/auth/arx-callback': typeof AuthArxCallbackRoute
   '/auth/arx-logout-server': typeof AuthArxLogoutServerRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -148,20 +204,28 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/comandos': typeof ComandosRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/precos': typeof PrecosRoute
   '/suporte': typeof SuporteRoute
+  '/api/blacklist': typeof ApiBlacklistRoute
   '/api/bot-status': typeof ApiBotStatusRoute
   '/api/botconfig': typeof ApiBotconfigRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/contact': typeof ApiContactRoute
   '/api/dashboard': typeof ApiDashboardRoute
+  '/api/guild-branding': typeof ApiGuildBrandingRoute
+  '/api/guild-config': typeof ApiGuildConfigRoute
+  '/api/guilds': typeof ApiGuildsRoute
   '/api/health-check': typeof ApiHealthCheckRoute
   '/api/me': typeof ApiMeRoute
   '/api/protection': typeof ApiProtectionRoute
   '/api/reports': typeof ApiReportsRoute
   '/api/stats': typeof ApiStatsRoute
+  '/api/whitelist': typeof ApiWhitelistRoute
   '/auth/arx-callback': typeof AuthArxCallbackRoute
   '/auth/arx-logout-server': typeof AuthArxLogoutServerRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -170,20 +234,28 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/comandos': typeof ComandosRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/precos': typeof PrecosRoute
   '/suporte': typeof SuporteRoute
+  '/api/blacklist': typeof ApiBlacklistRoute
   '/api/bot-status': typeof ApiBotStatusRoute
   '/api/botconfig': typeof ApiBotconfigRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/contact': typeof ApiContactRoute
   '/api/dashboard': typeof ApiDashboardRoute
+  '/api/guild-branding': typeof ApiGuildBrandingRoute
+  '/api/guild-config': typeof ApiGuildConfigRoute
+  '/api/guilds': typeof ApiGuildsRoute
   '/api/health-check': typeof ApiHealthCheckRoute
   '/api/me': typeof ApiMeRoute
   '/api/protection': typeof ApiProtectionRoute
   '/api/reports': typeof ApiReportsRoute
   '/api/stats': typeof ApiStatsRoute
+  '/api/whitelist': typeof ApiWhitelistRoute
   '/auth/arx-callback': typeof AuthArxCallbackRoute
   '/auth/arx-logout-server': typeof AuthArxLogoutServerRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -193,20 +265,28 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/checkout'
     | '/comandos'
     | '/dashboard'
     | '/login'
     | '/logout'
     | '/precos'
     | '/suporte'
+    | '/api/blacklist'
     | '/api/bot-status'
     | '/api/botconfig'
+    | '/api/checkout'
+    | '/api/contact'
     | '/api/dashboard'
+    | '/api/guild-branding'
+    | '/api/guild-config'
+    | '/api/guilds'
     | '/api/health-check'
     | '/api/me'
     | '/api/protection'
     | '/api/reports'
     | '/api/stats'
+    | '/api/whitelist'
     | '/auth/arx-callback'
     | '/auth/arx-logout-server'
     | '/auth/callback'
@@ -214,20 +294,28 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/checkout'
     | '/comandos'
     | '/dashboard'
     | '/login'
     | '/logout'
     | '/precos'
     | '/suporte'
+    | '/api/blacklist'
     | '/api/bot-status'
     | '/api/botconfig'
+    | '/api/checkout'
+    | '/api/contact'
     | '/api/dashboard'
+    | '/api/guild-branding'
+    | '/api/guild-config'
+    | '/api/guilds'
     | '/api/health-check'
     | '/api/me'
     | '/api/protection'
     | '/api/reports'
     | '/api/stats'
+    | '/api/whitelist'
     | '/auth/arx-callback'
     | '/auth/arx-logout-server'
     | '/auth/callback'
@@ -235,20 +323,28 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/checkout'
     | '/comandos'
     | '/dashboard'
     | '/login'
     | '/logout'
     | '/precos'
     | '/suporte'
+    | '/api/blacklist'
     | '/api/bot-status'
     | '/api/botconfig'
+    | '/api/checkout'
+    | '/api/contact'
     | '/api/dashboard'
+    | '/api/guild-branding'
+    | '/api/guild-config'
+    | '/api/guilds'
     | '/api/health-check'
     | '/api/me'
     | '/api/protection'
     | '/api/reports'
     | '/api/stats'
+    | '/api/whitelist'
     | '/auth/arx-callback'
     | '/auth/arx-logout-server'
     | '/auth/callback'
@@ -257,20 +353,28 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CheckoutRoute: typeof CheckoutRoute
   ComandosRoute: typeof ComandosRoute
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
   PrecosRoute: typeof PrecosRoute
   SuporteRoute: typeof SuporteRoute
+  ApiBlacklistRoute: typeof ApiBlacklistRoute
   ApiBotStatusRoute: typeof ApiBotStatusRoute
   ApiBotconfigRoute: typeof ApiBotconfigRoute
+  ApiCheckoutRoute: typeof ApiCheckoutRoute
+  ApiContactRoute: typeof ApiContactRoute
   ApiDashboardRoute: typeof ApiDashboardRoute
+  ApiGuildBrandingRoute: typeof ApiGuildBrandingRoute
+  ApiGuildConfigRoute: typeof ApiGuildConfigRoute
+  ApiGuildsRoute: typeof ApiGuildsRoute
   ApiHealthCheckRoute: typeof ApiHealthCheckRoute
   ApiMeRoute: typeof ApiMeRoute
   ApiProtectionRoute: typeof ApiProtectionRoute
   ApiReportsRoute: typeof ApiReportsRoute
   ApiStatsRoute: typeof ApiStatsRoute
+  ApiWhitelistRoute: typeof ApiWhitelistRoute
   AuthArxCallbackRoute: typeof AuthArxCallbackRoute
   AuthArxLogoutServerRoute: typeof AuthArxLogoutServerRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
@@ -321,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComandosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -354,6 +465,13 @@ declare module '@tanstack/react-router' {
       path: '/auth/arx-callback'
       fullPath: '/auth/arx-callback'
       preLoaderRoute: typeof AuthArxCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/whitelist': {
+      id: '/api/whitelist'
+      path: '/api/whitelist'
+      fullPath: '/api/whitelist'
+      preLoaderRoute: typeof ApiWhitelistRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/stats': {
@@ -391,11 +509,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHealthCheckRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/guilds': {
+      id: '/api/guilds'
+      path: '/api/guilds'
+      fullPath: '/api/guilds'
+      preLoaderRoute: typeof ApiGuildsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/guild-config': {
+      id: '/api/guild-config'
+      path: '/api/guild-config'
+      fullPath: '/api/guild-config'
+      preLoaderRoute: typeof ApiGuildConfigRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/guild-branding': {
+      id: '/api/guild-branding'
+      path: '/api/guild-branding'
+      fullPath: '/api/guild-branding'
+      preLoaderRoute: typeof ApiGuildBrandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/dashboard': {
       id: '/api/dashboard'
       path: '/api/dashboard'
       fullPath: '/api/dashboard'
       preLoaderRoute: typeof ApiDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/contact': {
+      id: '/api/contact'
+      path: '/api/contact'
+      fullPath: '/api/contact'
+      preLoaderRoute: typeof ApiContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/checkout': {
+      id: '/api/checkout'
+      path: '/api/checkout'
+      fullPath: '/api/checkout'
+      preLoaderRoute: typeof ApiCheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/botconfig': {
@@ -412,25 +565,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiBotStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/blacklist': {
+      id: '/api/blacklist'
+      path: '/api/blacklist'
+      fullPath: '/api/blacklist'
+      preLoaderRoute: typeof ApiBlacklistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CheckoutRoute: CheckoutRoute,
   ComandosRoute: ComandosRoute,
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
   PrecosRoute: PrecosRoute,
   SuporteRoute: SuporteRoute,
+  ApiBlacklistRoute: ApiBlacklistRoute,
   ApiBotStatusRoute: ApiBotStatusRoute,
   ApiBotconfigRoute: ApiBotconfigRoute,
+  ApiCheckoutRoute: ApiCheckoutRoute,
+  ApiContactRoute: ApiContactRoute,
   ApiDashboardRoute: ApiDashboardRoute,
+  ApiGuildBrandingRoute: ApiGuildBrandingRoute,
+  ApiGuildConfigRoute: ApiGuildConfigRoute,
+  ApiGuildsRoute: ApiGuildsRoute,
   ApiHealthCheckRoute: ApiHealthCheckRoute,
   ApiMeRoute: ApiMeRoute,
   ApiProtectionRoute: ApiProtectionRoute,
   ApiReportsRoute: ApiReportsRoute,
   ApiStatsRoute: ApiStatsRoute,
+  ApiWhitelistRoute: ApiWhitelistRoute,
   AuthArxCallbackRoute: AuthArxCallbackRoute,
   AuthArxLogoutServerRoute: AuthArxLogoutServerRoute,
   AuthCallbackRoute: AuthCallbackRoute,

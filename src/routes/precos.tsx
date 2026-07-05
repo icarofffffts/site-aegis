@@ -1,22 +1,63 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Sparkles } from "lucide-react";
+import { Check, X, Sparkles } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { PricingSkeleton } from "@/components/skeletons/PricingSkeleton";
-import { PLANS } from "@/data/pricing";
+const PLANS = [
+  {
+    name: "Free",
+    tagline: "Prote??o b?sica para iniciar.",
+    badge: "Com an?ncios",
+    monthly: 0,
+    yearly: 0,
+    cta: "Adicionar ao Discord",
+    features: [
+      "Prote??o Anti-Raid ML padr?o",
+      "Whitelist (b?sico)",
+      "Dashboard vis?o geral"
+    ],
+    limitations: [
+      "M?ximo 1 servidor gerenciado",
+      "M?ximo 20 termos na Blacklist",
+      "Sem alertas em tempo real",
+      "Sem AutoMod AI e Comandos Pro"
+    ],
+    highlight: false
+  },
+  {
+    name: "Premium",
+    tagline: "Seguran?a total sem limites.",
+    badge: "Sem an?ncios",
+    monthly: 14.99,
+    yearly: 149.90,
+    cta: "Assinar Premium",
+    features: [
+      "Zero an?ncios na Dashboard",
+      "Servidores ilimitados",
+      "Blacklist sem restri??o (Infinito)",
+      "Alertas em tempo real",
+      "AutoMod AI (Intelig?ncia Artif.)",
+      "Estat?sticas e relat?rios detalhados",
+      "Comandos avan?ados desbloqueados",
+      "Suporte priorit?rio"
+    ],
+    limitations: [],
+    highlight: true
+  }
+];
 import { cn } from "@/lib/utils";
 import { SITE_URLS } from "@/lib/constants";
 
 export const Route = createFileRoute("/precos")({
   head: () => ({
     meta: [
-      { title: "Preços — Aegis" },
+      { title: "Precos - Aegis" },
       {
         name: "description",
-        content: "Planos do Aegis: Free, Premium e Enterprise. Comece grátis e desbloqueie proteção avançada quando precisar.",
+        content: "Planos do Aegis: Free, Premium e Enterprise. Comece gratis e desbloqueie protecao avancada quando precisar.",
       },
-      { property: "og:title", content: "Preços — Aegis" },
+      { property: "og:title", content: "Precos - Aegis" },
       { property: "og:description", content: "Planos transparentes para proteger comunidades de qualquer tamanho." },
     ],
   }),
@@ -24,10 +65,10 @@ export const Route = createFileRoute("/precos")({
 });
 
 const FAQ = [
-  { q: "Posso usar grátis para sempre?", a: "Sim. O plano Free tem todos os comandos essenciais de moderação e nunca expira." },
-  { q: "Como funciona a cobrança?", a: "Mensal ou anual, com desconto no anual. Cancele quando quiser, sem multa." },
-  { q: "Vocês oferecem reembolso?", a: "Sim — reembolso integral em até 14 dias após a primeira cobrança." },
-  { q: "O Aegis vai funcionar em outras plataformas?", a: "Sim. Estamos expandindo para Telegram, Slack e Revolt. Assinantes Premium e Enterprise terão acesso prioritário." },
+  { q: "Posso usar gratis para sempre?", a: "Sim. O plano Free tem todos os comandos essenciais de moderacao e nunca expira." },
+  { q: "Como funciona a cobranca?", a: "Mensal ou anual, com desconto no anual. Cancele quando quiser, sem multa." },
+  { q: "Voces oferecem reembolso?", a: "Sim - reembolso integral em ate 14 dias apos a primeira cobranca." },
+  { q: "O Aegis vai funcionar em outras plataformas?", a: "Sim. Estamos expandindo para Telegram, Slack e Revolt. Assinantes Premium e Enterprise terao acesso prioritario." },
 ];
 
 function PricingPage() {
@@ -44,11 +85,11 @@ function PricingPage() {
       <section className="bg-[#0d1117] border-b border-[#30363d]">
         <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 lg:px-8">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#30363d] bg-[#161b22] px-3 py-1 text-xs font-semibold text-yellow-500">
-            <Sparkles className="h-3.5 w-3.5" /> Comece grátis, escale quando precisar
+            <Sparkles className="h-3.5 w-3.5" /> Comece gratis, escale quando precisar
           </span>
           <h1 className="mt-6 text-4xl font-bold text-white sm:text-6xl">Planos para sua <span className="text-yellow-500">comunidade</span></h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-[#7d8590]">
-            Proteção profissional para servidores de qualquer tamanho. Sem taxas ocultas.
+            Protecao profissional para servidores de qualquer tamanho. Sem taxas ocultas.
           </p>
 
           <div className="mt-10 inline-flex items-center gap-1 rounded-lg border border-[#30363d] bg-[#010409] p-1">
@@ -68,7 +109,7 @@ function PricingPage() {
                 yearly ? "bg-[#30363d] text-white" : "text-[#7d8590] hover:text-white",
               )}
             >
-              Anual <span className="ml-1 text-xs text-yellow-500">−17%</span>
+              Anual <span className="ml-1 text-xs text-yellow-500">-17%</span>
             </button>
           </div>
         </div>
@@ -79,7 +120,7 @@ function PricingPage() {
           <PricingSkeleton count={3} />
         ) : (
           <div className="grid gap-8 lg:grid-cols-3">
-            {PLANS.map((plan, i) => {
+            {PLANS.map((plan) => {
               const price = yearly ? plan.yearly : plan.monthly;
               const isHighlight = plan.highlight;
               return (
@@ -88,7 +129,7 @@ function PricingPage() {
                   className={cn(
                     "relative flex flex-col rounded-xl border p-8 transition-all",
                     isHighlight
-                      ? "border-yellow-500/50 bg-[#161b22] ring-1 ring-yellow-500/20"
+                      ? "border-yellow-500/50 bg-[#161b22] ring-1 ring-yellow-500/20 shadow-lg shadow-yellow-500/5"
                       : "border-[#30363d] bg-[#0d1117] hover:border-[#8b949e]",
                   )}
                 >
@@ -97,15 +138,30 @@ function PricingPage() {
                       Mais popular
                     </span>
                   )}
-                  <h3 className="text-xl font-bold text-white">{plan.name}</h3>
-                  <p className="mt-2 text-sm text-[#7d8590]">{plan.tagline}</p>
+
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="text-xl font-bold text-white">{plan.name}</h3>
+                      <p className="mt-2 text-sm text-[#7d8590]">{plan.tagline}</p>
+                    </div>
+                    {plan.badge && (
+                      <span className={cn(
+                        "text-[10px] font-bold px-2 py-1 rounded-full",
+                        plan.badge === "Sem anuncios"
+                          ? "bg-green-500/10 text-green-400 border border-green-500/20"
+                          : "bg-[#30363d] text-[#7d8590]"
+                      )}>
+                        {plan.badge === "Com anuncios" ? "?? " : "?? "}{plan.badge}
+                      </span>
+                    )}
+                  </div>
 
                   <div className="mt-8 flex items-baseline gap-1">
                     <span className="text-4xl font-bold text-white">
-                      {price === 0 ? "Grátis" : `R$ ${price.toFixed(2).replace(".", ",")}`}
+                      {price === 0 ? "Gratis" : `R$ ${price.toFixed(2).replace(".", ",")}`}
                     </span>
                     {price > 0 && (
-                      <span className="text-sm text-[#7d8590]">/{yearly ? "ano" : "mês"}</span>
+                      <span className="text-sm text-[#7d8590]">/{yearly ? "ano" : "mes"}</span>
                     )}
                   </div>
 
@@ -121,13 +177,24 @@ function PricingPage() {
                     <a href={plan.cta === "Adicionar ao Discord" ? SITE_URLS.botInvite : `/checkout?plan=${plan.name.toLowerCase()}`}>{plan.cta}</a>
                   </Button>
 
-                  <ul className="mt-10 space-y-4 text-sm">
+                  <ul className="mt-10 space-y-3 text-sm">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-start gap-3">
                         <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#3fb950]" />
-                        <span className="text-[#7d8590]">{f}</span>
+                        <span className="text-[#e6edf3]">{f}</span>
                       </li>
                     ))}
+                    {plan.limitations && plan.limitations.length > 0 && (
+                      <>
+                        <li className="pt-2 border-t border-[#30363d]" />
+                        {plan.limitations.map((f) => (
+                          <li key={f} className="flex items-start gap-3">
+                            <X className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#484f58]" />
+                            <span className="text-[#484f58]">{f}</span>
+                          </li>
+                        ))}
+                      </>
+                    )}
                   </ul>
                 </div>
               );

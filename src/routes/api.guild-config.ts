@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { checkAuth } from "@/lib/auth-check";
 
@@ -6,6 +6,23 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
+
+const ALLOWED_FIELDS = [
+  "alert_log_channel_id",
+  "welcome_channel_id",
+  "moderation_log_channel_id",
+  "welcome_message",
+  "auto_kick_on_critical",
+  "auto_mute_duration",
+  "require_approval_for_alerts",
+  "max_warnings_before_kick",
+  "disclosure_detection_enabled",
+  "raid_threshold",
+  "account_min_age_days",
+  "server_name",
+];
+
+const INTEGER_FIELDS = ["raid_threshold", "account_min_age_days", "auto_mute_duration", "max_warnings_before_kick"];
 
 export const Route = createFileRoute("/api/guild-config")({
   server: {
@@ -32,13 +49,27 @@ export const Route = createFileRoute("/api/guild-config")({
         const { guildId, config } = body;
         if (!guildId) return new Response(JSON.stringify({ error: "guildId required" }), { status: 400, headers: { "Content-Type": "application/json" } });
 
+        // Filtrar apenas campos validos da tabela arx_server_config
+        const safeConfig: Record<string, unknown> = {};
+        for (const field of ALLOWED_FIELDS) {
+          if (Object.prototype.hasOwnProperty.call(config, field)) {
+            let value = config[field];
+            // Converter campos inteiros com parseInt
+            if (INTEGER_FIELDS.includes(field) && value !== null && value !== undefined && value !== "") {
+              const parsed = parseInt(String(value), 10);
+              value = isNaN(parsed) ? null : parsed;
+            }
+            safeConfig[field] = value;
+          }
+        }
+
         const { data: existing } = await supabase.schema("aegis").from("arx_server_config").select("id").eq("discord_guild_id", guildId).single();
 
         let res;
         if (existing) {
-          res = await supabase.schema("aegis").from("arx_server_config").update({ ...config, updated_at: new Date().toISOString() }).eq("discord_guild_id", guildId).select().single();
+          res = await supabase.schema("aegis").from("arx_server_config").update({ ...safeConfig, updated_at: new Date().toISOString() }).eq("discord_guild_id", guildId).select().single();
         } else {
-          res = await supabase.schema("aegis").from("arx_server_config").insert({ discord_guild_id: guildId, ...config }).select().single();
+          res = await supabase.schema("aegis").from("arx_server_config").insert({ discord_guild_id: guildId, ...safeConfig }).select().single();
         }
 
         if (res.error) return new Response(JSON.stringify({ error: res.error.message }), { status: 500, headers: { "Content-Type": "application/json" } });

@@ -5,6 +5,7 @@ import { AegisLogo } from "./AegisLogo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SITE_URLS } from "@/lib/constants";
+import { getStoredBranding } from "@/lib/branding-store";
 
 const NAV = [
   { to: "/", label: "Início" },
@@ -24,6 +25,13 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<SessionUser | null>(null);
+  const [branding, setBranding] = useState(getStoredBranding());
+
+  useEffect(() => {
+    const onStorage = () => setBranding(getStoredBranding());
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -65,7 +73,11 @@ export function SiteHeader() {
           className="flex items-center transition-transform duration-300 hover:scale-[1.02]"
           onClick={() => setOpen(false)}
         >
-          <AegisLogo />
+          <AegisLogo
+            brandName={branding?.brandName}
+            logoUrl={branding?.logoUrl}
+            hideBranding={branding?.hideBranding}
+          />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
