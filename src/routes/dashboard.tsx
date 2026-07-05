@@ -941,7 +941,7 @@ function StatsSection({ authFetch }: { authFetch: typeof window.fetch }) {
 
 // ── Meu Servidor ─────────────────────────────────────────────────
 function ServerConfigSection({ authFetch, guild }: { authFetch: typeof window.fetch; guild: Guild | null }) {
-  const guildId = guildId ?? null;
+  const gId = guild?.id ?? null;
   const [config, setConfig] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -957,9 +957,9 @@ function ServerConfigSection({ authFetch, guild }: { authFetch: typeof window.fe
   });
 
   useEffect(() => {
-    if (!guildId) return;
+    if (!gId) return;
     setLoading(true);
-    authFetch(`/api/guild-config?guildId=${guildId}`)
+    authFetch(`/api/guild-config?guildId=${gId}`)
       .then(r => r.ok ? r.json() : null)
       .then(d => {
         if (d?.config) {
@@ -979,12 +979,12 @@ function ServerConfigSection({ authFetch, guild }: { authFetch: typeof window.fe
   }, [guildId]);
 
   const save = async () => {
-    if (!guildId) return;
+    if (!gId) return;
     setSaving(true);
     await authFetch("/api/guild-config", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ guildId, config: form }),
+      body: JSON.stringify({ guildId: gId, config: form }),
     });
     setSaving(false);
     setSaved(true);
