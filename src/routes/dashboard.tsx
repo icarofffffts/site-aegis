@@ -40,6 +40,7 @@ interface DashboardData {
     id: string;
     action_type: string;
     discord_user_id: string;
+    count?: number;
     reason: string;
     created_at: string;
   }>;
@@ -391,7 +392,14 @@ function OverviewSection({ data, loading }: { data: DashboardData | null; loadin
                       {item.action_type === "purge" && <Clock className="h-4 w-4" />}
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-white">{actionLabel[item.action_type] ?? item.action_type}</div>
+                      <div className="text-sm font-medium text-white flex items-center gap-2">
+                        {actionLabel[item.action_type] ?? item.action_type}
+                        {(item.count && item.count > 1) && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#30363d] text-[10x] text-[#7d8590]">
+                            {item.count}x
+                          </span>
+                        )}
+                      </div>
                       <div className="text-xs text-[#7d8590]">ID: {item.discord_user_id} • {item.reason}</div>
                     </div>
                   </div>

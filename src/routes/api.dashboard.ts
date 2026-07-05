@@ -71,9 +71,26 @@ export const Route = createFileRoute("/api/dashboard")({
             .schema("aegis").from("arx_action_log")
             .select("*")
             .order("created_at", { ascending: false })
-            .limit(10);
+            .limit(100);
 
           // 5. Alertas das últimas 24h (para calcular "ataques bloqueados hoje")
+          
+          // Agrupa actions pelo usuário e tipo de ação para não poluir a tela
+          const groupedActions = [];
+          const actionMap = new Map();
+          
+          for (const action of (recentActions || [])) {
+            const key = action.discord_user_id + '-' + action.action_type;
+            if (actionMap.has(key)) {
+              actionMap.get(key).count++;
+            } else {
+              const newAction = { ...action, count: 1 };
+              actionMap.set(key, newAction);
+              groupedActions.push(newAction);
+            }
+          }
+          const finalRecentActions = groupedActions.slice(0, 15);
+
           const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
           const { count: alertsToday } = await supabase
             .schema("aegis").from("arx_alerts")
@@ -101,7 +118,7 @@ export const Route = createFileRoute("/api/dashboard")({
                 botOnline: botStatus.online,
                 botLastSeen: botStatus.lastSeen ?? null,
               },
-              recentActions: recentActions ?? [],
+              recentActions: finalRecentActions,
               pendingReports: pendingReports ?? [],
             }),
             { headers: { "Content-Type": "application/json" } },
