@@ -570,14 +570,40 @@ function ProtectionSection({ authFetch, guildId }: { authFetch: typeof window.fe
   const [loading, setLoading] = useState(true);
   const [newPattern, setNewPattern] = useState({ value: "", type: "keyword", severity: "high", description: "" });
   const [saving, setSaving] = useState(false);
+  const [blacklistData, setBlacklistData] = useState<any[] | null>(null);
+  const [whitelistData, setWhitelistData] = useState<any[] | null>(null);
 
   useEffect(() => {
     authFetch(`/api/protection?guildId=${GUILD_ID}`)
       .then(r => r.ok ? r.json() : null)
       .then(d => { if (d) { setPatterns(d.patterns ?? []); setConfig(d.config); } })
       .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [guildId]);
+        }, [guildId]);
+
+  const loadBlacklist = useCallback(async () => {
+    try {
+      const [bl, wl] = await Promise.all([
+        authFetch("/api/blacklist?guildId=" + (guild?.id ?? "")),
+        authFetch("/api/whitelist?guildId=" + (guild?.id ?? "")),
+      ]);
+      const blData = await bl.json();
+      const wlData = await wl.json();
+      setBlacklistData(blData.data ?? []);
+      setWhitelistData(wlData.data ?? []);
+    } catch { setBlacklistData([]); setWhitelistData([]); }
+  }, [guild?.id]);
+
+  useEffect(() => { loadBlacklist(); }, [loadBlacklist]);
+
+  async function removeBlacklistItem(id: number) {
+    await authFetch("/api/blacklist?id=" + id, { method: "DELETE" });
+    setBlacklistData(prev => prev ? prev.filter(i => i.id !== id) : prev);
+  }
+
+  async function removeWhitelistItem(id: number) {
+    await authFetch("/api/whitelist?id=" + id, { method: "DELETE" });
+    setWhitelistData(prev => prev ? prev.filter(i => i.id !== id) : prev);
+  }
 
   const addPattern = async () => {
     if (!newPattern.value.trim()) return;
@@ -616,6 +642,89 @@ function ProtectionSection({ authFetch, guildId }: { authFetch: typeof window.fe
         <h1 className="text-2xl font-bold text-white">Proteção</h1>
         <p className="text-[#7d8590] mt-1">Configurações de detecção e padrões customizados do AegisBot.</p>
       </header>
+
+      <div className="bg-[#21262d] border border-[#30363d] rounded-lg p-4 mb-4">
+        <h3 className="text-sm font-semibold text-[#e6edf3] mb-2">🛡️ Proteção Inteligente com OCR</h3>
+        <p className="text-xs text-[#8b949e] leading-relaxed">
+          O <strong className="text-[#e6edf3]">AegisBot</strong> utiliza <strong className="text-[#e6edf3]">OCR (Optical Character Recognition)</strong> para escanear
+          imagens enviadas nos servidores monitorados. Isso significa que mesmo que um usuário tente
+          evitar a detecção postando conteúdo proibido como imagem, o bot consegue extrair o texto
+          e aplicar as regras de proteção.
+        </p>
+        <p className="text-xs text-[#8b949e] mt-2 leading-relaxed">
+          Além disso, o bot escaneia <strong className="text-[#e6edf3]">domínios em links</strong>,
+          <strong className="text-[#e6edf3]"> palavras-chave</strong> em mensagens de texto, e
+          <strong className="text-[#e6edf3]"> expressões regulares</strong> para detectar golpes,
+          fraudes e conteúdo malicioso.
+        </p>
+      </div>
+
+      <div className="bg-[#21262d] border border-[#30363d] rounded-lg p-4 mb-4">
+        <h3 className="text-sm font-semibold text-[#e6edf3] mb-3">🚫 Blacklist de Termos</h3>
+        <p className="text-xs text-[#8b949e] mb-3">
+          Gerencie os termos, palavras-chave e expressões regulares que o bot bloqueia automaticamente.
+          Use os comandos <code className="text-[#58a6ff]">/blacklist add</code> and{' '}
+          <code className="text-[#58a6ff]">/blacklist remove</code> no Discord, ou gerencie aqui.
+        </p>
+        <div className="space-y-2 max-h-64 overflow-y-auto mb-3">
+          {blacklistData === null ? (
+            <div className="text-xs text-[#8b949e]">Carregando...</div>
+          ) : blacklistData.length === 0 ? (
+            <div className="text-xs text-[#8b949e]">Nenhum termo na blacklist. Use /blacklist add no Discord para adicionar.</div>
+          ) : (
+            blacklistData.map((item: any) => (
+              <div key={item.id} className="flex items-center justify-between bg-[#161b22] rounded px-3 py-2">
+                <div className="flex items-center gap-2">
+                  {item.is_regex ? (
+                    <span className="text-[10px] font-mono text-[#d2a8ff] bg-[#1c1333] px-1.5 py-0.5 rounded">Regex</span>
+                  ) : (
+                    <span className="text-[10px] font-mono text-[#58a6ff] bg-[#0d2b45] px-1.5 py-0.5 rounded">Texto</span>
+                  )}
+                  <code className="text-xs text-[#e6edf3]">{item.value}</code>
+                </div>
+                <button
+                  onClick={() => removeBlacklistItem(item.id)}
+                  className="text-[#f85149] hover:text-[#ff7b72] text-xs"
+                >
+                  Remover
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      <div className="bg-[#21262d] border border-[#30363d] rounded-lg p-4 mb-4">
+        <h3 className="text-sm font-semibold text-[#e6edf3] mb-3">✅ Whitelist (Isentos)</h3>
+        <p className="text-xs text-[#8b949e] mb-3">
+          Usuários, cargos (roles) ou domínios isentos de verificação. Use{' '}
+          <code className="text-[#58a6ff]">/whitelist add</code> no Discord ou gerencie aqui.
+        </p>
+        <div className="space-y-2 max-h-64 overflow-y-auto">
+          {whitelistData === null ? (
+            <div className="text-xs text-[#8b949e]">Carregando...</div>
+          ) : whitelistData.length === 0 ? (
+            <div className="text-xs text-[#8b949e]">Nenhum item na whitelist.</div>
+          ) : (
+            whitelistData.map((item: any) => (
+              <div key={item.id} className="flex items-center justify-between bg-[#161b22] rounded px-3 py-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono text-[#3fb950] bg-[#132b1a] px-1.5 py-0.5 rounded">
+                    {item.type === 'user' ? '👤 User' : item.type === 'role' ? '💼 Role' : '🌐 Domínio'}
+                  </span>
+                  <code className="text-xs text-[#e6edf3]">{item.value}</code>
+                </div>
+                <button
+                  onClick={() => removeWhitelistItem(item.id)}
+                  className="text-[#f85149] hover:text-[#ff7b72] text-xs"
+                >
+                  Remover
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
 
       {/* Toggles de config */}
       <div className="rounded-xl border border-[#30363d] bg-[#161b22]/50 p-6 space-y-4">
