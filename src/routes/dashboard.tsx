@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState, useCallback } from "react";
 import { SITE_URLS } from "@/lib/constants";
 
+const ADMIN_DISCORD_IDS = ["858698544822353951"];
+
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
 });
@@ -87,6 +89,9 @@ function DashboardPage() {
   const [guilds, setGuilds] = useState<{ mutual: Guild[]; notAdded: Guild[] } | null>(null);
   const [selectedGuild, setSelectedGuild] = useState<Guild | null>(null);
   const [showGuildPicker, setShowGuildPicker] = useState(false);
+  const isPremium = user && ADMIN_DISCORD_IDS.includes(user.id);
+  const PREMIUM_TABS = ["alerts", "protection", "stats", "settings"];
+  const isTabLocked = (tab: string) => !isPremium && PREMIUM_TABS.includes(tab);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -232,34 +237,64 @@ function DashboardPage() {
           
           <nav className="flex-1 p-4 space-y-1">
             <SidebarLink icon={LayoutDashboard} label="Overview"      active={activeTab === "overview"}    onClick={() => setActiveTab("overview")} />
-            <SidebarLink icon={Bell}            label="Alertas"        active={activeTab === "alerts"}      onClick={() => setActiveTab("alerts")} />
-            <SidebarLink icon={Shield}          label="Proteção"       active={activeTab === "protection"}  onClick={() => setActiveTab("protection")} />
-            <SidebarLink icon={BarChart3}       label="Estatísticas"   active={activeTab === "stats"}       onClick={() => setActiveTab("stats")} />
+            <SidebarLink icon={Bell}            label="Alertas"        active={activeTab === "alerts"}      locked={isTabLocked("alerts")}       onClick={() => { if (isTabLocked("alerts")) return; setActiveTab("alerts"); }} />
+            <SidebarLink icon={Shield}          label="Proteção"       active={activeTab === "protection"}  locked={isTabLocked("protection")}   onClick={() => { if (isTabLocked("protection")) return; setActiveTab("protection"); }} />
+            <SidebarLink icon={BarChart3}       label="Estatísticas"   active={activeTab === "stats"}       locked={isTabLocked("stats")}        onClick={() => { if (isTabLocked("stats")) return; setActiveTab("stats"); }} />
             <div className="pt-4 pb-2 px-3 text-[10px] font-bold text-[#7d8590] uppercase tracking-wider">Configurações</div>
-            <SidebarLink icon={Settings}        label="Meu Servidor"   active={activeTab === "settings"}    onClick={() => setActiveTab("settings")} />
+            <SidebarLink icon={Settings}        label="Meu Servidor"   active={activeTab === "settings"}    locked={isTabLocked("settings")}     onClick={() => { if (isTabLocked("settings")) return; setActiveTab("settings"); }} />
           </nav>
 
-          <div className="p-4 border-t border-[#30363d] space-y-2">
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-2 text-[#7d8590] hover:text-red-400 hover:bg-red-500/10"
-              onClick={() => {
-                try { localStorage.removeItem("aegis_session"); } catch {}
-                window.location.replace("/");
-              }}
-            >
-              <LogOut className="h-4 w-4" /> Sair
-            </Button>
-            <Button asChild variant="outline" className="w-full border-[#30363d] bg-[#161b22] text-white hover:bg-[#1c2128]">
-              <a href={SITE_URLS.supportServer} rel="noopener">Suporte Técnico</a>
-            </Button>
+          <div className="p-4 border-t border-[#30363d]">
+            {!isPremium && (
+              <div className="mb-3 px-3 py-2.5 rounded-lg bg-gradient-to-r from-[#1a1a2e] to-[#16213e] border border-[#2a2a4e]">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-yellow-500 text-xs">⭐</span>
+                  <span className="text-[11px] font-bold text-white uppercase tracking-wider">Premium</span>
+                </div>
+                <p className="text-[10px] text-[#8b949e] leading-relaxed mb-2">
+                  Desbloqueie Alertas, Proteção, Estatísticas e configurações avançadas.
+                </p>
+                <button
+                  onClick={() => setActiveTab("premium")}
+                  className="w-full text-[10px] font-semibold text-white bg-[#238636] hover:bg-[#2ea043] rounded py-1.5 transition-colors"
+                >
+                  Assine o Premium
+                </button>
+              </div>
+            )}
+            {isPremium && (
+              <div className="mb-3 px-3 py-2 rounded-lg bg-[#132b1a] border border-[#1f4a2e]">
+                <div className="flex items-center gap-2">
+                  <span className="text-green-500 text-xs">✔</span>
+                  <span className="text-[11px] font-bold text-[#3fb950] uppercase tracking-wider">Premium Ativo</span>
+                </div>
+                <p className="text-[10px] text-[#7d8590] mt-0.5">Todos os recursos desbloqueados.</p>
+              </div>
+            )}
+            <div className="space-y-2">
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-2 text-[#7d8590] hover:text-red-400 hover:bg-red-500/10"
+                onClick={() => {
+                  try { localStorage.removeItem("aegis_session"); } catch {}
+                  window.location.replace("/");
+                }}
+              >
+                <LogOut className="h-4 w-4" /> Sair
+              </Button>
+              <Button asChild variant="outline" className="w-full border-[#30363d] bg-[#161b22] text-white hover:bg-[#1c2128]">
+                <a href={SITE_URLS.supportServer} rel="noopener">Suporte Técnico</a>
+              </Button>
+            </div>
           </div>
         </aside>
 
         {/* Content Area */}
         <main className="flex-1 overflow-y-auto p-8">
           <div className="max-w-6xl mx-auto">
-            {!selectedGuild ? (
+            {activeTab === "premium" ? (
+              <PremiumPage isPremium={isPremium} onUpgrade={() => setShowGuildPicker(true)} />
+            ) : !selectedGuild ? (
               <div className="flex flex-col items-center justify-center py-24 text-center">
                 <div className="text-4xl mb-4 opacity-30">📋</div>
                 <h2 className="text-xl font-bold text-white mb-2">Nenhum servidor selecionado</h2>
@@ -276,11 +311,12 @@ function DashboardPage() {
               </div>
             ) : (
               <>
+                {activeTab === "premium" && <PremiumPage isPremium={isPremium} onUpgrade={() => setShowGuildPicker(true)} />}
                 {activeTab === "overview"   && <OverviewSection data={data} loading={loadingData} />}
-                {activeTab === "alerts"     && <AlertsSection authFetch={authFetch} />}
-                {activeTab === "protection" && <ProtectionSection authFetch={authFetch} guildId={selectedGuild?.id} />}
-                {activeTab === "stats"      && <StatsSection authFetch={authFetch} />}
-                {activeTab === "settings"   && <ServerConfigSection authFetch={authFetch} guild={selectedGuild} />}
+                {activeTab === "alerts"     && (isPremium ? <AlertsSection authFetch={authFetch} /> : <PremiumPage isPremium={isPremium} onUpgrade={() => setActiveTab("premium")} />)}
+                {activeTab === "protection" && (isPremium ? <ProtectionSection authFetch={authFetch} guildId={selectedGuild?.id} /> : <PremiumPage isPremium={isPremium} onUpgrade={() => setActiveTab("premium")} />)}
+                {activeTab === "stats"      && (isPremium ? <StatsSection authFetch={authFetch} /> : <PremiumPage isPremium={isPremium} onUpgrade={() => setActiveTab("premium")} />)}
+                {activeTab === "settings"   && (isPremium ? <ServerConfigSection authFetch={authFetch} guild={selectedGuild} /> : <PremiumPage isPremium={isPremium} onUpgrade={() => setActiveTab("premium")} />)}
               </>
             )}
           </div>
@@ -290,28 +326,100 @@ function DashboardPage() {
   );
 }
 
-function SidebarLink({ icon: Icon, label, active, onClick, badge }: any) {
+function SidebarLink({ icon: Icon, label, active, onClick, badge, locked }: any) {
   return (
     <button
-      onClick={onClick}
+      onClick={locked ? undefined : onClick}
       className={`w-full flex items-center justify-between px-3 py-2 rounded-md transition-colors ${
         active 
           ? "bg-[#1f6feb] text-white" 
-          : "text-[#7d8590] hover:bg-[#161b22] hover:text-white"
+          : locked
+            ? "text-[#484f58] cursor-not-allowed"
+            : "text-[#7d8590] hover:bg-[#161b22] hover:text-white"
       }`}
     >
       <div className="flex items-center gap-3">
-        <Icon className="h-4 w-4" />
-        <span className="text-sm font-medium">{label}</span>
+        {locked ? (
+          <svg className="h-4 w-4 text-[#484f58]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        ) : (
+          <Icon className="h-4 w-4" />
+        )}
+        <span className={`text-sm font-medium ${locked ? "text-[#484f58]" : ""}`}>{label}</span>
       </div>
-      {badge && (
+      {badge && !locked && (
         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
           active ? "bg-white/20 text-white" : "bg-[#30363d] text-[#7d8590]"
         }`}>
           {badge}
         </span>
       )}
+      {locked && (
+        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#1c1333] text-[#d2a8ff]">PRO</span>
+      )}
     </button>
+  );
+}
+
+function PremiumPage({ isPremium, onUpgrade }: { isPremium: boolean; onUpgrade: () => void }) {
+  return (
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+      {isPremium ? (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <div className="text-5xl mb-4">✔️</div>
+          <h2 className="text-2xl font-bold text-white mb-2">Premium Ativo</h2>
+          <p className="text-[#8b949e] mb-4 max-w-md">
+            Todos os recursos do AegisBot estão desbloqueados para a sua conta.
+          </p>
+          <div className="grid grid-cols-2 gap-4 max-w-lg w-full mt-4">
+            {[
+              { icon: "🛡️", title: "Anti-Raid ML", desc: "Detecção inteligente de ataques" },
+              { icon: "📊", title: "Relatórios Semanais", desc: "Insights completos do servidor" },
+              { icon: "🔍", title: "Whitelist Regex", desc: "Padrões avançados de isenção" },
+              { icon: "🤖", title: "AutoMod AI", desc: "Moderação com inteligência artificial" },
+            ].map(f => (
+              <div key={f.title} className="bg-[#21262d] border border-[#30363d] rounded-lg p-4 text-left">
+                <div className="text-2xl mb-2">{f.icon}</div>
+                <h3 className="text-sm font-semibold text-[#e6edf3]">{f.title}</h3>
+                <p className="text-xs text-[#8b949e] mt-1">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <div className="text-5xl mb-4">⭐</div>
+          <h2 className="text-2xl font-bold text-white mb-2">AegisBot Premium</h2>
+          <p className="text-[#8b949e] mb-8 max-w-md">
+            Desbloqueie todos os recursos avançados de proteção para seu servidor.
+          </p>
+          <div className="grid grid-cols-2 gap-4 max-w-lg w-full mb-8">
+            {[
+              { icon: "🛡️", title: "Anti-Raid ML", desc: "Machine learning contra ataques" },
+              { icon: "📊", title: "Relatórios Semanais", desc: "Análise detalhada" },
+              { icon: "🔍", title: "Whitelist Regex", desc: "Padrões avançados" },
+              { icon: "🤖", title: "AutoMod AI", desc: "Moderação automática" },
+              { icon: "🔐", title: "Blacklist Ilimitada", desc: "Sem limites de termos" },
+              { icon: "⚡", title: "Prioridade", desc: "Suporte prioritário" },
+            ].map(f => (
+              <div key={f.title} className="bg-[#1a1a2e] border border-[#2a2a4e] rounded-lg p-4 text-left">
+                <div className="text-2xl mb-2">{f.icon}</div>
+                <h3 className="text-sm font-semibold text-[#e6edf3]">{f.title}</h3>
+                <p className="text-xs text-[#8b949e] mt-1">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={onUpgrade}
+            className="px-6 py-2.5 bg-gradient-to-r from-[#238636] to-[#2ea043] text-white font-semibold rounded-lg hover:from-[#2ea043] hover:to-[#3fb950] transition-all"
+          >
+            Assinar Premium
+          </button>
+          <p className="text-[10px] text-[#484f58] mt-3">Em breve: sistema de assinatura via Mercado Pago</p>
+        </div>
+      )}
+    </div>
   );
 }
 
