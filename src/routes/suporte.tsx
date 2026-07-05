@@ -32,7 +32,7 @@ const FAQ = [
 
 const CONTACTS = [
   { icon: MessageCircle, title: "Servidor de suporte", desc: "Respostas rápidas da nossa equipe e da comunidade.", action: "Entrar no Discord", href: "https://discord.gg/gr93e7rQc4" },
-  { icon: Mail, title: "E-mail", desc: "Para parcerias, imprensa e questões formais.", action: "support@aegisbot.app", href: "mailto:contato@arxdevs.xyz" },
+  { icon: Mail, title: "E-mail", desc: "Para parcerias, imprensa e questões formais.", action: "suporte@arxdevs.xyz", href: "mailto:suporte@arxdevs.xyz" },
   { icon: Activity, title: "Status", desc: "Acompanhe a disponibilidade em tempo real.", action: "Ver status", href: "https://status.arxdevs.xyz" },
   { icon: BookOpen, title: "Documentação", desc: "Guias passo-a-passo de configuração.", action: "Abrir docs", href: "https://docs.arxdevs.xyz" },
 ];

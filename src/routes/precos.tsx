@@ -118,7 +118,7 @@ function PricingPage() {
                         : "border-[#30363d] bg-[#21262d] text-[#c9d1d9] hover:bg-[#30363d] hover:border-[#8b949e]",
                     )}
                   >
-                    <a href={SITE_URLS.botInvite}>{plan.cta}</a>
+                    <a href={plan.cta === "Adicionar ao Discord" ? SITE_URLS.botInvite : `/checkout?plan=${plan.name.toLowerCase()}`}>{plan.cta}</a>
                   </Button>
 
                   <ul className="mt-10 space-y-4 text-sm">

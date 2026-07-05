@@ -29,7 +29,7 @@ export const PLANS: PricingPlan[] = [
     monthly: 19.9,
     yearly: 199,
     highlight: true,
-    cta: "Garantir Proteção",
+    cta: "Assinar Agora",
     features: [
       "Tudo do Plano Free",
       "IA Vision: OCR para detecção em imagens",
@@ -45,7 +45,7 @@ export const PLANS: PricingPlan[] = [
     tagline: "Ecossistema completo para grandes redes",
     monthly: 49.9,
     yearly: 499,
-    cta: "Seja um Parceiro",
+    cta: "Assinar Agora",
     features: [
       "Tudo do Plano Premium",
       "Whitelist Global ArxDevs",
