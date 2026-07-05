@@ -976,7 +976,7 @@ function ServerConfigSection({ authFetch, guild }: { authFetch: typeof window.fe
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [guildId]);
+  }, [gId]);
 
   const save = async () => {
     if (!gId) return;
