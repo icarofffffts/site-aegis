@@ -19,6 +19,12 @@ import {
   Bell,
   Search,
   Palette,
+  Brain,
+  Bot,
+  MessageSquare,
+  Gavel,
+  Fingerprint,
+  SlidersHorizontal,
 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
@@ -73,10 +79,10 @@ interface DashboardData {
 
 function timeAgo(iso: string) {
   const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-  if (diff < 60) return `${diff}s ago`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-  return `${Math.floor(diff / 86400)}d ago`;
+  if (diff < 60) return `${diff}s atrás`;
+  if (diff < 3600) return `${Math.floor(diff / 60)}m atrás`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h atrás`;
+  return `${Math.floor(diff / 86400)}d atrás`;
 }
 
 function getToken(): string | null {
@@ -149,7 +155,7 @@ function DashboardPage() {
     return () => clearInterval(interval);
   }, [fetchDashboard]);
 
-  // Busca servidores do usu??rio
+  // Busca servidores do usuário
   useEffect(() => {
     authFetch("/api/guilds")
       .then((r) => (r.ok ? r.json() : null))
@@ -217,7 +223,7 @@ function DashboardPage() {
                   </>
                 )}
                 <span className="text-[#7d8590] text-xs shrink-0">
-                  {showGuildPicker ? "???" : "???"}
+                  {showGuildPicker ? "▲" : "▼"}
                 </span>
               </button>
 
@@ -321,7 +327,7 @@ function DashboardPage() {
             />
             <SidebarLink
               icon={BarChart3}
-              label="Estat?sticas"
+              label="Estatísticas"
               active={activeTab === "stats"}
               locked={!serverSelected || isTabLocked("stats")}
               onClick={() => {
@@ -334,7 +340,7 @@ function DashboardPage() {
               Ferramentas
             </div>
             <SidebarLink
-              icon={AlertTriangle}
+              icon={Brain}
               label="AutoMod AI"
               active={activeTab === "automod"}
               locked={!serverSelected || !isPremium}
@@ -355,7 +361,7 @@ function DashboardPage() {
             />
             <SidebarLink
               icon={Shield}
-              label="Prote??o"
+              label="Proteção"
               active={activeTab === "protection"}
               locked={!serverSelected || isTabLocked("protection")}
               onClick={() => {
@@ -364,7 +370,7 @@ function DashboardPage() {
               }}
             />
             <SidebarLink
-              icon={Search}
+              icon={MessageSquare}
               label="Comandos"
               active={activeTab === "commands"}
               locked={!serverSelected || !isPremium}
@@ -375,7 +381,7 @@ function DashboardPage() {
             />
 
             <div className="pt-4 pb-2 px-3 text-[10px] font-bold text-[#7d8590] uppercase tracking-wider">
-              Configura??es
+              Configurações
             </div>
             <SidebarLink
               icon={Settings}
@@ -403,13 +409,13 @@ function DashboardPage() {
             {!isPremium && (
               <div className="mb-3 px-3 py-2.5 rounded-lg bg-gradient-to-r from-[#1a1a2e] to-[#16213e] border border-[#2a2a4e]">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <span className="text-yellow-500 text-xs">???</span>
+                  <span className="text-yellow-500 text-xs">✦</span>
                   <span className="text-[11px] font-bold text-white uppercase tracking-wider">
                     Premium
                   </span>
                 </div>
                 <p className="text-[10px] text-[#8b949e] leading-relaxed mb-2">
-                  Desbloqueie Alertas, Prote????o, Estat??sticas e configura????es avan??adas.
+                  Desbloqueie Alertas, Proteção, Estatísticas e configurações avançadas.
                 </p>
                 <button
                   onClick={() => setActiveTab("premium")}
@@ -422,7 +428,7 @@ function DashboardPage() {
             {isPremium && (
               <div className="mb-3 px-3 py-2 rounded-lg bg-[#132b1a] border border-[#1f4a2e]">
                 <div className="flex items-center gap-2">
-                  <span className="text-green-500 text-xs">???</span>
+                  <span className="text-green-500 text-xs">✦</span>
                   <span className="text-[11px] font-bold text-[#3fb950] uppercase tracking-wider">
                     Premium Ativo
                   </span>
@@ -451,7 +457,7 @@ function DashboardPage() {
                 className="w-full border-[#30363d] bg-[#161b22] text-white hover:bg-[#1c2128]"
               >
                 <a href={SITE_URLS.supportServer} rel="noopener">
-                  Suporte T??cnico
+                  Suporte Técnico
                 </a>
               </Button>
             </div>
@@ -490,7 +496,7 @@ function DashboardPage() {
                       )}
                       <h3 className="font-bold text-white mb-1 truncate w-full">{g.name}</h3>
                       <span className="text-xs text-[#7d8590] mb-4">
-                        Dono: {g.owner ? "Sim" : "N?o"}
+                        Dono: {g.owner ? "Sim" : "Não"}
                       </span>
                       <Button
                         className="w-full bg-[#238636] hover:bg-[#2ea043] text-white border-none"
@@ -512,7 +518,7 @@ function DashboardPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {guilds?.notAdded?.length === 0 && (
                     <p className="text-[#7d8590] text-sm">
-                      Voc? n?o gerencia nenhum outro servidor.
+                      Você não gerencia nenhum outro servidor.
                     </p>
                   )}
                   {guilds?.notAdded?.map((g) => (
@@ -555,14 +561,14 @@ function DashboardPage() {
                 {!isPremium && activeTab !== "premium" && (
                   <div className="mb-8 bg-gradient-to-r from-blue-900/40 to-blue-800/20 border border-blue-500/30 rounded-lg p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl">??</span>
+                      <span className="text-2xl">⚡</span>
                       <div>
                         <h3 className="text-white font-bold text-sm">
-                          An?ncio: Remova os an?ncios e desbloqueie todos os recursos com o Aegis
+                          Anúncio: Remova os anúncios e desbloqueie todos os recursos com o Aegis
                           Premium
                         </h3>
                         <p className="text-[#8b949e] text-xs mt-0.5">
-                          Apoie o desenvolvimento e tenha acesso a estat?sticas e alertas em tempo
+                          Apoie o desenvolvimento e tenha acesso a estatísticas e alertas em tempo
                           real.
                         </p>
                       </div>
@@ -580,6 +586,18 @@ function DashboardPage() {
                   <PremiumPage isPremium={isPremium} onUpgrade={() => setActiveTab("premium")} />
                 )}
                 {activeTab === "overview" && <OverviewSection data={data} loading={loadingData} />}
+                {activeTab === "automod" &&
+                  (isPremium ? (
+                    <AutoModSection authFetch={authFetch} guildId={selectedGuild?.id} />
+                  ) : (
+                    <PremiumPage isPremium={isPremium} onUpgrade={() => setActiveTab("premium")} />
+                  ))}
+                {activeTab === "commands" &&
+                  (isPremium ? (
+                    <CommandsSection authFetch={authFetch} guildId={selectedGuild?.id} />
+                  ) : (
+                    <PremiumPage isPremium={isPremium} onUpgrade={() => setActiveTab("premium")} />
+                  ))}
                 {activeTab === "alerts" &&
                   (isPremium ? (
                     <AlertsSection authFetch={authFetch} />
@@ -610,9 +628,6 @@ function DashboardPage() {
                   ) : (
                     <PremiumPage isPremium={isPremium} onUpgrade={() => setActiveTab("premium")} />
                   ))}
-                {(activeTab === "automod" || activeTab === "commands") && (
-                  <PremiumPage isPremium={isPremium} onUpgrade={() => setActiveTab("premium")} />
-                )}
               </>
             )}
           </div>
@@ -677,24 +692,24 @@ function PremiumPage({ isPremium, onUpgrade }: { isPremium: boolean; onUpgrade: 
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       {isPremium ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="text-5xl mb-4">??????</div>
+          <div className="text-5xl mb-4">🛡️</div>
           <h2 className="text-2xl font-bold text-white mb-2">Premium Ativo</h2>
           <p className="text-[#8b949e] mb-4 max-w-md">
-            Todos os recursos do AegisBot est??o desbloqueados para a sua conta.
+            Todos os recursos do AegisBot estão desbloqueados para a sua conta.
           </p>
           <div className="grid grid-cols-2 gap-4 max-w-lg w-full mt-4">
             {[
-              { icon: "???????", title: "Anti-Raid ML", desc: "Detec????o inteligente de ataques" },
+              { icon: "🤖", title: "Anti-Raid ML", desc: "Detecção inteligente de ataques" },
               {
-                icon: "????",
-                title: "Relat??rios Semanais",
+                icon: "📊",
+                title: "Relatórios Semanais",
                 desc: "Insights completos do servidor",
               },
-              { icon: "????", title: "Whitelist Regex", desc: "Padr??es avan??ados de isen????o" },
+              { icon: "🔓", title: "Whitelist Regex", desc: "Padrões avançados de isenção" },
               {
-                icon: "????",
+                icon: "🧠",
                 title: "AutoMod AI",
-                desc: "Modera????o com intelig??ncia artificial",
+                desc: "Moderação com inteligência artificial",
               },
             ].map((f) => (
               <div
@@ -710,19 +725,19 @@ function PremiumPage({ isPremium, onUpgrade }: { isPremium: boolean; onUpgrade: 
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="text-5xl mb-4">???</div>
+          <div className="text-5xl mb-4">⭐</div>
           <h2 className="text-2xl font-bold text-white mb-2">AegisBot Premium</h2>
           <p className="text-[#8b949e] mb-8 max-w-md">
-            Desbloqueie todos os recursos avan??ados de prote????o para seu servidor.
+            Desbloqueie todos os recursos avançados de proteção para seu servidor.
           </p>
           <div className="grid grid-cols-2 gap-4 max-w-lg w-full mb-8">
             {[
-              { icon: "???????", title: "Anti-Raid ML", desc: "Machine learning contra ataques" },
-              { icon: "????", title: "Relat??rios Semanais", desc: "An??lise detalhada" },
-              { icon: "????", title: "Whitelist Regex", desc: "Padr??es avan??ados" },
-              { icon: "????", title: "AutoMod AI", desc: "Modera????o autom??tica" },
-              { icon: "????", title: "Blacklist Ilimitada", desc: "Sem limites de termos" },
-              { icon: "???", title: "Prioridade", desc: "Suporte priorit??rio" },
+              { icon: "🤖", title: "Anti-Raid ML", desc: "Machine learning contra ataques" },
+              { icon: "📊", title: "Relatórios Semanais", desc: "Análise detalhada" },
+              { icon: "🔓", title: "Whitelist Regex", desc: "Padrões avançados" },
+              { icon: "🧠", title: "AutoMod AI", desc: "Moderação automática" },
+              { icon: "⛔", title: "Blacklist Ilimitada", desc: "Sem limites de termos" },
+              { icon: "⭐", title: "Prioridade", desc: "Suporte prioritário" },
             ].map((f) => (
               <div
                 key={f.title}
@@ -749,41 +764,248 @@ function PremiumPage({ isPremium, onUpgrade }: { isPremium: boolean; onUpgrade: 
   );
 }
 
+// ─── AutoMod AI ────────────────────────────────────────────────────────
+function AutoModSection({
+  authFetch,
+  guildId,
+}: {
+  authFetch: typeof window.fetch;
+  guildId?: string;
+}) {
+  const [rules, setRules] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!guildId) {
+      setLoading(false);
+      return;
+    }
+    authFetch(`/api/botconfig?guildId=${guildId}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.automod?.rules) setRules(d.automod.rules);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [guildId]);
+
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <header className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">AutoMod AI</h1>
+          <p className="text-[#7d8590] mt-1">
+            Regras inteligentes de moderação automática para seu servidor.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#161b22] border border-[#30363d] text-xs text-[#3fb950] font-semibold">
+            <Brain className="h-3.5 w-3.5" />
+            IA Ativa
+          </span>
+        </div>
+      </header>
+
+      <div className="bg-[#21262d] border border-[#30363d] rounded-lg p-4 mb-4">
+        <h3 className="text-sm font-semibold text-[#e6edf3] mb-2">
+          🧠 Moderação com Inteligência Artificial
+        </h3>
+        <p className="text-xs text-[#8b949e] leading-relaxed">
+          O <strong className="text-[#e6edf3]">AutoMod AI</strong> analisa mensagens em tempo real
+          usando machine learning para detectar padrões de spam, golpes, divulgação não autorizada
+          e comportamento malicioso. Diferente de sistemas baseados apenas em palavras-chave, o
+          AutoMod AI entende o contexto da mensagem.
+        </p>
+      </div>
+
+      <div className="rounded-xl border border-[#30363d] bg-[#161b22]/50 overflow-hidden">
+        <div className="px-6 py-4 border-b border-[#30363d] flex items-center justify-between">
+          <h3 className="font-semibold text-white">Regras Ativas</h3>
+          <span className="text-xs text-[#7d8590]">
+            {rules.length} regra{rules.length !== 1 ? "s" : ""}
+          </span>
+        </div>
+
+        {loading ? (
+          <div className="px-6 py-8 text-center text-sm text-[#7d8590]">Carregando...</div>
+        ) : rules.length === 0 ? (
+          <div className="px-6 py-12 text-center">
+            <Bot className="h-10 w-10 text-[#7d8590] mx-auto mb-3" />
+            <p className="text-white font-medium">Nenhuma regra personalizada</p>
+            <p className="text-xs text-[#7d8590] mt-1">
+              As regras padrão do AutoMod AI continuam ativas. Use os comandos do bot no Discord
+              para configurar regras personalizadas.
+            </p>
+          </div>
+        ) : (
+          <div className="divide-y divide-[#30363d]">
+            {rules.map((rule: any, i: number) => (
+              <div key={rule.id ?? i} className="px-6 py-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-full bg-[#0d1117] border border-[#30363d] flex items-center justify-center">
+                    <Gavel className="h-4 w-4 text-[#d2a8ff]" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-white">{rule.name ?? `Regra ${i + 1}`}</p>
+                    <p className="text-xs text-[#7d8590]">{rule.description ?? rule.action ?? "Sem descrição"}</p>
+                  </div>
+                </div>
+                <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded border ${
+                  rule.enabled !== false
+                    ? "text-green-400 bg-green-500/10 border-green-500/30"
+                    : "text-[#484f58] bg-[#30363d] border-[#30363d]"
+                }`}>
+                  {rule.enabled !== false ? "Ativo" : "Inativo"}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="bg-[#21262d] border border-[#30363d] rounded-lg p-4">
+        <h3 className="text-sm font-semibold text-[#e6edf3] mb-3">💡 Dicas de Uso</h3>
+        <ul className="space-y-2 text-xs text-[#8b949e]">
+          <li className="flex items-start gap-2">
+            <span className="text-[#3fb950] mt-0.5">•</span>
+            <span>Use <code className="text-[#58a6ff]">/automod config</code> no Discord para ajustar a sensibilidade das regras.</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-[#3fb950] mt-0.5">•</span>
+            <span>O AutoMod AI aprende com o tempo — quanto mais dados, mais preciso ele fica.</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-[#3fb950] mt-0.5">•</span>
+            <span>Combine com a <strong className="text-[#e6edf3]">Blacklist</strong> e <strong className="text-[#e6edf3]">Whitelist</strong> para um controle ainda mais refinado.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+// ─── Comandos ────────────────────────────────────────────────────────────
+function CommandsSection({
+  authFetch,
+  guildId,
+}: {
+  authFetch: typeof window.fetch;
+  guildId?: string;
+}) {
+  const [commands, setCommands] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!guildId) {
+      setLoading(false);
+      return;
+    }
+    authFetch(`/api/botconfig?guildId=${guildId}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.commands) setCommands(d.commands);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [guildId]);
+
+  const CMD_CATEGORIES = [
+    { key: "moderation", label: "Moderação", icon: Gavel },
+    { key: "security", label: "Segurança", icon: Shield },
+    { key: "utility", label: "Utilitários", icon: SlidersHorizontal },
+    { key: "automod", label: "AutoMod", icon: Brain },
+  ];
+
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <header>
+        <h1 className="text-2xl font-bold text-white">Comandos</h1>
+        <p className="text-[#7d8590] mt-1">
+          Comandos avançados disponíveis para o seu servidor.
+        </p>
+      </header>
+
+      {!guildId ? (
+        <div className="flex flex-col items-center justify-center h-96 text-center">
+          <div className="p-5 rounded-full bg-[#161b22] border border-[#30363d] mb-5">
+            <MessageSquare className="h-10 w-10 text-[#7d8590]" />
+          </div>
+          <h2 className="text-xl font-bold text-white">Selecione um servidor</h2>
+          <p className="text-[#7d8590] mt-2 max-w-sm">
+            Escolha um servidor na sidebar para ver os comandos disponíveis.
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-6">
+          {CMD_CATEGORIES.map((cat) => (
+            <div
+              key={cat.key}
+              className="rounded-xl border border-[#30363d] bg-[#161b22]/50 overflow-hidden"
+            >
+              <div className="px-6 py-4 border-b border-[#30363d] flex items-center gap-3">
+                <cat.icon className="h-5 w-5 text-blue-500" />
+                <h3 className="font-semibold text-white">{cat.label}</h3>
+              </div>
+              <div className="divide-y divide-[#30363d]">
+                {loading ? (
+                  <div className="px-6 py-8 text-center text-sm text-[#7d8590]">Carregando...</div>
+                ) : (
+                  <div className="px-6 py-8 text-center">
+                    <p className="text-sm text-[#7d8590]">
+                      Use <code className="text-[#58a6ff]">/help</code> no Discord para ver a lista
+                      completa de comandos disponíveis.
+                    </p>
+                    <p className="text-xs text-[#7d8590] mt-2">
+                      A configuração de comandos personalizados estará disponível em breve no
+                      dashboard.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Overview ──────────────────────────────────────────────────────────
 function OverviewSection({ data, loading }: { data: DashboardData | null; loading: boolean }) {
   const s = data?.stats;
 
   const STATS = [
     {
-      label: "Usu??rios Flagados",
-      value: s?.flaggedUsers ?? "???",
+      label: "Usuários Flagados",
+      value: s?.flaggedUsers ?? "—",
       icon: Users,
       color: "text-blue-500",
     },
     {
       label: "Alertas Hoje",
-      value: s?.alertsToday ?? "???",
+      value: s?.alertsToday ?? "—",
       icon: Shield,
       color: "text-green-500",
     },
     {
-      label: "Alertas Cr??ticos",
-      value: s?.criticalAlerts ?? "???",
+      label: "Alertas Críticos",
+      value: s?.criticalAlerts ?? "—",
       icon: AlertTriangle,
       color: "text-orange-500",
     },
     {
       label: "Total de Alertas",
-      value: s?.totalAlerts ?? "???",
+      value: s?.totalAlerts ?? "—",
       icon: Clock,
       color: "text-purple-500",
     },
   ];
 
   const actionLabel: Record<string, string> = {
-    warned: "Advert??ncia Aplicada",
-    kicked: "Usu??rio Expulso",
-    banned: "Usu??rio Banido",
-    muted: "Usu??rio Silenciado",
+    warned: "Advertência Aplicada",
+    kicked: "Usuário Expulso",
+    banned: "Usuário Banido",
+    muted: "Usuário Silenciado",
     purge: "Mensagens Apagadas",
   };
 
@@ -800,7 +1022,7 @@ function OverviewSection({ data, loading }: { data: DashboardData | null; loadin
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white">Dashboard do Servidor</h1>
-          <p className="text-[#7d8590] mt-1">Vis??o geral da seguran??a e atividades do Aegis.</p>
+          <p className="text-[#7d8590] mt-1">Visão geral da segurança e atividades do Aegis.</p>
         </div>
         <div className="flex items-center gap-2">
           {s?.botOnline ? (
@@ -858,7 +1080,7 @@ function OverviewSection({ data, loading }: { data: DashboardData | null; loadin
               ))
             ) : data?.recentActions.length === 0 ? (
               <div className="px-6 py-8 text-center text-sm text-[#7d8590]">
-                Nenhuma a????o registrada ainda.
+                Nenhuma ação registrada ainda.
               </div>
             ) : (
               data?.recentActions.map((item) => (
@@ -884,7 +1106,7 @@ function OverviewSection({ data, loading }: { data: DashboardData | null; loadin
                         )}
                       </div>
                       <div className="text-xs text-[#7d8590]">
-                        ID: {item.discord_user_id} ??? {item.reason}
+                        ID: {item.discord_user_id}
                       </div>
                     </div>
                   </div>
@@ -913,20 +1135,20 @@ function OverviewSection({ data, loading }: { data: DashboardData | null; loadin
             {s?.botOnline ? "Online e operacional" : "Offline"}
           </p>
           {s?.botLastSeen && (
-            <p className="text-xs text-[#7d8590] mt-2">??ltimo sinal: {timeAgo(s.botLastSeen)}</p>
+            <p className="text-xs text-[#7d8590] mt-2">Último sinal: {timeAgo(s.botLastSeen)}</p>
           )}
           <div className="mt-4 w-full space-y-2 text-left">
             <div className="flex justify-between text-xs">
               <span className="text-[#7d8590]">Alertas ativos</span>
-              <span className="text-white font-medium">{s?.totalAlerts ?? "???"}</span>
+              <span className="text-white font-medium">{s?.totalAlerts ?? "—"}</span>
             </div>
             <div className="flex justify-between text-xs">
-              <span className="text-[#7d8590]">Cr??ticos</span>
-              <span className="text-red-400 font-medium">{s?.criticalAlerts ?? "???"}</span>
+              <span className="text-[#7d8590]">Críticos</span>
+              <span className="text-red-400 font-medium">{s?.criticalAlerts ?? "—"}</span>
             </div>
             <div className="flex justify-between text-xs">
-              <span className="text-[#7d8590]">Usu??rios flagados</span>
-              <span className="text-white font-medium">{s?.flaggedUsers ?? "???"}</span>
+              <span className="text-[#7d8590]">Usuários flagados</span>
+              <span className="text-white font-medium">{s?.flaggedUsers ?? "—"}</span>
             </div>
           </div>
         </div>
@@ -935,7 +1157,7 @@ function OverviewSection({ data, loading }: { data: DashboardData | null; loadin
   );
 }
 
-// ?????? Alertas ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+// ─── Alertas ──────────────────────────────────────────────────────────
 function AlertsSection({ authFetch }: { authFetch: typeof window.fetch }) {
   const [alerts, setAlerts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -947,7 +1169,7 @@ function AlertsSection({ authFetch }: { authFetch: typeof window.fetch }) {
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (d?.flaggedUsers) {
-          // Converte o mapa de usu??rios em lista de alertas
+          // Converte o mapa de usuários em lista de alertas
           const list = Object.entries(d.flaggedUsers).map(([id, info]: [string, any]) => ({
             userId: id,
             ...info,
@@ -981,13 +1203,13 @@ function AlertsSection({ authFetch }: { authFetch: typeof window.fetch }) {
         <div>
           <h1 className="text-2xl font-bold text-white">Alertas Ativos</h1>
           <p className="text-[#7d8590] mt-1">
-            Usu??rios com alertas registrados no sistema AegisBot.
+            Usuários com alertas registrados no sistema AegisBot.
           </p>
         </div>
         <div className="flex items-center gap-2 text-sm">
           <span className="text-[#7d8590]">{alerts.length} total</span>
           <span className="text-red-400 font-medium">
-            {alerts.filter((a) => a.maxSeverity === "critical").length} cr??ticos
+            {alerts.filter((a) => a.maxSeverity === "critical").length} críticos
           </span>
         </div>
       </header>
@@ -1021,7 +1243,7 @@ function AlertsSection({ authFetch }: { authFetch: typeof window.fetch }) {
       {/* Tabela */}
       <div className="rounded-xl border border-[#30363d] bg-[#161b22]/50 overflow-hidden">
         <div className="grid grid-cols-[1fr_auto_auto_auto] gap-4 px-6 py-3 border-b border-[#30363d] bg-[#0d1117] text-[10px] font-bold uppercase tracking-wider text-[#7d8590]">
-          <span>Usu??rio</span>
+          <span>Usuário</span>
           <span>Tipos</span>
           <span>Alertas</span>
           <span>Severidade</span>
@@ -1076,7 +1298,7 @@ function AlertsSection({ authFetch }: { authFetch: typeof window.fetch }) {
   );
 }
 
-// ?????? Prote????o ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+// ─── Proteção ──────────────────────────────────────────────────────────
 function ProtectionSection({
   authFetch,
   guildId,
@@ -1084,7 +1306,7 @@ function ProtectionSection({
   authFetch: typeof window.fetch;
   guildId?: string;
 }) {
-  const GUILD_ID = guildId ?? "placeholder"; // sem guild selecionada ainda
+  const GUILD_ID = guildId ?? "placeholder";
   const [patterns, setPatterns] = useState<any[]>([]);
   const [config, setConfig] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -1185,37 +1407,37 @@ function ProtectionSection({
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header>
-        <h1 className="text-2xl font-bold text-white">Prote????o</h1>
+        <h1 className="text-2xl font-bold text-white">Proteção</h1>
         <p className="text-[#7d8590] mt-1">
-          Configura????es de detec????o e padr??es customizados do AegisBot.
+          Configurações de detecção e padrões customizados do AegisBot.
         </p>
       </header>
 
       <div className="bg-[#21262d] border border-[#30363d] rounded-lg p-4 mb-4">
         <h3 className="text-sm font-semibold text-[#e6edf3] mb-2">
-          ??????? Prote????o Inteligente com OCR
+          🛡️ Proteção Inteligente com OCR
         </h3>
         <p className="text-xs text-[#8b949e] leading-relaxed">
           O <strong className="text-[#e6edf3]">AegisBot</strong> utiliza{" "}
           <strong className="text-[#e6edf3]">OCR (Optical Character Recognition)</strong> para
           escanear imagens enviadas nos servidores monitorados. Isso significa que mesmo que um
-          usu??rio tente evitar a detec????o postando conte??do proibido como imagem, o bot consegue
-          extrair o texto e aplicar as regras de prote????o.
+          usuário tente evitar a detecção postando conteúdo proibido como imagem, o bot consegue
+          extrair o texto e aplicar as regras de proteção.
         </p>
         <p className="text-xs text-[#8b949e] mt-2 leading-relaxed">
-          Al??m disso, o bot escaneia <strong className="text-[#e6edf3]">dom??nios em links</strong>
+          Além disso, o bot escaneia <strong className="text-[#e6edf3]">domínios em links</strong>
           ,<strong className="text-[#e6edf3]"> palavras-chave</strong> em mensagens de texto, e
-          <strong className="text-[#e6edf3]"> express??es regulares</strong> para detectar golpes,
-          fraudes e conte??do malicioso.
+          <strong className="text-[#e6edf3]"> expressões regulares</strong> para detectar golpes,
+          fraudes e conteúdo malicioso.
         </p>
       </div>
 
       <div className="bg-[#21262d] border border-[#30363d] rounded-lg p-4 mb-4">
-        <h3 className="text-sm font-semibold text-[#e6edf3] mb-3">???? Blacklist de Termos</h3>
+        <h3 className="text-sm font-semibold text-[#e6edf3] mb-3">⛔ Blacklist de Termos</h3>
         <p className="text-xs text-[#8b949e] mb-3">
-          Gerencie os termos, palavras-chave e express??es regulares que o bot bloqueia
+          Gerencie os termos, palavras-chave e expressões regulares que o bot bloqueia
           automaticamente. Use os comandos <code className="text-[#58a6ff]">/blacklist add</code>{" "}
-          and <code className="text-[#58a6ff]">/blacklist remove</code> no Discord, ou gerencie
+          e <code className="text-[#58a6ff]">/blacklist remove</code> no Discord, ou gerencie
           aqui.
         </p>
         <div className="space-y-2 max-h-64 overflow-y-auto mb-3">
@@ -1256,9 +1478,9 @@ function ProtectionSection({
       </div>
 
       <div className="bg-[#21262d] border border-[#30363d] rounded-lg p-4 mb-4">
-        <h3 className="text-sm font-semibold text-[#e6edf3] mb-3">??? Whitelist (Isentos)</h3>
+        <h3 className="text-sm font-semibold text-[#e6edf3] mb-3">🔓 Whitelist (Isentos)</h3>
         <p className="text-xs text-[#8b949e] mb-3">
-          Usu??rios, cargos (roles) ou dom??nios isentos de verifica????o. Use{" "}
+          Usuários, cargos (roles) ou domínios isentos de verificação. Use{" "}
           <code className="text-[#58a6ff]">/whitelist add</code> no Discord ou gerencie aqui.
         </p>
         <div className="space-y-2 max-h-64 overflow-y-auto">
@@ -1275,10 +1497,10 @@ function ProtectionSection({
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] font-mono text-[#3fb950] bg-[#132b1a] px-1.5 py-0.5 rounded">
                     {item.type === "user"
-                      ? "???? User"
+                      ? "👤 User"
                       : item.type === "role"
-                        ? "???? Role"
-                        : "???? Dom??nio"}
+                        ? "🛡️ Role"
+                        : "🌐 Domínio"}
                   </span>
                   <code className="text-xs text-[#e6edf3]">{item.value}</code>
                 </div>
@@ -1296,17 +1518,17 @@ function ProtectionSection({
 
       {/* Toggles de config */}
       <div className="rounded-xl border border-[#30363d] bg-[#161b22]/50 p-6 space-y-4">
-        <h3 className="font-semibold text-white mb-2">Configura????es do Servidor</h3>
+        <h3 className="font-semibold text-white mb-2">Configurações do Servidor</h3>
         {[
           {
             key: "disclosure_detection_enabled",
-            label: "Detec????o silenciosa ativa",
-            desc: "Analisa mensagens em background sem resposta p??blica",
+            label: "Detecção silenciosa ativa",
+            desc: "Analisa mensagens em background sem resposta pública",
           },
           {
             key: "auto_kick_on_critical",
-            label: "A????o autom??tica em cr??ticos",
-            desc: "Reage e loga automaticamente quando severidade cr??tica ?? detectada",
+            label: "Ação automática em críticos",
+            desc: "Reage e loga automaticamente quando severidade crítica é detectada",
           },
         ].map(({ key, label, desc }) => (
           <div
@@ -1331,12 +1553,12 @@ function ProtectionSection({
         ))}
       </div>
 
-      {/* Padr??es de detec????o */}
+      {/* Padrões de detecção */}
       <div className="rounded-xl border border-[#30363d] bg-[#161b22]/50 overflow-hidden">
         <div className="px-6 py-4 border-b border-[#30363d] flex items-center justify-between">
-          <h3 className="font-semibold text-white">Padr??es de Detec????o Customizados</h3>
+          <h3 className="font-semibold text-white">Padrões de Detecção Customizados</h3>
           <span className="text-xs text-[#7d8590]">
-            {patterns.length} padr??o{patterns.length !== 1 ? "s" : ""}
+            {patterns.length} padrão{patterns.length !== 1 ? "s" : ""}
           </span>
         </div>
 
@@ -1401,7 +1623,7 @@ function ProtectionSection({
             ))
           ) : patterns.length === 0 ? (
             <div className="px-6 py-8 text-center text-sm text-[#7d8590]">
-              Nenhum padr??o customizado. Os padr??es globais do AegisBot continuam ativos.
+              Nenhum padrão customizado. Os padrões globais do AegisBot continuam ativos.
             </div>
           ) : (
             patterns.map((p) => (
@@ -1432,7 +1654,7 @@ function ProtectionSection({
   );
 }
 
-// ?????? Estat??sticas ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+// ─── Estatísticas ──────────────────────────────────────────────────────
 function StatsSection({ authFetch }: { authFetch: typeof window.fetch }) {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -1459,7 +1681,7 @@ function StatsSection({ authFetch }: { authFetch: typeof window.fetch }) {
     low: "bg-blue-500",
   };
   const TYPE_LABEL: Record<string, string> = {
-    disclosure: "Divulga????o",
+    disclosure: "Divulgação",
     spam: "Spam",
     scam: "Golpe",
     custom: "Customizado",
@@ -1468,11 +1690,11 @@ function StatsSection({ authFetch }: { authFetch: typeof window.fetch }) {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header>
-        <h1 className="text-2xl font-bold text-white">Estat??sticas</h1>
-        <p className="text-[#7d8590] mt-1">Hist??rico de alertas e a????es dos ??ltimos 14 dias.</p>
+        <h1 className="text-2xl font-bold text-white">Estatísticas</h1>
+        <p className="text-[#7d8590] mt-1">Histórico de alertas e ações dos últimos 14 dias.</p>
       </header>
 
-      {/* Gr??fico de barras ??? alertas por dia */}
+      {/* Gráfico de barras — alertas por dia */}
       <div className="rounded-xl border border-[#30363d] bg-[#161b22]/50 p-6">
         <h3 className="font-semibold text-white mb-6">Alertas por Dia</h3>
         {loading ? (
@@ -1487,7 +1709,7 @@ function StatsSection({ authFetch }: { authFetch: typeof window.fetch }) {
           </div>
         ) : days.length === 0 ? (
           <p className="text-sm text-[#7d8590] text-center py-8">
-            Nenhum dado nos ??ltimos 14 dias.
+            Nenhum dado nos últimos 14 dias.
           </p>
         ) : (
           <div className="flex items-end gap-1 h-32">
@@ -1578,7 +1800,7 @@ function StatsSection({ authFetch }: { authFetch: typeof window.fetch }) {
                   </div>
                 ))}
               {Object.keys(stats?.byType ?? {}).length === 0 && (
-                <p className="text-sm text-[#7d8590] text-center py-4">Nenhum dado dispon??vel.</p>
+                <p className="text-sm text-[#7d8590] text-center py-4">Nenhum dado disponível.</p>
               )}
             </div>
           )}
@@ -1588,7 +1810,7 @@ function StatsSection({ authFetch }: { authFetch: typeof window.fetch }) {
   );
 }
 
-// ?????? Meu Servidor ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+// ─── Meu Servidor ──────────────────────────────────────────────────────
 function ServerConfigSection({
   authFetch,
   guild,
@@ -1693,7 +1915,7 @@ function ServerConfigSection({
           <div>
             <h1 className="text-2xl font-bold text-white">{guild.name}</h1>
             <p className="text-[#7d8590] text-sm mt-0.5">
-              Configura????es do Aegis neste servidor.
+              Configurações do Aegis neste servidor.
             </p>
           </div>
         </div>
@@ -1702,7 +1924,7 @@ function ServerConfigSection({
           disabled={saving || loading}
           className="bg-[#1f883d] hover:bg-[#1a7a35] text-white border-none"
         >
-          {saving ? "Salvando..." : saved ? "??? Salvo!" : "Salvar altera????es"}
+          {saving ? "Salvando..." : saved ? "✅ Salvo!" : "Salvar alterações"}
         </Button>
       </header>
 
@@ -1723,7 +1945,7 @@ function ServerConfigSection({
             </h3>
             <Field
               label="Canal de logs"
-              desc="ID do canal onde o Aegis envia logs de modera????o e alertas."
+              desc="ID do canal onde o Aegis envia logs de moderação e alertas."
             >
               <input
                 value={form.alert_log_channel_id}
@@ -1734,7 +1956,7 @@ function ServerConfigSection({
             </Field>
             <Field
               label="Canal de boas-vindas"
-              desc="ID do canal onde o Aegis posta mensagens de boas-vindas p??blicas."
+              desc="ID do canal onde o Aegis posta mensagens de boas-vindas públicas."
             >
               <input
                 value={form.welcome_channel_id}
@@ -1765,11 +1987,11 @@ function ServerConfigSection({
 
           <div className="rounded-xl border border-[#30363d] bg-[#161b22]/50 px-6">
             <h3 className="font-semibold text-white pt-5 pb-2 text-sm uppercase tracking-wider text-[#7d8590]">
-              Prote????o
+              Proteção
             </h3>
             <Field
-              label="Detec????o silenciosa"
-              desc="Analisa mensagens em background e registra alertas sem resposta p??blica."
+              label="Detecção silenciosa"
+              desc="Analisa mensagens em background e registra alertas sem resposta pública."
             >
               <button
                 onClick={() =>
@@ -1788,8 +2010,8 @@ function ServerConfigSection({
               </button>
             </Field>
             <Field
-              label="A????o autom??tica em cr??ticos"
-              desc="Reage e loga automaticamente quando uma amea??a cr??tica ?? detectada."
+              label="Ação automática em críticos"
+              desc="Reage e loga automaticamente quando uma ameaça crítica é detectada."
             >
               <button
                 onClick={() =>
@@ -1806,7 +2028,7 @@ function ServerConfigSection({
             </Field>
             <Field
               label="Threshold de raid"
-              desc="N??mero de entradas simult??neas para ativar o anti-raid autom??tico."
+              desc="Número de entradas simultâneas para ativar o anti-raid automático."
             >
               <input
                 type="number"
@@ -1818,8 +2040,8 @@ function ServerConfigSection({
               />
             </Field>
             <Field
-              label="Idade m??nima da conta (dias)"
-              desc="Contas mais novas que este valor s??o monitoradas ao enviar links."
+              label="Idade mínima da conta (dias)"
+              desc="Contas mais novas que este valor são monitoradas ao enviar links."
             >
               <input
                 type="number"
@@ -1833,45 +2055,45 @@ function ServerConfigSection({
           </div>
 
           <div className="rounded-xl border border-purple-500/20 bg-purple-500/5 p-5 flex gap-4">
-            <span className="text-2xl shrink-0 mt-0.5">????</span>
+            <span className="text-2xl shrink-0 mt-0.5">💎</span>
             <div>
-              <p className="text-sm font-medium text-white">Benef??cios Premium</p>
+              <p className="text-sm font-medium text-white">Benefícios Premium</p>
               <p className="text-xs text-[#8b949e] mt-1 leading-relaxed">
                 Desbloqueie funcionalidades inteligentes exclusivas para seu servidor:
               </p>
               <ul className="mt-2 space-y-1 text-xs text-[#8b949e]">
                 <li className="flex items-center gap-2">
-                  <span className="text-purple-400">???</span>
+                  <span className="text-purple-400">✦</span>
                   <span>
                     <strong className="text-[#e6edf3]">Anti-raid inteligente</strong> com machine
-                    learning ??? detecta padr??es de ataque em tempo real
+                    learning — detecta padrões de ataque em tempo real
                   </span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-purple-400">???</span>
+                  <span className="text-purple-400">✦</span>
                   <span>
-                    <strong className="text-[#e6edf3]">Relat??rios semanais</strong> autom??ticos
-                    com an??lises de seguran??a
+                    <strong className="text-[#e6edf3]">Relatórios semanais</strong> automáticos
+                    com análises de segurança
                   </span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-purple-400">???</span>
+                  <span className="text-purple-400">✦</span>
                   <span>
-                    <strong className="text-[#e6edf3]">Whitelist avan??ada</strong> com dom??nios
-                    regex e multi-n??vel
+                    <strong className="text-[#e6edf3]">Whitelist avançada</strong> com domínios
+                    regex e multi-nível
                   </span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-purple-400">???</span>
+                  <span className="text-purple-400">✦</span>
                   <span>
-                    <strong className="text-[#e6edf3]">Comandos customizados</strong> com a????es
+                    <strong className="text-[#e6edf3]">Comandos customizados</strong> com ações
                     automatizadas (AutoMod AI)
                   </span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-purple-400">???</span>
+                  <span className="text-purple-400">✦</span>
                   <span>
-                    <strong className="text-[#e6edf3]">Suporte priorit??rio</strong> ??? configure
+                    <strong className="text-[#e6edf3]">Suporte prioritário</strong> — configure
                     regras exclusivas com nossa equipe
                   </span>
                 </li>
