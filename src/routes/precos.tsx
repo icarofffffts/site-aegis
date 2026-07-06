@@ -7,19 +7,19 @@ import { PricingSkeleton } from "@/components/skeletons/PricingSkeleton";
 const PLANS = [
   {
     name: "Free",
-    tagline: "Prote??o b?sica para iniciar.",
-    badge: "Com an?ncios",
+    tagline: "Proteção básica para iniciar.",
+    badge: "Com anúncios",
     monthly: 0,
     yearly: 0,
     cta: "Adicionar ao Discord",
     features: [
-      "Prote??o Anti-Raid ML padr?o",
-      "Whitelist (b?sico)",
-      "Dashboard vis?o geral"
+      "Proteção Anti-Raid ML padrão",
+      "Whitelist (básico)",
+      "Dashboard visão geral"
     ],
     limitations: [
-      "M?ximo 1 servidor gerenciado",
-      "M?ximo 20 termos na Blacklist",
+      "Máximo 1 servidor gerenciado",
+      "Máximo 20 termos na Blacklist",
       "Sem alertas em tempo real",
       "Sem AutoMod AI e Comandos Pro"
     ],
@@ -27,20 +27,20 @@ const PLANS = [
   },
   {
     name: "Premium",
-    tagline: "Seguran?a total sem limites.",
-    badge: "Sem an?ncios",
+    tagline: "Segurança total sem limites.",
+    badge: "Sem anúncios",
     monthly: 14.99,
     yearly: 149.90,
     cta: "Assinar Premium",
     features: [
-      "Zero an?ncios na Dashboard",
+      "Zero anúncios na Dashboard",
       "Servidores ilimitados",
-      "Blacklist sem restri??o (Infinito)",
+      "Blacklist sem restrição (Infinito)",
       "Alertas em tempo real",
-      "AutoMod AI (Intelig?ncia Artif.)",
-      "Estat?sticas e relat?rios detalhados",
-      "Comandos avan?ados desbloqueados",
-      "Suporte priorit?rio"
+      "AutoMod AI (Inteligência Artificial)",
+      "Estatísticas e relatórios detalhados",
+      "Comandos avançados desbloqueados",
+      "Suporte prioritário"
     ],
     limitations: [],
     highlight: true
@@ -65,10 +65,10 @@ export const Route = createFileRoute("/precos")({
 });
 
 const FAQ = [
-  { q: "Posso usar gratis para sempre?", a: "Sim. O plano Free tem todos os comandos essenciais de moderacao e nunca expira." },
-  { q: "Como funciona a cobranca?", a: "Mensal ou anual, com desconto no anual. Cancele quando quiser, sem multa." },
-  { q: "Voces oferecem reembolso?", a: "Sim - reembolso integral em ate 14 dias apos a primeira cobranca." },
-  { q: "O Aegis vai funcionar em outras plataformas?", a: "Sim. Estamos expandindo para Telegram, Slack e Revolt. Assinantes Premium e Enterprise terao acesso prioritario." },
+  { q: "Posso usar grátis para sempre?", a: "Sim. O plano Free tem todos os comandos essenciais de moderação e nunca expira." },
+  { q: "Como funciona a cobrança?", a: "Mensal ou anual, com desconto no anual. Cancele quando quiser, sem multa." },
+  { q: "Vocês oferecem reembolso?", a: "Sim — reembolso integral em até 14 dias após a primeira cobrança." },
+  { q: "O Aegis vai funcionar em outras plataformas?", a: "Sim. Estamos expandindo para Telegram, Slack e Revolt. Assinantes Premium e Enterprise terão acesso prioritário." },
 ];
 
 function PricingPage() {
@@ -85,11 +85,11 @@ function PricingPage() {
       <section className="bg-[#0d1117] border-b border-[#30363d]">
         <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 lg:px-8">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#30363d] bg-[#161b22] px-3 py-1 text-xs font-semibold text-yellow-500">
-            <Sparkles className="h-3.5 w-3.5" /> Comece gratis, escale quando precisar
+            <Sparkles className="h-3.5 w-3.5" /> Comece grátis, escale quando precisar
           </span>
           <h1 className="mt-6 text-4xl font-bold text-white sm:text-6xl">Planos para sua <span className="text-yellow-500">comunidade</span></h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-[#7d8590]">
-            Protecao profissional para servidores de qualquer tamanho. Sem taxas ocultas.
+             Proteção profissional para servidores de qualquer tamanho. Sem taxas ocultas.
           </p>
 
           <div className="mt-10 inline-flex items-center gap-1 rounded-lg border border-[#30363d] bg-[#010409] p-1">
@@ -147,18 +147,18 @@ function PricingPage() {
                     {plan.badge && (
                       <span className={cn(
                         "text-[10px] font-bold px-2 py-1 rounded-full",
-                        plan.badge === "Sem anuncios"
+                        plan.badge === "Sem anúncios"
                           ? "bg-green-500/10 text-green-400 border border-green-500/20"
                           : "bg-[#30363d] text-[#7d8590]"
                       )}>
-                        {plan.badge === "Com anuncios" ? "?? " : "?? "}{plan.badge}
+                        {plan.badge === "Com anúncios" ? "📢 " : "✨ "}{plan.badge}
                       </span>
                     )}
                   </div>
 
                   <div className="mt-8 flex items-baseline gap-1">
                     <span className="text-4xl font-bold text-white">
-                      {price === 0 ? "Gratis" : `R$ ${price.toFixed(2).replace(".", ",")}`}
+                      {price === 0 ? "Grátis" : `R$ ${price.toFixed(2).replace(".", ",")}`}
                     </span>
                     {price > 0 && (
                       <span className="text-sm text-[#7d8590]">/{yearly ? "ano" : "mes"}</span>

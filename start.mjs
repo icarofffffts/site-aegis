@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DIST_CLIENT = join(__dirname, "dist", "client");
 
-const port = parseInt(process.env.PORT || "3004", 10);
+const port = parseInt(process.env.PORT || "3010", 10);
 const VITE_PREVIEW_PORT = parseInt(process.env.VITE_PREVIEW_PORT || "3002", 10);
 
 // ── Supabase ──────────────────────────────────────────────────────
@@ -48,7 +48,7 @@ function sessionCookie(payload, maxAge = 7 * 24 * 3600) {
 
 function json(res, status, data) {
   const body = JSON.stringify(data);
-  res.writeHead(status, { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body) });
+  res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Content-Length": Buffer.byteLength(body) });
   res.end(body);
 }
 
@@ -91,7 +91,7 @@ async function passToSSR(req, res) {
     res.end();
   } catch (err) {
     console.error("[aegis-ssr] Proxy error:", err.message);
-    if (!INDEX_HTML) { res.writeHead(503); res.end("Site em manutenção."); return; }
+    if (!INDEX_HTML) { res.writeHead(503, { "Content-Type": "text/plain; charset=utf-8" }); res.end("Site em manutenção."); return; }
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" });
     res.end(INDEX_HTML);
   }
@@ -332,8 +332,11 @@ fetch('/api/auth/process', {
       if (!session) session = getSession(cookies);
 
       if (!session) return json(res, 401, { authenticated: false });
+
+      const isPremium = ADMIN_IDS.includes(session.id);
       return json(res, 200, {
         authenticated: true,
+        isPremium,
         user: {
           id: session.id, username: session.username,
           discriminator: session.discriminator,
@@ -479,7 +482,7 @@ fetch('/api/auth/process', {
   } catch (err) {
     console.error("[aegis-ssr] Error on", path, "-", err.message);
     if (!res.headersSent) {
-      res.writeHead(500);
+      res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
       res.end("Internal Server Error");
     }
   }

@@ -118,7 +118,7 @@ export function SiteHeader() {
             </div>
           ) : (
             <Button asChild variant="ghost" size="sm" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-              <Link to="/login">Login</Link>
+              <Link to="/login" search={{ error: undefined }}>Login</Link>
             </Button>
           )}
           <Button
@@ -183,6 +183,7 @@ export function SiteHeader() {
           ) : (
             <Link
               to="/login"
+              search={{ error: undefined }}
               onClick={() => setOpen(false)}
               className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-surface hover:text-foreground"
             >
