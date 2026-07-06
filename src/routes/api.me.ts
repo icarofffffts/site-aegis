@@ -50,7 +50,7 @@ export const Route = createFileRoute("/api/me")({
                   avatar: null,
                 },
               }),
-              { headers: { "Content-Type": "application/json" } }
+              { headers: { "Content-Type": "application/json; charset=utf-8" } }
             );
           }
           // Token expired/invalid — clear it
@@ -59,7 +59,7 @@ export const Route = createFileRoute("/api/me")({
             {
               status: 401,
               headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json; charset=utf-8",
                 "Set-Cookie":
                   "arx_token=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
               },
@@ -73,7 +73,7 @@ export const Route = createFileRoute("/api/me")({
         if (!legacyMatch) {
           return new Response(JSON.stringify({ authenticated: false }), {
             status: 401,
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json; charset=utf-8" },
           });
         }
 
@@ -88,7 +88,7 @@ export const Route = createFileRoute("/api/me")({
               {
                 status: 401,
                 headers: {
-                  "Content-Type": "application/json",
+                  "Content-Type": "application/json; charset=utf-8",
                   "Set-Cookie":
                     "aegis_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
                 },
@@ -109,14 +109,14 @@ export const Route = createFileRoute("/api/me")({
                   : `https://cdn.discordapp.com/embed/avatars/0.png`,
               },
             }),
-            { headers: { "Content-Type": "application/json" } }
+            { headers: { "Content-Type": "application/json; charset=utf-8" } }
           );
         } catch {
           return new Response(
             JSON.stringify({ authenticated: false, reason: "invalid_session" }),
             {
               status: 401,
-              headers: { "Content-Type": "application/json" },
+              headers: { "Content-Type": "application/json; charset=utf-8" },
             }
           );
         }
