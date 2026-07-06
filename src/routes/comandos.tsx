@@ -13,10 +13,14 @@ export const Route = createFileRoute("/comandos")({
       { title: "Comandos — Aegis" },
       {
         name: "description",
-        content: "Lista completa dos comandos do Aegis: moderação, anti-raid, configuração, logs e utilidades.",
+        content:
+          "Lista completa dos comandos do Aegis: moderação, anti-raid, configuração, logs e utilidades.",
       },
       { property: "og:title", content: "Comandos — Aegis" },
-      { property: "og:description", content: "Explore todos os comandos do bot Aegis filtrados por categoria." },
+      {
+        property: "og:description",
+        content: "Explore todos os comandos do bot Aegis filtrados por categoria.",
+      },
     ],
   }),
   component: CommandsPage,
@@ -37,9 +41,7 @@ function CommandsPage() {
       const matchesCat = active === "Todos" || c.category === active;
       const q = query.trim().toLowerCase();
       const matchesQuery =
-        !q ||
-        c.name.toLowerCase().includes(q) ||
-        c.description.toLowerCase().includes(q);
+        !q || c.name.toLowerCase().includes(q) || c.description.toLowerCase().includes(q);
       return matchesCat && matchesQuery;
     });
   }, [query, active]);
@@ -51,7 +53,9 @@ function CommandsPage() {
           <span className="inline-flex items-center gap-2 rounded-full border border-[#30363d] bg-[#161b22] px-3 py-1 text-xs font-medium text-[#7d8590]">
             <Shield className="h-3.5 w-3.5 text-blue-500" /> {COMMANDS.length} comandos disponíveis
           </span>
-          <h1 className="mt-5 text-4xl font-bold text-white sm:text-5xl">Comandos do <span className="text-blue-500">Aegis</span></h1>
+          <h1 className="mt-5 text-4xl font-bold text-white sm:text-5xl">
+            Comandos do <span className="text-blue-500">Aegis</span>
+          </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-[#7d8590]">
             Lista técnica de comandos para moderação, segurança e automação.
           </p>

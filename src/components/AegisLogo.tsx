@@ -27,7 +27,7 @@ export function AegisLogo({
       {withText && (
         <div className="flex flex-col leading-tight">
           <span className="font-display text-xl font-bold tracking-tight text-white">
-            {showCustom ? (brandName || "Aegis") : "Aegis"}
+            {showCustom ? brandName || "Aegis" : "Aegis"}
           </span>
           {!hideBranding && (
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#7d8590]">

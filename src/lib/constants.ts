@@ -5,7 +5,8 @@ const ARX_CALLBACK_URI = encodeURIComponent("https://aegis.arxdevs.xyz/auth/arx-
 export const SITE_URLS = {
   discordInvite: "https://discord.gg/arxdevs",
   supportServer: "https://discord.gg/gr93e7rQc4",
-  botInvite: "https://discord.com/oauth2/authorize?client_id=1485085619280679145&permissions=8&scope=bot%20applications.commands",
+  botInvite:
+    "https://discord.com/oauth2/authorize?client_id=1485085619280679145&permissions=8&scope=bot%20applications.commands",
   // OAuth2 login — scope=identify+guilds para autenticar o usuário (não adicionar bot)
   discordLogin: `https://discord.com/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&response_type=code&redirect_uri=${DISCORD_REDIRECT_URI}&scope=identify%20guilds`,
   // ARX centralized auth

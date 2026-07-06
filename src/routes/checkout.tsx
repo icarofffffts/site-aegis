@@ -69,7 +69,9 @@ function CheckoutPage() {
                 </span>
                 <p className="mt-4 text-sm text-[#7d8590]">{plan.desc}</p>
                 <div className="mt-6 flex items-baseline gap-1">
-                  <span className="text-3xl font-bold text-white">R$ {price.toFixed(2).replace(".", ",")}</span>
+                  <span className="text-3xl font-bold text-white">
+                    R$ {price.toFixed(2).replace(".", ",")}
+                  </span>
                   <span className="text-sm text-[#7d8590]">/{yearly ? "ano" : "mês"}</span>
                 </div>
 
@@ -104,8 +106,12 @@ function CheckoutPage() {
                     <CreditCard className="h-6 w-6 text-blue-500" />
                   </div>
                   <div className="flex-1 text-left">
-                    <span className="block text-sm font-bold text-white">Cartão de Crédito (Stripe)</span>
-                    <span className="block text-xs text-[#7d8590] mt-0.5">Pagamento seguro via Stripe • Visa, Mastercard, Elo</span>
+                    <span className="block text-sm font-bold text-white">
+                      Cartão de Crédito (Stripe)
+                    </span>
+                    <span className="block text-xs text-[#7d8590] mt-0.5">
+                      Pagamento seguro via Stripe • Visa, Mastercard, Elo
+                    </span>
                   </div>
                   <ShieldCheck className="h-5 w-5 text-[#3fb950]" />
                 </button>
@@ -117,12 +123,14 @@ function CheckoutPage() {
                 >
                   <div className="h-12 w-12 rounded-lg bg-[#0d1117] border border-[#30363d] flex items-center justify-center">
                     <svg className="h-6 w-6 text-[#00b5e2]" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
                     </svg>
                   </div>
                   <div className="flex-1 text-left">
                     <span className="block text-sm font-bold text-white">Mercado Pago</span>
-                    <span className="block text-xs text-[#7d8590] mt-0.5">Pix, boleto, cartão • Parcelamento sem juros</span>
+                    <span className="block text-xs text-[#7d8590] mt-0.5">
+                      Pix, boleto, cartão • Parcelamento sem juros
+                    </span>
                   </div>
                   <ShieldCheck className="h-5 w-5 text-[#3fb950]" />
                 </button>
@@ -132,9 +140,18 @@ function CheckoutPage() {
                     <ShieldCheck className="h-4 w-4 inline mr-1 text-[#3fb950]" /> Garantia Aegis
                   </h3>
                   <ul className="space-y-2 text-xs text-[#7d8590]">
-                    <li className="flex items-start gap-2"><Check className="h-3.5 w-3.5 mt-0.5 text-[#3fb950] shrink-0" /> Pagamento 100% seguro processado por Stripe ou Mercado Pago</li>
-                    <li className="flex items-start gap-2"><Check className="h-3.5 w-3.5 mt-0.5 text-[#3fb950] shrink-0" /> Cancele quando quiser, sem multa</li>
-                    <li className="flex items-start gap-2"><Check className="h-3.5 w-3.5 mt-0.5 text-[#3fb950] shrink-0" /> Reembolso integral em até 14 dias</li>
+                    <li className="flex items-start gap-2">
+                      <Check className="h-3.5 w-3.5 mt-0.5 text-[#3fb950] shrink-0" /> Pagamento
+                      100% seguro processado por Stripe ou Mercado Pago
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="h-3.5 w-3.5 mt-0.5 text-[#3fb950] shrink-0" /> Cancele
+                      quando quiser, sem multa
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="h-3.5 w-3.5 mt-0.5 text-[#3fb950] shrink-0" /> Reembolso
+                      integral em até 14 dias
+                    </li>
                   </ul>
                 </div>
               </div>

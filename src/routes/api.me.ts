@@ -1,17 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { verifyArxJwt } from "@/lib/arx-auth";
 
-const ADMIN_IDS = (process.env.ADMIN_DISCORD_IDS ?? "")
-  .split(",")
-  .map((id) => id.trim());
+const ADMIN_IDS = (process.env.ADMIN_DISCORD_IDS ?? "").split(",").map((id) => id.trim());
 
 function getDiscordIdFromSessionCookie(cookieHeader: string): string | null {
   const legacyMatch = cookieHeader.match(/aegis_session=([^;]+)/);
   if (!legacyMatch) return null;
   try {
-    const session = JSON.parse(
-      Buffer.from(legacyMatch[1], "base64").toString("utf-8")
-    );
+    const session = JSON.parse(Buffer.from(legacyMatch[1], "base64").toString("utf-8"));
     if (Date.now() < session.expiresAt) {
       return session.id;
     }
@@ -50,21 +46,17 @@ export const Route = createFileRoute("/api/me")({
                   avatar: null,
                 },
               }),
-              { headers: { "Content-Type": "application/json; charset=utf-8" } }
+              { headers: { "Content-Type": "application/json; charset=utf-8" } },
             );
           }
           // Token expired/invalid — clear it
-          return new Response(
-            JSON.stringify({ authenticated: false, reason: "expired" }),
-            {
-              status: 401,
-              headers: {
-                "Content-Type": "application/json; charset=utf-8",
-                "Set-Cookie":
-                  "arx_token=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
-              },
-            }
-          );
+          return new Response(JSON.stringify({ authenticated: false, reason: "expired" }), {
+            status: 401,
+            headers: {
+              "Content-Type": "application/json; charset=utf-8",
+              "Set-Cookie": "arx_token=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
+            },
+          });
         }
 
         // Fallback: legacy Discord session (base64 cookie)
@@ -78,22 +70,16 @@ export const Route = createFileRoute("/api/me")({
         }
 
         try {
-          const session = JSON.parse(
-            Buffer.from(legacyMatch[1], "base64").toString("utf-8")
-          );
+          const session = JSON.parse(Buffer.from(legacyMatch[1], "base64").toString("utf-8"));
 
           if (Date.now() > session.expiresAt) {
-            return new Response(
-              JSON.stringify({ authenticated: false, reason: "expired" }),
-              {
-                status: 401,
-                headers: {
-                  "Content-Type": "application/json; charset=utf-8",
-                  "Set-Cookie":
-                    "aegis_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
-                },
-              }
-            );
+            return new Response(JSON.stringify({ authenticated: false, reason: "expired" }), {
+              status: 401,
+              headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Set-Cookie": "aegis_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
+              },
+            });
           }
 
           return new Response(
@@ -109,16 +95,13 @@ export const Route = createFileRoute("/api/me")({
                   : `https://cdn.discordapp.com/embed/avatars/0.png`,
               },
             }),
-            { headers: { "Content-Type": "application/json; charset=utf-8" } }
+            { headers: { "Content-Type": "application/json; charset=utf-8" } },
           );
         } catch {
-          return new Response(
-            JSON.stringify({ authenticated: false, reason: "invalid_session" }),
-            {
-              status: 401,
-              headers: { "Content-Type": "application/json; charset=utf-8" },
-            }
-          );
+          return new Response(JSON.stringify({ authenticated: false, reason: "invalid_session" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+          });
         }
       },
     },

@@ -29,7 +29,13 @@ const SlackIcon = (
 const RevoltIcon = (
   <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
     <circle cx="12" cy="12" r="10" fillOpacity="0.2" stroke="currentColor" strokeWidth="2" />
-    <path d="M8 8h5a3 3 0 0 1 0 6H8V8zm0 6l4 4" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <path
+      d="M8 8h5a3 3 0 0 1 0 6H8V8zm0 6l4 4"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+      strokeLinecap="round"
+    />
   </svg>
 );
 
@@ -58,16 +64,12 @@ export function PlatformBadge({
         size === "sm" && "px-2.5 py-1 text-xs",
       )}
     >
-      <span className={cn(isLive ? "text-primary" : "text-muted-foreground")}>
-        {platform.icon}
-      </span>
+      <span className={cn(isLive ? "text-primary" : "text-muted-foreground")}>{platform.icon}</span>
       <span className="text-sm font-medium">{platform.name}</span>
       <span
         className={cn(
           "ml-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
-          isLive
-            ? "bg-success/20 text-success"
-            : "bg-muted text-muted-foreground",
+          isLive ? "bg-success/20 text-success" : "bg-muted text-muted-foreground",
         )}
       >
         {isLive ? "Online" : "Em breve"}

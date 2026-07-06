@@ -1,9 +1,8 @@
 import { jwtVerify } from "jose";
 
-const ARX_AUTH_PORTAL =
-  process.env.ARX_AUTH_PORTAL_URL || "https://auth.arxdevs.xyz";
+const ARX_AUTH_PORTAL = process.env.ARX_AUTH_PORTAL_URL || "https://auth.arxdevs.xyz";
 const ARX_JWT_SECRET = new TextEncoder().encode(
-  process.env.ARX_JWT_SECRET || "super_secret_arx_auth_key_2026"
+  process.env.ARX_JWT_SECRET || "super_secret_arx_auth_key_2026",
 );
 const SITE_URL = process.env.NEXTAUTH_URL || "https://aegis.arxdevs.xyz";
 
@@ -16,17 +15,14 @@ export interface ArxUserInfo {
 
 export async function exchangeCodeForToken(
   code: string,
-  redirectUri: string
+  redirectUri: string,
 ): Promise<string | null> {
   try {
-    const res = await fetch(
-      `${ARX_AUTH_PORTAL}/webdev.v1.WebDevAuthPublicService/ExchangeToken`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, redirectUri, clientId: "aegis" }),
-      }
-    );
+    const res = await fetch(`${ARX_AUTH_PORTAL}/webdev.v1.WebDevAuthPublicService/ExchangeToken`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code, redirectUri, clientId: "aegis" }),
+    });
 
     if (!res.ok) return null;
 
@@ -58,9 +54,6 @@ export function getArxLoginUrl(redirectPath?: string): string {
   return `${ARX_AUTH_PORTAL}/?${params.toString()}`;
 }
 
-export function buildArxSessionCookie(
-  token: string,
-  maxAgeSeconds = 86400
-): string {
+export function buildArxSessionCookie(token: string, maxAgeSeconds = 86400): string {
   return `arx_token=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAgeSeconds}`;
 }

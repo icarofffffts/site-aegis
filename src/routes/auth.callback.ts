@@ -54,7 +54,12 @@ export const Route = createFileRoute("/auth/callback")({
         }
 
         // 2. Buscar dados do usuário no Discord
-        let discordUser: { id: string; username: string; avatar: string | null; discriminator: string };
+        let discordUser: {
+          id: string;
+          username: string;
+          avatar: string | null;
+          discriminator: string;
+        };
         try {
           const userRes = await fetch("https://discord.com/api/users/@me", {
             headers: { Authorization: `Bearer ${tokenData.access_token}` },
