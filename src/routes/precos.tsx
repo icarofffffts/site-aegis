@@ -12,25 +12,21 @@ const PLANS = [
     monthly: 0,
     yearly: 0,
     cta: "Adicionar ao Discord",
-    features: [
-      "Proteção Anti-Raid ML padrão",
-      "Whitelist (básico)",
-      "Dashboard visão geral"
-    ],
+    features: ["Proteção Anti-Raid ML padrão", "Whitelist (básico)", "Dashboard visão geral"],
     limitations: [
       "Máximo 1 servidor gerenciado",
       "Máximo 20 termos na Blacklist",
       "Sem alertas em tempo real",
-      "Sem AutoMod AI e Comandos Pro"
+      "Sem AutoMod AI e Comandos Pro",
     ],
-    highlight: false
+    highlight: false,
   },
   {
     name: "Premium",
     tagline: "Segurança total sem limites.",
     badge: "Sem anúncios",
     monthly: 14.99,
-    yearly: 149.90,
+    yearly: 149.9,
     cta: "Assinar Premium",
     features: [
       "Zero anúncios na Dashboard",
@@ -40,11 +36,11 @@ const PLANS = [
       "AutoMod AI (Inteligência Artificial)",
       "Estatísticas e relatórios detalhados",
       "Comandos avançados desbloqueados",
-      "Suporte prioritário"
+      "Suporte prioritário",
     ],
     limitations: [],
-    highlight: true
-  }
+    highlight: true,
+  },
 ];
 import { cn } from "@/lib/utils";
 import { SITE_URLS } from "@/lib/constants";
@@ -55,20 +51,36 @@ export const Route = createFileRoute("/precos")({
       { title: "Precos - Aegis" },
       {
         name: "description",
-        content: "Planos do Aegis: Free, Premium e Enterprise. Comece gratis e desbloqueie protecao avancada quando precisar.",
+        content:
+          "Planos do Aegis: Free, Premium e Enterprise. Comece gratis e desbloqueie protecao avancada quando precisar.",
       },
       { property: "og:title", content: "Precos - Aegis" },
-      { property: "og:description", content: "Planos transparentes para proteger comunidades de qualquer tamanho." },
+      {
+        property: "og:description",
+        content: "Planos transparentes para proteger comunidades de qualquer tamanho.",
+      },
     ],
   }),
   component: PricingPage,
 });
 
 const FAQ = [
-  { q: "Posso usar grátis para sempre?", a: "Sim. O plano Free tem todos os comandos essenciais de moderação e nunca expira." },
-  { q: "Como funciona a cobrança?", a: "Mensal ou anual, com desconto no anual. Cancele quando quiser, sem multa." },
-  { q: "Vocês oferecem reembolso?", a: "Sim — reembolso integral em até 14 dias após a primeira cobrança." },
-  { q: "O Aegis vai funcionar em outras plataformas?", a: "Sim. Estamos expandindo para Telegram, Slack e Revolt. Assinantes Premium e Enterprise terão acesso prioritário." },
+  {
+    q: "Posso usar grátis para sempre?",
+    a: "Sim. O plano Free tem todos os comandos essenciais de moderação e nunca expira.",
+  },
+  {
+    q: "Como funciona a cobrança?",
+    a: "Mensal ou anual, com desconto no anual. Cancele quando quiser, sem multa.",
+  },
+  {
+    q: "Vocês oferecem reembolso?",
+    a: "Sim — reembolso integral em até 14 dias após a primeira cobrança.",
+  },
+  {
+    q: "O Aegis vai funcionar em outras plataformas?",
+    a: "Sim. Estamos expandindo para Telegram, Slack e Revolt. Assinantes Premium e Enterprise terão acesso prioritário.",
+  },
 ];
 
 function PricingPage() {
@@ -87,9 +99,11 @@ function PricingPage() {
           <span className="inline-flex items-center gap-2 rounded-full border border-[#30363d] bg-[#161b22] px-3 py-1 text-xs font-semibold text-yellow-500">
             <Sparkles className="h-3.5 w-3.5" /> Comece grátis, escale quando precisar
           </span>
-          <h1 className="mt-6 text-4xl font-bold text-white sm:text-6xl">Planos para sua <span className="text-yellow-500">comunidade</span></h1>
+          <h1 className="mt-6 text-4xl font-bold text-white sm:text-6xl">
+            Planos para sua <span className="text-yellow-500">comunidade</span>
+          </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-[#7d8590]">
-             Proteção profissional para servidores de qualquer tamanho. Sem taxas ocultas.
+            Proteção profissional para servidores de qualquer tamanho. Sem taxas ocultas.
           </p>
 
           <div className="mt-10 inline-flex items-center gap-1 rounded-lg border border-[#30363d] bg-[#010409] p-1">
@@ -145,13 +159,16 @@ function PricingPage() {
                       <p className="mt-2 text-sm text-[#7d8590]">{plan.tagline}</p>
                     </div>
                     {plan.badge && (
-                      <span className={cn(
-                        "text-[10px] font-bold px-2 py-1 rounded-full",
-                        plan.badge === "Sem anúncios"
-                          ? "bg-green-500/10 text-green-400 border border-green-500/20"
-                          : "bg-[#30363d] text-[#7d8590]"
-                      )}>
-                        {plan.badge === "Com anúncios" ? "📢 " : "✨ "}{plan.badge}
+                      <span
+                        className={cn(
+                          "text-[10px] font-bold px-2 py-1 rounded-full",
+                          plan.badge === "Sem anúncios"
+                            ? "bg-green-500/10 text-green-400 border border-green-500/20"
+                            : "bg-[#30363d] text-[#7d8590]",
+                        )}
+                      >
+                        {plan.badge === "Com anúncios" ? "📢 " : "✨ "}
+                        {plan.badge}
                       </span>
                     )}
                   </div>
@@ -174,7 +191,15 @@ function PricingPage() {
                         : "border-[#30363d] bg-[#21262d] text-[#c9d1d9] hover:bg-[#30363d] hover:border-[#8b949e]",
                     )}
                   >
-                    <a href={plan.cta === "Adicionar ao Discord" ? SITE_URLS.botInvite : `/checkout?plan=${plan.name.toLowerCase()}`}>{plan.cta}</a>
+                    <a
+                      href={
+                        plan.cta === "Adicionar ao Discord"
+                          ? SITE_URLS.botInvite
+                          : `/checkout?plan=${plan.name.toLowerCase()}`
+                      }
+                    >
+                      {plan.cta}
+                    </a>
                   </Button>
 
                   <ul className="mt-10 space-y-3 text-sm">
@@ -212,7 +237,9 @@ function PricingPage() {
                 <summary className="cursor-pointer list-none text-base font-semibold text-white">
                   <div className="flex items-center justify-between gap-4">
                     <span>{item.q}</span>
-                    <span className="text-[#8b949e] transition-transform group-open:rotate-45">+</span>
+                    <span className="text-[#8b949e] transition-transform group-open:rotate-45">
+                      +
+                    </span>
                   </div>
                 </summary>
                 <p className="mt-4 text-sm leading-relaxed text-[#7d8590]">{item.a}</p>

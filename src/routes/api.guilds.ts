@@ -18,9 +18,7 @@ export const Route = createFileRoute("/api/guilds")({
 
         let accessToken: string;
         try {
-          const session = JSON.parse(
-            Buffer.from(legacyMatch[1], "base64").toString("utf-8")
-          );
+          const session = JSON.parse(Buffer.from(legacyMatch[1], "base64").toString("utf-8"));
           if (Date.now() > session.expiresAt)
             return new Response(JSON.stringify({ error: "expired" }), {
               status: 401,
@@ -35,17 +33,15 @@ export const Route = createFileRoute("/api/guilds")({
         }
 
         try {
-          const userGuildsRes = await fetch(
-            "https://discord.com/api/users/@me/guilds",
-            { headers: { Authorization: `Bearer ${accessToken}` } }
-          );
+          const userGuildsRes = await fetch("https://discord.com/api/users/@me/guilds", {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
           if (!userGuildsRes.ok) throw new Error("Failed fetch user guilds");
           const userGuilds: any[] = await userGuildsRes.json();
 
-          const botGuildsRes = await fetch(
-            "https://discord.com/api/users/@me/guilds",
-            { headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` } }
-          );
+          const botGuildsRes = await fetch("https://discord.com/api/users/@me/guilds", {
+            headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` },
+          });
           if (!botGuildsRes.ok) throw new Error("Failed fetch bot guilds");
           const botGuilds: any[] = await botGuildsRes.json();
 

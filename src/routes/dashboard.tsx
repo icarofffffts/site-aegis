@@ -814,8 +814,8 @@ function AutoModSection({
         </h3>
         <p className="text-xs text-[#8b949e] leading-relaxed">
           O <strong className="text-[#e6edf3]">AutoMod AI</strong> analisa mensagens em tempo real
-          usando machine learning para detectar padrões de spam, golpes, divulgação não autorizada
-          e comportamento malicioso. Diferente de sistemas baseados apenas em palavras-chave, o
+          usando machine learning para detectar padrões de spam, golpes, divulgação não autorizada e
+          comportamento malicioso. Diferente de sistemas baseados apenas em palavras-chave, o
           AutoMod AI entende o contexto da mensagem.
         </p>
       </div>
@@ -848,15 +848,21 @@ function AutoModSection({
                     <Gavel className="h-4 w-4 text-[#d2a8ff]" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">{rule.name ?? `Regra ${i + 1}`}</p>
-                    <p className="text-xs text-[#7d8590]">{rule.description ?? rule.action ?? "Sem descrição"}</p>
+                    <p className="text-sm font-medium text-white">
+                      {rule.name ?? `Regra ${i + 1}`}
+                    </p>
+                    <p className="text-xs text-[#7d8590]">
+                      {rule.description ?? rule.action ?? "Sem descrição"}
+                    </p>
                   </div>
                 </div>
-                <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded border ${
-                  rule.enabled !== false
-                    ? "text-green-400 bg-green-500/10 border-green-500/30"
-                    : "text-[#484f58] bg-[#30363d] border-[#30363d]"
-                }`}>
+                <span
+                  className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded border ${
+                    rule.enabled !== false
+                      ? "text-green-400 bg-green-500/10 border-green-500/30"
+                      : "text-[#484f58] bg-[#30363d] border-[#30363d]"
+                  }`}
+                >
                   {rule.enabled !== false ? "Ativo" : "Inativo"}
                 </span>
               </div>
@@ -870,15 +876,24 @@ function AutoModSection({
         <ul className="space-y-2 text-xs text-[#8b949e]">
           <li className="flex items-start gap-2">
             <span className="text-[#3fb950] mt-0.5">•</span>
-            <span>Use <code className="text-[#58a6ff]">/automod config</code> no Discord para ajustar a sensibilidade das regras.</span>
+            <span>
+              Use <code className="text-[#58a6ff]">/automod config</code> no Discord para ajustar a
+              sensibilidade das regras.
+            </span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#3fb950] mt-0.5">•</span>
-            <span>O AutoMod AI aprende com o tempo — quanto mais dados, mais preciso ele fica.</span>
+            <span>
+              O AutoMod AI aprende com o tempo — quanto mais dados, mais preciso ele fica.
+            </span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#3fb950] mt-0.5">•</span>
-            <span>Combine com a <strong className="text-[#e6edf3]">Blacklist</strong> e <strong className="text-[#e6edf3]">Whitelist</strong> para um controle ainda mais refinado.</span>
+            <span>
+              Combine com a <strong className="text-[#e6edf3]">Blacklist</strong> e{" "}
+              <strong className="text-[#e6edf3]">Whitelist</strong> para um controle ainda mais
+              refinado.
+            </span>
           </li>
         </ul>
       </div>
@@ -922,9 +937,7 @@ function CommandsSection({
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header>
         <h1 className="text-2xl font-bold text-white">Comandos</h1>
-        <p className="text-[#7d8590] mt-1">
-          Comandos avançados disponíveis para o seu servidor.
-        </p>
+        <p className="text-[#7d8590] mt-1">Comandos avançados disponíveis para o seu servidor.</p>
       </header>
 
       {!guildId ? (
@@ -1107,9 +1120,7 @@ function OverviewSection({ data, loading }: { data: DashboardData | null; loadin
                           </span>
                         )}
                       </div>
-                      <div className="text-xs text-[#7d8590]">
-                        ID: {item.discord_user_id}
-                      </div>
+                      <div className="text-xs text-[#7d8590]">ID: {item.discord_user_id}</div>
                     </div>
                   </div>
                   <div className="text-xs text-[#7d8590]">{timeAgo(item.created_at)}</div>
@@ -1427,8 +1438,8 @@ function ProtectionSection({
           extrair o texto e aplicar as regras de proteção.
         </p>
         <p className="text-xs text-[#8b949e] mt-2 leading-relaxed">
-          Além disso, o bot escaneia <strong className="text-[#e6edf3]">domínios em links</strong>
-          ,<strong className="text-[#e6edf3]"> palavras-chave</strong> em mensagens de texto, e
+          Além disso, o bot escaneia <strong className="text-[#e6edf3]">domínios em links</strong>,
+          <strong className="text-[#e6edf3]"> palavras-chave</strong> em mensagens de texto, e
           <strong className="text-[#e6edf3]"> expressões regulares</strong> para detectar golpes,
           fraudes e conteúdo malicioso.
         </p>
@@ -1438,9 +1449,8 @@ function ProtectionSection({
         <h3 className="text-sm font-semibold text-[#e6edf3] mb-3">⛔ Blacklist de Termos</h3>
         <p className="text-xs text-[#8b949e] mb-3">
           Gerencie os termos, palavras-chave e expressões regulares que o bot bloqueia
-          automaticamente. Use os comandos <code className="text-[#58a6ff]">/blacklist add</code>{" "}
-          e <code className="text-[#58a6ff]">/blacklist remove</code> no Discord, ou gerencie
-          aqui.
+          automaticamente. Use os comandos <code className="text-[#58a6ff]">/blacklist add</code> e{" "}
+          <code className="text-[#58a6ff]">/blacklist remove</code> no Discord, ou gerencie aqui.
         </p>
         <div className="space-y-2 max-h-64 overflow-y-auto mb-3">
           {blacklistData === null ? (
@@ -1828,11 +1838,16 @@ function ServerConfigSection({
   const [form, setForm] = useState({
     alert_log_channel_id: "",
     welcome_channel_id: "",
+    moderation_log_channel_id: "",
     welcome_message: "",
+    server_name: "",
     auto_kick_on_critical: false,
     disclosure_detection_enabled: true,
     raid_threshold: "5",
     account_min_age_days: "7",
+    max_warnings_before_kick: "5",
+    require_approval_for_alerts: false,
+    auto_mute_duration: "3600",
   });
 
   useEffect(() => {
@@ -1847,9 +1862,21 @@ function ServerConfigSection({
             ...f,
             alert_log_channel_id: d.config.alert_log_channel_id ?? "",
             welcome_channel_id: d.config.welcome_channel_id ?? "",
+            moderation_log_channel_id: d.config.moderation_log_channel_id ?? "",
             welcome_message: d.config.welcome_message ?? "",
+            server_name: d.config.server_name ?? "",
             auto_kick_on_critical: d.config.auto_kick_on_critical ?? false,
             disclosure_detection_enabled: d.config.disclosure_detection_enabled ?? true,
+            raid_threshold: d.config.raid_threshold != null ? String(d.config.raid_threshold) : "5",
+            account_min_age_days:
+              d.config.account_min_age_days != null ? String(d.config.account_min_age_days) : "7",
+            max_warnings_before_kick:
+              d.config.max_warnings_before_kick != null
+                ? String(d.config.max_warnings_before_kick)
+                : "5",
+            require_approval_for_alerts: d.config.require_approval_for_alerts ?? false,
+            auto_mute_duration:
+              d.config.auto_mute_duration != null ? String(d.config.auto_mute_duration) : "3600",
           }));
         }
       })
@@ -1916,9 +1943,7 @@ function ServerConfigSection({
           )}
           <div>
             <h1 className="text-2xl font-bold text-white">{guild.name}</h1>
-            <p className="text-[#7d8590] text-sm mt-0.5">
-              Configurações do Aegis neste servidor.
-            </p>
+            <p className="text-[#7d8590] text-sm mt-0.5">Configurações do Aegis neste servidor.</p>
           </div>
         </div>
         <Button
@@ -1967,6 +1992,19 @@ function ServerConfigSection({
                 className="w-52 px-3 py-1.5 rounded-md bg-[#0d1117] border border-[#30363d] text-sm text-white font-mono focus:outline-none focus:border-blue-500"
               />
             </Field>
+            <Field
+              label="Canal de moderação"
+              desc="ID do canal onde logs detalhados de moderação são enviados."
+            >
+              <input
+                value={form.moderation_log_channel_id}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, moderation_log_channel_id: e.target.value }))
+                }
+                placeholder="ID do canal"
+                className="w-52 px-3 py-1.5 rounded-md bg-[#0d1117] border border-[#30363d] text-sm text-white font-mono focus:outline-none focus:border-blue-500"
+              />
+            </Field>
           </div>
 
           <div className="rounded-xl border border-[#30363d] bg-[#161b22]/50 px-6">
@@ -1983,6 +2021,17 @@ function ServerConfigSection({
                 placeholder="Bem-vindo ao servidor, {user}! ..."
                 rows={3}
                 className="w-72 px-3 py-2 rounded-md bg-[#0d1117] border border-[#30363d] text-sm text-white focus:outline-none focus:border-blue-500 resize-none"
+              />
+            </Field>
+            <Field
+              label="Nome do servidor (DM)"
+              desc="Nome exibido nas mensagens enviadas por DM aos novos membros."
+            >
+              <input
+                value={form.server_name}
+                onChange={(e) => setForm((f) => ({ ...f, server_name: e.target.value }))}
+                placeholder={guild.name}
+                className="w-52 px-3 py-1.5 rounded-md bg-[#0d1117] border border-[#30363d] text-sm text-white font-mono focus:outline-none focus:border-blue-500"
               />
             </Field>
           </div>
@@ -2054,6 +2103,54 @@ function ServerConfigSection({
                 className="w-20 px-3 py-1.5 rounded-md bg-[#0d1117] border border-[#30363d] text-sm text-white text-center focus:outline-none focus:border-blue-500"
               />
             </Field>
+            <Field
+              label="Máx. avisos antes de expulsar"
+              desc="Número máximo de warnings antes de uma ação automática de kick."
+            >
+              <input
+                type="number"
+                min="1"
+                max="20"
+                value={form.max_warnings_before_kick}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, max_warnings_before_kick: e.target.value }))
+                }
+                className="w-20 px-3 py-1.5 rounded-md bg-[#0d1117] border border-[#30363d] text-sm text-white text-center focus:outline-none focus:border-blue-500"
+              />
+            </Field>
+            <Field
+              label="Exigir aprovação para alertas"
+              desc="Quando ativo, alertas precisam ser aprovados por um staff antes de aplicar ação."
+            >
+              <button
+                onClick={() =>
+                  setForm((f) => ({
+                    ...f,
+                    require_approval_for_alerts: !f.require_approval_for_alerts,
+                  }))
+                }
+                className="text-[#7d8590] hover:text-white transition-colors"
+              >
+                {form.require_approval_for_alerts ? (
+                  <ToggleRight className="h-7 w-7 text-green-500" />
+                ) : (
+                  <ToggleLeft className="h-7 w-7" />
+                )}
+              </button>
+            </Field>
+            <Field
+              label="Duração do mute automático (s)"
+              desc="Tempo em segundos para mute automático quando uma regra é acionada."
+            >
+              <input
+                type="number"
+                min="60"
+                max="86400"
+                value={form.auto_mute_duration}
+                onChange={(e) => setForm((f) => ({ ...f, auto_mute_duration: e.target.value }))}
+                className="w-24 px-3 py-1.5 rounded-md bg-[#0d1117] border border-[#30363d] text-sm text-white text-center focus:outline-none focus:border-blue-500"
+              />
+            </Field>
           </div>
 
           <div className="rounded-xl border border-purple-500/20 bg-purple-500/5 p-5 flex gap-4">
@@ -2074,8 +2171,8 @@ function ServerConfigSection({
                 <li className="flex items-center gap-2">
                   <span className="text-purple-400">✦</span>
                   <span>
-                    <strong className="text-[#e6edf3]">Relatórios semanais</strong> automáticos
-                    com análises de segurança
+                    <strong className="text-[#e6edf3]">Relatórios semanais</strong> automáticos com
+                    análises de segurança
                   </span>
                 </li>
                 <li className="flex items-center gap-2">

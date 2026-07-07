@@ -1,8 +1,6 @@
 import { verifyArxJwt } from "./arx-auth";
 
-const ADMIN_IDS = (process.env.ADMIN_DISCORD_IDS ?? "")
-  .split(",")
-  .map((id) => id.trim());
+const ADMIN_IDS = (process.env.ADMIN_DISCORD_IDS ?? "").split(",").map((id) => id.trim());
 
 export interface AuthResult {
   authenticated: boolean;
@@ -20,7 +18,7 @@ export function clearSessionHeaders(): Record<string, string> {
 }
 
 export async function checkAuth(
-  request: Request
+  request: Request,
 ): Promise<{ result: AuthResult; clearHeaders?: Record<string, string> }> {
   const cookieHeader = request.headers.get("cookie") ?? "";
 
@@ -53,9 +51,7 @@ export async function checkAuth(
   }
 
   try {
-    const session = JSON.parse(
-      Buffer.from(legacyMatch[1], "base64").toString("utf-8")
-    );
+    const session = JSON.parse(Buffer.from(legacyMatch[1], "base64").toString("utf-8"));
 
     if (Date.now() > session.expiresAt) {
       return {

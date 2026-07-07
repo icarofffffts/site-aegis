@@ -1,14 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  exchangeCodeForToken,
-  verifyArxJwt,
-  buildArxSessionCookie,
-} from "@/lib/arx-auth";
+import { exchangeCodeForToken, verifyArxJwt, buildArxSessionCookie } from "@/lib/arx-auth";
 
 const SITE_URL = process.env.NEXTAUTH_URL || "https://aegis.arxdevs.xyz";
-const ADMIN_IDS = (process.env.ADMIN_DISCORD_IDS ?? "")
-  .split(",")
-  .map((id) => id.trim());
+const ADMIN_IDS = (process.env.ADMIN_DISCORD_IDS ?? "").split(",").map((id) => id.trim());
 
 export const Route = createFileRoute("/auth/arx-callback")({
   server: {

@@ -8,7 +8,10 @@ export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
       { title: "Login — Aegis" },
-      { name: "description", content: "Acesse o painel do Aegis com sua conta Discord para gerenciar sua comunidade." },
+      {
+        name: "description",
+        content: "Acesse o painel do Aegis com sua conta Discord para gerenciar sua comunidade.",
+      },
       { property: "og:title", content: "Login — Aegis" },
       { property: "og:description", content: "Autenticação segura via Discord OAuth2." },
     ],
@@ -37,7 +40,8 @@ function DiscordIcon({ className }: { className?: string }) {
 
 function LoginPage() {
   const { error } = useSearch({ from: "/login" });
-  const errorMessage = error && error !== "null" ? (ERROR_MESSAGES[error] ?? "Ocorreu um erro inesperado.") : null;
+  const errorMessage =
+    error && error !== "null" ? (ERROR_MESSAGES[error] ?? "Ocorreu um erro inesperado.") : null;
 
   return (
     <SiteLayout>
@@ -49,7 +53,9 @@ function LoginPage() {
               Acesse o painel do <span className="text-blue-500">Aegis</span>
             </h1>
             <p className="mt-4 text-lg text-[#7d8590]">
-              Plataforma de governança de segurança comunitária distribuída para o ecossistema Discord. Autentique-se com sua conta para revisar denúncias, gerenciar servidores e consultar reputações.
+              Plataforma de governança de segurança comunitária distribuída para o ecossistema
+              Discord. Autentique-se com sua conta para revisar denúncias, gerenciar servidores e
+              consultar reputações.
             </p>
 
             <ul className="mt-8 space-y-3 text-sm text-[#7d8590]">
@@ -107,7 +113,8 @@ function LoginPage() {
               <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4 mt-6 text-xs text-[#7d8590]">
                 <p className="font-medium text-white">Apenas moderadores autorizados</p>
                 <p className="mt-1">
-                  O acesso ao painel é restrito a IDs Discord pré-aprovados pela equipe ARX DEVS. Solicite acesso no servidor de suporte.
+                  O acesso ao painel é restrito a IDs Discord pré-aprovados pela equipe ARX DEVS.
+                  Solicite acesso no servidor de suporte.
                 </p>
               </div>
 

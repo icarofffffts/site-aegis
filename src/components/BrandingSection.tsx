@@ -86,6 +86,7 @@ export function BrandingSection({
       })
       .catch(() => {})
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gId]);
 
   const save = async () => {

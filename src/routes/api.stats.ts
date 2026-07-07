@@ -12,25 +12,34 @@ export const Route = createFileRoute("/api/stats")({
     handlers: {
       GET: async ({ request }) => {
         const { result } = await checkAuth(request);
-        if (!result.authenticated) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
+        if (!result.authenticated)
+          return new Response(JSON.stringify({ error: "unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+          });
 
         const since14d = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
         const { data: alertsByDay } = await supabase
-          .schema("aegis").from("arx_alerts")
+          .schema("aegis")
+          .from("arx_alerts")
           .select("created_at, severity")
           .gte("created_at", since14d)
           .order("created_at", { ascending: true });
 
-        const byDay: Record<string, { total: number; critical: number; high: number; medium: number; low: number }> = {};
+        const byDay: Record<
+          string,
+          { total: number; critical: number; high: number; medium: number; low: number }
+        > = {};
         for (const alert of alertsByDay ?? []) {
           const day = alert.created_at.slice(0, 10);
           if (!byDay[day]) byDay[day] = { total: 0, critical: 0, high: 0, medium: 0, low: 0 };
           byDay[day].total++;
-          byDay[day][alert.severity as keyof typeof byDay[string]]++;
+          byDay[day][alert.severity as keyof (typeof byDay)[string]]++;
         }
 
         const { data: byType } = await supabase
-          .schema("aegis").from("arx_alerts")
+          .schema("aegis")
+          .from("arx_alerts")
           .select("alert_type")
           .eq("is_active", true);
 
@@ -40,7 +49,8 @@ export const Route = createFileRoute("/api/stats")({
         }
 
         const { data: bySeverity } = await supabase
-          .schema("aegis").from("arx_alerts")
+          .schema("aegis")
+          .from("arx_alerts")
           .select("severity")
           .eq("is_active", true);
 
@@ -50,7 +60,8 @@ export const Route = createFileRoute("/api/stats")({
         }
 
         const { data: actionsByDay } = await supabase
-          .schema("aegis").from("arx_action_log")
+          .schema("aegis")
+          .from("arx_action_log")
           .select("created_at, action_type")
           .gte("created_at", since14d)
           .order("created_at", { ascending: true });
@@ -61,12 +72,15 @@ export const Route = createFileRoute("/api/stats")({
           actionsByDayMap[day] = (actionsByDayMap[day] ?? 0) + 1;
         }
 
-        return new Response(JSON.stringify({
-          alertsByDay: byDay,
-          actionsByDay: actionsByDayMap,
-          byType: typeCount,
-          bySeverity: severityCount,
-        }), { headers: { "Content-Type": "application/json" } });
+        return new Response(
+          JSON.stringify({
+            alertsByDay: byDay,
+            actionsByDay: actionsByDayMap,
+            byType: typeCount,
+            bySeverity: severityCount,
+          }),
+          { headers: { "Content-Type": "application/json" } },
+        );
       },
     },
   },

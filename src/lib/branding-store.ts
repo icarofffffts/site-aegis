@@ -24,5 +24,7 @@ export function setStoredBranding(branding: BrandingState | null) {
     } else {
       localStorage.removeItem(STORAGE_KEY);
     }
-  } catch {}
+  } catch {
+    /* ignore */
+  }
 }

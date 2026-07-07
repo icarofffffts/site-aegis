@@ -46,7 +46,7 @@ export function SiteHeader() {
       credentials: "include",
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     })
-      .then((r) => r.ok ? r.json() : null)
+      .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (data?.authenticated) setUser(data.user);
       })
@@ -109,7 +109,11 @@ export function SiteHeader() {
                 size="sm"
                 className="text-sm font-medium text-muted-foreground hover:text-foreground"
                 onClick={() => {
-                  try { localStorage.removeItem("aegis_session"); } catch {}
+                  try {
+                    localStorage.removeItem("aegis_session");
+                  } catch {
+                    /* ignore */
+                  }
                   window.location.replace("/");
                 }}
               >
@@ -117,15 +121,24 @@ export function SiteHeader() {
               </Button>
             </div>
           ) : (
-            <Button asChild variant="ghost" size="sm" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-              <Link to="/login" search={{ error: undefined }}>Login</Link>
+            <Button
+              asChild
+              variant="ghost"
+              size="sm"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+              <Link to="/login" search={{ error: undefined }}>
+                Login
+              </Link>
             </Button>
           )}
           <Button
             asChild
             className="bg-[#1f883d] text-white hover:bg-[#1a7a35] shadow-none border border-[#1f883d]"
           >
-            <a href={SITE_URLS.botInvite} rel="noopener">Adicionar ao Discord</a>
+            <a href={SITE_URLS.botInvite} rel="noopener">
+              Adicionar ao Discord
+            </a>
           </Button>
         </div>
 
@@ -172,7 +185,11 @@ export function SiteHeader() {
               <button
                 onClick={() => {
                   setOpen(false);
-                  try { localStorage.removeItem("aegis_session"); } catch {}
+                  try {
+                    localStorage.removeItem("aegis_session");
+                  } catch {
+                    /* ignore */
+                  }
                   window.location.replace("/");
                 }}
                 className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-red-400 hover:bg-surface w-full text-left"
@@ -190,8 +207,13 @@ export function SiteHeader() {
               Login
             </Link>
           )}
-          <Button asChild className="mt-2 bg-[#1f883d] text-white hover:bg-[#1a7a35] shadow-none border border-[#1f883d]">
-            <a href={SITE_URLS.botInvite} rel="noopener">Adicionar ao Discord</a>
+          <Button
+            asChild
+            className="mt-2 bg-[#1f883d] text-white hover:bg-[#1a7a35] shadow-none border border-[#1f883d]"
+          >
+            <a href={SITE_URLS.botInvite} rel="noopener">
+              Adicionar ao Discord
+            </a>
           </Button>
         </nav>
       </div>

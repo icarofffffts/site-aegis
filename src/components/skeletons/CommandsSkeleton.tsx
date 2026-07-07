@@ -1,6 +1,10 @@
 export function CommandsSkeleton({ count = 9 }: { count?: number }) {
   return (
-    <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true" aria-live="polite">
+    <div
+      className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      aria-busy="true"
+      aria-live="polite"
+    >
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
