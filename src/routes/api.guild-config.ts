@@ -1,6 +1,8 @@
 ﻿import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { checkAuth } from "@/lib/auth-check";
+import fs from "node:fs";
+import path from "node:path";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -8,10 +10,13 @@ const supabase = createClient(
 );
 
 const ALLOWED_FIELDS = [
+  "server_name",
   "alert_log_channel_id",
-  "welcome_channel_id",
   "moderation_log_channel_id",
+  "welcome_channel_id",
   "welcome_message",
+  "welcome_enabled",
+  "welcome_message_type",
   "auto_kick_on_critical",
   "auto_mute_duration",
   "require_approval_for_alerts",
@@ -19,7 +24,25 @@ const ALLOWED_FIELDS = [
   "disclosure_detection_enabled",
   "raid_threshold",
   "account_min_age_days",
-  "server_name",
+  "grace_period_seconds",
+  "instant_ban_hours",
+  "whitelabel_enabled",
+  "whitelabel_logo_url",
+  "whitelabel_banner_url",
+  "whitelabel_bot_name",
+  "whitelabel_bot_footer",
+  "whitelabel_embed_color",
+  "whitelabel_hide_watermark",
+];
+
+const WHITELABEL_FIELDS = [
+  "whitelabel_enabled",
+  "whitelabel_logo_url",
+  "whitelabel_banner_url",
+  "whitelabel_bot_name",
+  "whitelabel_bot_footer",
+  "whitelabel_embed_color",
+  "whitelabel_hide_watermark",
 ];
 
 const INTEGER_FIELDS = [
@@ -27,7 +50,64 @@ const INTEGER_FIELDS = [
   "account_min_age_days",
   "auto_mute_duration",
   "max_warnings_before_kick",
+  "grace_period_seconds",
+  "instant_ban_hours",
 ];
+
+function getBotWhitelabelPath() {
+  return path.join(process.cwd(), "..", "bot", "src", "database", "data", "whitelabel.json");
+}
+
+function syncWhitelabelToBot(guildId: string, fields: Record<string, unknown>) {
+  try {
+    const whitelabelPath = getBotWhitelabelPath();
+    const dir = path.dirname(whitelabelPath);
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    let data: { entries: Record<string, unknown> } = { entries: {} };
+    if (fs.existsSync(whitelabelPath)) {
+      data = JSON.parse(fs.readFileSync(whitelabelPath, "utf-8"));
+    }
+
+    const current = (data.entries[guildId] ?? {}) as Record<string, unknown>;
+
+    const updates: Record<string, unknown> = {};
+    if ("whitelabel_enabled" in fields) {
+      updates.detectionEnabled = fields.whitelabel_enabled;
+    }
+    if ("whitelabel_logo_url" in fields) {
+      updates.botAvatar = fields.whitelabel_logo_url;
+    }
+    if ("whitelabel_banner_url" in fields) {
+      updates.bannerUrl = fields.whitelabel_banner_url;
+    }
+    if ("whitelabel_bot_name" in fields) {
+      updates.botName = fields.whitelabel_bot_name;
+    }
+    if ("whitelabel_bot_footer" in fields) {
+      updates.botFooter = fields.whitelabel_bot_footer;
+    }
+    if ("whitelabel_embed_color" in fields) {
+      updates.embedColor =
+        typeof fields.whitelabel_embed_color === "string"
+          ? parseInt(fields.whitelabel_embed_color.replace("#", ""), 16)
+          : fields.whitelabel_embed_color;
+    }
+    if ("whitelabel_hide_watermark" in fields) {
+      updates.hideWatermark = fields.whitelabel_hide_watermark;
+    }
+
+    data.entries[guildId] = { ...current, ...updates };
+    fs.writeFileSync(whitelabelPath, JSON.stringify(data, null, 2));
+
+    console.log(`[whitelabel-sync] Guild ${guildId}: campos sincronizados com o bot`);
+  } catch (err) {
+    console.error("[whitelabel-sync] Erro ao sincronizar com o bot:", err);
+  }
+}
 
 export const Route = createFileRoute("/api/guild-config")({
   server: {
@@ -54,7 +134,15 @@ export const Route = createFileRoute("/api/guild-config")({
           .select("*")
           .eq("discord_guild_id", guildId)
           .single();
-        return new Response(JSON.stringify({ config: data ?? null }), {
+
+        const { data: patterns } = await supabase
+          .schema("aegis")
+          .from("arx_detection_patterns")
+          .select("*")
+          .eq("discord_guild_id", guildId)
+          .eq("is_active", true);
+
+        return new Response(JSON.stringify({ config: data ?? null, patterns: patterns ?? [] }), {
           headers: { "Content-Type": "application/json" },
         });
       },
@@ -124,6 +212,14 @@ export const Route = createFileRoute("/api/guild-config")({
             status: 500,
             headers: { "Content-Type": "application/json" },
           });
+
+        const hasWhitelabelFields = Object.keys(safeConfig).some((k) =>
+          WHITELABEL_FIELDS.includes(k),
+        );
+        if (hasWhitelabelFields) {
+          syncWhitelabelToBot(guildId, safeConfig);
+        }
+
         return new Response(JSON.stringify({ ok: true, config: res.data }), {
           headers: { "Content-Type": "application/json" },
         });
